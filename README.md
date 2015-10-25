@@ -5,6 +5,13 @@ This module provides new CLI commands for Magento 2 to import/export data in/fro
 
 This module is inspired by the awesome n98-magerun plugin "HarrisStreet ImpEx" by @SchumacherFM for Magento 1 which you can find [here](https://github.com/Zookal/HarrisStreet-ImpEx).
 
+Functionality
+-------------
+
+This module is a work in progress and will be extended in the near future with more functionality.
+
+Currently implemented is only the import of yaml files. Other file formats and export functionality will be added later.
+
 Support
 -------
 If you encounter any problems or bugs, please create an issue on [GitHub](https://github.com/semaio/Magento2-ConfigImportExport/issues).

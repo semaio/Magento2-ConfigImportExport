@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Semaio\ConfigImportExport\Model\Processor\ExportProcessorInterface" type="Semaio\ConfigImportExport\Model\Processor\ExportProcessor"/>
+    <preference for="Semaio\ConfigImportExport\Model\Processor\ImportProcessorInterface" type="Semaio\ConfigImportExport\Model\Processor\ImportProcessor"/>
+    <preference for="Semaio\ConfigImportExport\Model\Validator\ScopeValidatorInterface" type="Semaio\ConfigImportExport\Model\Validator\ScopeValidator"/>
+
+    <type name="Magento\Framework\Console\CommandList">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="SemaioConfigExportCommand" xsi:type="object">Semaio\ConfigImportExport\Command\ExportCommand</item>
+                <item name="SemaioConfigImportCommand" xsi:type="object">Semaio\ConfigImportExport\Command\ImportCommand</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Semaio\ConfigImportExport\Model\Processor\ImportProcessor">
+        <arguments>
+            <argument name="readers" xsi:type="array">
+                <item name="yaml" xsi:type="string">Semaio\ConfigImportExport\Model\File\Reader\YamlReader</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

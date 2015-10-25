@@ -1,0 +1,25 @@
+{
+  "name": "semaio/configimportexport",
+  "description": "Import/Export core_config_data values in Magento 2",
+  "require": {
+    "php": "~5.5.0|~5.6.0|~7.0.0",
+    "magento/module-store": "1.0.0-beta",
+    "magento/framework": "1.0.0-beta"
+  },
+  "type": "magento2-module",
+  "license": "OSL-3.0",
+  "authors": [
+    {
+      "name": "Rouven Alexander Rieker",
+      "email": "therouv@googlemail.com"
+    }
+  ],
+  "autoload": {
+    "files": [
+      "registration.php"
+    ],
+    "psr-4": {
+      "Semaio\\ConfigImportExport\\": ""
+    }
+  }
+}
