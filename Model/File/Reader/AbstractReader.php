@@ -21,7 +21,7 @@ abstract class AbstractReader implements ReaderInterface
         $return = [];
         foreach ($content as $nameSpace => $settings) {
             if (strpos($nameSpace, '/') === false) {
-                $cfgValues = $this->_flatten($nameSpace, $settings);
+                $cfgValues = $this->flatten($nameSpace, $settings);
                 $return = array_merge($return, $cfgValues);
             } else {
                 $return[$nameSpace] = $settings;
