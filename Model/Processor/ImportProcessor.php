@@ -5,9 +5,9 @@
  */
 namespace Semaio\ConfigImportExport\Model\Processor;
 
-use Symfony\Component\Finder\Finder;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Semaio\ConfigImportExport\Model\Validator\ScopeValidatorInterface;
+use Semaio\ConfigImportExport\Model\File\FinderInterface;
 
 /**
  * Class ImportProcessor
@@ -40,20 +40,27 @@ class ImportProcessor extends AbstractProcessor implements ImportProcessorInterf
      * @var array
      */
     private $environment;
+    /**
+     * @var FinderInterface
+     */
+    private $finder;
 
     /**
      * @param WriterInterface         $configWriter
      * @param ScopeValidatorInterface $scopeValidator
+     * @param FinderInterface         $finder
      * @param array                   $readers
      */
     public function __construct(
         WriterInterface $configWriter,
         ScopeValidatorInterface $scopeValidator,
+        FinderInterface $finder,
         array $readers = []
     )
     {
         $this->configWriter = $configWriter;
         $this->scopeValidator = $scopeValidator;
+        $this->finder = $finder;
         $this->readers = $readers;
     }
 
@@ -76,7 +83,13 @@ class ImportProcessor extends AbstractProcessor implements ImportProcessorInterf
             throw new \InvalidArgumentException(ucfirst($format) . ' file reader could not be instantiated."');
         }
 
-        $files = $this->_getConfigurationFiles();
+        // Find files
+        $finder = $this->finder;
+        $finder->setEnvironment($this->environment);
+        $finder->setBaseFolder($this->getBaseFolderName());
+        $finder->setFolder($this->folder);
+        $finder->setFormat($this->getFormat());
+        $files = $finder->find();
         if (0 === count($files)) {
             throw new \InvalidArgumentException('No files found for format: *.' . $format);
         }
@@ -129,84 +142,9 @@ class ImportProcessor extends AbstractProcessor implements ImportProcessorInterf
     }
 
     /**
-     * @return array
-     */
-    protected function _getConfigurationFiles()
-    {
-        return array_merge($this->_getConfigurationBaseFiles(), $this->_getConfigurationEnvFiles());
-    }
-
-    /**
-     *
-     * @return array
-     * @throws \InvalidArgumentException
-     */
-    protected function _getConfigurationBaseFiles()
-    {
-        $files = $this->_find($this->folder . DIRECTORY_SEPARATOR . $this->getBaseFolderName() . DIRECTORY_SEPARATOR);
-        if (0 === count($files)) {
-            throw new \InvalidArgumentException('No base files found for format: *.' . $this->getFormat());
-        }
-
-        return $files;
-    }
-
-    /**
-     * @return array
-     * @throws \InvalidArgumentException
-     */
-    protected function _getConfigurationEnvFiles()
-    {
-        $fullEnvPath = '';
-        $files = [];
-        foreach ($this->environment as $envPath) {
-            $fullEnvPath .= $envPath . DIRECTORY_SEPARATOR;
-            $find = $this->_find($this->folder . DIRECTORY_SEPARATOR . $fullEnvPath, '0');
-            $files = array_merge($files, $find);
-        }
-
-        if (0 === count($files)) {
-            throw new \InvalidArgumentException('No env files found for format: *.' . $this->getFormat());
-        }
-
-        return $files;
-    }
-
-    /**
-     * @param string $path
-     * @param null   $depth
-     *
-     * @return array
-     */
-    protected function _find($path, $depth = null)
-    {
-        // Remove trailing slash from path
-        $path = rtrim($path, '/');
-
-        $finder = new Finder();
-        $finder->files()
-            ->ignoreUnreadableDirs()
-            ->name('*.' . $this->getFormat())
-            ->followLinks()
-            ->in($path);
-
-        if (null !== $depth) {
-            $finder->depth($depth);
-        }
-
-        $files = [];
-        foreach ($finder as $file) {
-            /** @var $file \Symfony\Component\Finder\SplFileInfo */
-            $files[] = $file->getPathname();
-        }
-
-        return $files;
-    }
-
-    /**
      * @return string
      */
-    private function getBaseFolderName()
+    public function getBaseFolderName()
     {
         return $this->getInput()->getOption('base');
     }
