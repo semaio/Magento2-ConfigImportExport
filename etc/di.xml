@@ -1,4 +1,10 @@
 <?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Rouven Alexander Rieker - All rights reserved.
+ * See LICENSE.md bundled with this module for license details.
+ */
+-->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Semaio\ConfigImportExport\Model\Processor\ExportProcessorInterface" type="Semaio\ConfigImportExport\Model\Processor\ExportProcessor"/>
     <preference for="Semaio\ConfigImportExport\Model\Processor\ImportProcessorInterface" type="Semaio\ConfigImportExport\Model\Processor\ImportProcessor"/>
