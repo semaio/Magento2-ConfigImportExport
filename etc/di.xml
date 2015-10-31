@@ -17,6 +17,7 @@
         <arguments>
             <argument name="readers" xsi:type="array">
                 <item name="yaml" xsi:type="string">Semaio\ConfigImportExport\Model\File\Reader\YamlReader</item>
+                <item name="json" xsi:type="string">Semaio\ConfigImportExport\Model\File\Reader\JsonReader</item>
             </argument>
         </arguments>
     </type>

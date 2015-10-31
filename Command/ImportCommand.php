@@ -29,7 +29,7 @@ class ImportCommand extends AbstractCommand
         $this->addArgument('folder', InputArgument::REQUIRED, 'Import folder name');
         $this->addArgument('environment', InputArgument::REQUIRED, 'Environment name. SubEnvs separated by slash e.g.: development/osx/developer01');
         $this->addOption('base', null, InputOption::VALUE_OPTIONAL, 'Base folder name', 'base');
-        $this->addOption('format', 'm', InputOption::VALUE_OPTIONAL, 'Format: yaml', 'yaml');
+        $this->addOption('format', 'm', InputOption::VALUE_OPTIONAL, 'Format: yaml, json (Default: yaml)', 'yaml');
 
         parent::configure();
     }
