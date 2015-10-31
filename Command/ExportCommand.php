@@ -5,7 +5,6 @@
  */
 namespace Semaio\ConfigImportExport\Command;
 
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -15,7 +14,6 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\App\Cache\Manager as CacheManager;
 use Semaio\ConfigImportExport\Model\Processor\ExportProcessorInterface;
-use Semaio\ConfigImportExport\Model\File\FinderInterface;
 
 /**
  * Class ExportCommand
