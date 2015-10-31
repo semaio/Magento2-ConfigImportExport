@@ -22,7 +22,6 @@ class ExportProcessor extends AbstractProcessor implements ExportProcessorInterf
      */
     public function process()
     {
-        $this->writeSection('Start Export');
         $this->getOutput()->writeln('<info>Finished.</info>');
     }
 

@@ -20,7 +20,7 @@
         </arguments>
     </type>
 
-    <type name="Semaio\ConfigImportExport\Model\Processor\ImportProcessor">
+    <type name="Semaio\ConfigImportExport\Command\ImportCommand">
         <arguments>
             <argument name="readers" xsi:type="array">
                 <item name="yaml" xsi:type="string">Semaio\ConfigImportExport\Model\File\Reader\YamlReader</item>

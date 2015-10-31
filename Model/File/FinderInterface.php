@@ -18,6 +18,11 @@ interface FinderInterface
     public function find();
 
     /**
+     * @param array $environment
+     */
+    public function setEnvironment($environment);
+
+    /**
      * @param mixed $folder
      */
     public function setFolder($folder);
@@ -31,9 +36,4 @@ interface FinderInterface
      * @param mixed $format
      */
     public function setFormat($format);
-
-    /**
-     * @param array $environment
-     */
-    public function setEnvironment($environment);
 }

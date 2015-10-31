@@ -5,9 +5,17 @@
  */
 namespace Semaio\ConfigImportExport\Command;
 
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Magento\Framework\App\ObjectManager\ConfigLoader;
+use Magento\Framework\App\State as AppState;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Registry;
+use Magento\Framework\App\Cache\Manager as CacheManager;
+use Semaio\ConfigImportExport\Model\Processor\ExportProcessorInterface;
+use Semaio\ConfigImportExport\Model\File\FinderInterface;
 
 /**
  * Class ExportCommand
@@ -20,6 +28,33 @@ class ExportCommand extends AbstractCommand
      * Command Name
      */
     const COMMAND_NAME = 'config:data:export';
+
+    /**
+     * @var ExportProcessorInterface
+     */
+    private $exportProcessor;
+
+    /**
+     * @param Registry                 $registry
+     * @param AppState                 $appState
+     * @param ConfigLoader             $configLoader
+     * @param ObjectManagerInterface   $objectManager
+     * @param CacheManager             $cacheManager
+     * @param ExportProcessorInterface $exportProcessor
+     * @param null                     $name
+     */
+    public function __construct(
+        Registry $registry,
+        AppState $appState,
+        ConfigLoader $configLoader,
+        ObjectManagerInterface $objectManager,
+        CacheManager $cacheManager,
+        ExportProcessorInterface $exportProcessor,
+        $name = null
+    ) {
+        $this->exportProcessor = $exportProcessor;
+        parent::__construct($registry, $appState, $configLoader, $objectManager, $cacheManager, $name);
+    }
 
     /**
      * Configure the command
@@ -48,10 +83,10 @@ class ExportCommand extends AbstractCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         parent::execute($input, $output);
+        $this->writeSection('Start Export');
 
-        $this->_exportProcessor->setInput($input);
-        $this->_exportProcessor->setOutput($output);
-        $this->_exportProcessor->process();
+        $this->exportProcessor->setOutput($output);
+        $this->exportProcessor->process();
     }
 }
 

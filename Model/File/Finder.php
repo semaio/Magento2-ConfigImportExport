@@ -60,11 +60,28 @@ class Finder implements FinderInterface
     }
 
     /**
+     * @param string $environment
+     * @throws \InvalidArgumentException
+     */
+    public function setEnvironment($environment)
+    {
+        $environmentFolder = $this->folder . DIRECTORY_SEPARATOR . $environment;
+        if (false === is_dir($environmentFolder) || false === is_readable($environmentFolder)) {
+            throw new \InvalidArgumentException('Cannot access folders for environment: ' . $environment);
+        }
+        $this->environment = explode(DIRECTORY_SEPARATOR, trim($environment, DIRECTORY_SEPARATOR));
+    }
+
+    /**
      * @param string $folder
+     * @throws \InvalidArgumentException
      */
     public function setFolder($folder)
     {
-        $this->folder = $folder;
+        if (false === is_dir($folder) || false === is_readable($folder)) {
+            throw new \InvalidArgumentException('Cannot access folder: ' . $folder);
+        }
+        $this->folder = rtrim($folder, '/');
     }
 
     /**
@@ -81,14 +98,6 @@ class Finder implements FinderInterface
     public function setFormat($format)
     {
         $this->format = $format;
-    }
-
-    /**
-     * @param array $environment
-     */
-    public function setEnvironment($environment)
-    {
-        $this->environment = $environment;
     }
 
     /**

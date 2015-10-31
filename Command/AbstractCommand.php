@@ -13,8 +13,7 @@ use Magento\Framework\App\Cache\Manager as CacheManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Semaio\ConfigImportExport\Model\Processor\ExportProcessorInterface;
-use Semaio\ConfigImportExport\Model\Processor\ImportProcessorInterface;
+use Symfony\Component\Console\Helper\FormatterHelper;
 
 /**
  * Class AbstractCommand
@@ -54,15 +53,6 @@ abstract class AbstractCommand extends Command
     private $output;
 
     /**
-     * @var ExportProcessorInterface
-     */
-    protected $_exportProcessor;
-
-    /**
-     * @var ImportProcessorInterface
-     */
-    protected $_importProcessor;
-    /**
      * @var CacheManager
      */
     private $cacheManager;
@@ -73,8 +63,6 @@ abstract class AbstractCommand extends Command
      * @param ConfigLoader             $configLoader
      * @param ObjectManagerInterface   $objectManager
      * @param CacheManager             $cacheManager
-     * @param ExportProcessorInterface $exportProcessor
-     * @param ImportProcessorInterface $importProcessor
      * @param null                     $name
      */
     public function __construct(
@@ -83,8 +71,6 @@ abstract class AbstractCommand extends Command
         ConfigLoader $configLoader,
         ObjectManagerInterface $objectManager,
         CacheManager $cacheManager,
-        ExportProcessorInterface $exportProcessor,
-        ImportProcessorInterface $importProcessor,
         $name = null
     ) {
         $this->registry = $registry;
@@ -92,8 +78,6 @@ abstract class AbstractCommand extends Command
         $this->configLoader = $configLoader;
         $this->objectManager = $objectManager;
         $this->cacheManager = $cacheManager;
-        $this->_exportProcessor = $exportProcessor;
-        $this->_importProcessor = $importProcessor;
         parent::__construct($name);
     }
 
@@ -120,6 +104,24 @@ abstract class AbstractCommand extends Command
     public function getCacheManager()
     {
         return $this->cacheManager;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFormat()
+    {
+        return $this->input->getOption('format');
+    }
+
+    /**
+     * @param string $text
+     * @param string $style
+     */
+    public function writeSection($text, $style = 'bg=blue;fg=white')
+    {
+        $formatter = new FormatterHelper();
+        $this->output->writeln(['', $formatter->formatBlock($text, $style, true), '']);
     }
 }
 

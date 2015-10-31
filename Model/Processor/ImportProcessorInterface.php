@@ -5,6 +5,9 @@
  */
 namespace Semaio\ConfigImportExport\Model\Processor;
 
+use Semaio\ConfigImportExport\Model\File\Reader\ReaderInterface;
+use Semaio\ConfigImportExport\Model\File\FinderInterface;
+
 /**
  * Interface ImportProcessorInterface
  *
@@ -13,14 +16,12 @@ namespace Semaio\ConfigImportExport\Model\Processor;
 interface ImportProcessorInterface extends AbstractProcessorInterface
 {
     /**
-     * @param string $folder
-     * @throws \InvalidArgumentException
+     * @param ReaderInterface $reader
      */
-    public function setFolder($folder);
+    public function setReader(ReaderInterface $reader);
 
     /**
-     * @param string $environment
-     * @throws \InvalidArgumentException
+     * @param FinderInterface $finder
      */
-    public function setEnvironment($environment);
+    public function setFinder(FinderInterface $finder);
 }

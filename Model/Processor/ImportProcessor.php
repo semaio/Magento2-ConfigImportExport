@@ -8,6 +8,7 @@ namespace Semaio\ConfigImportExport\Model\Processor;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Semaio\ConfigImportExport\Model\Validator\ScopeValidatorInterface;
 use Semaio\ConfigImportExport\Model\File\FinderInterface;
+use Semaio\ConfigImportExport\Model\File\Reader\ReaderInterface;
 
 /**
  * Class ImportProcessor
@@ -27,41 +28,25 @@ class ImportProcessor extends AbstractProcessor implements ImportProcessorInterf
     private $scopeValidator;
 
     /**
-     * @var array
-     */
-    private $readers;
-
-    /**
-     * @var string
-     */
-    private $folder;
-
-    /**
-     * @var array
-     */
-    private $environment;
-    /**
      * @var FinderInterface
      */
     private $finder;
 
     /**
+     * @var ReaderInterface
+     */
+    private $reader;
+
+    /**
      * @param WriterInterface         $configWriter
      * @param ScopeValidatorInterface $scopeValidator
-     * @param FinderInterface         $finder
-     * @param array                   $readers
      */
     public function __construct(
         WriterInterface $configWriter,
-        ScopeValidatorInterface $scopeValidator,
-        FinderInterface $finder,
-        array $readers = []
-    )
-    {
+        ScopeValidatorInterface $scopeValidator
+    ) {
         $this->configWriter = $configWriter;
         $this->scopeValidator = $scopeValidator;
-        $this->finder = $finder;
-        $this->readers = $readers;
     }
 
     /**
@@ -69,34 +54,15 @@ class ImportProcessor extends AbstractProcessor implements ImportProcessorInterf
      */
     public function process()
     {
-        $this->writeSection('Start Import');
-
-        // Check if there is a reader for the given file extension
-        $format = $this->getFormat();
-        if (!array_key_exists($format, $this->readers)) {
-            throw new \InvalidArgumentException('Format "' . $format . '" is currently not supported."');
-        }
-
-        /** @var \Semaio\ConfigImportExport\Model\File\Reader\ReaderInterface $reader */
-        $reader = new $this->readers[$format];
-        if (!$reader || !is_object($reader)) {
-            throw new \InvalidArgumentException(ucfirst($format) . ' file reader could not be instantiated."');
-        }
-
         // Find files
-        $finder = $this->finder;
-        $finder->setEnvironment($this->environment);
-        $finder->setBaseFolder($this->getBaseFolderName());
-        $finder->setFolder($this->folder);
-        $finder->setFormat($this->getFormat());
-        $files = $finder->find();
+        $files = $this->finder->find();
         if (0 === count($files)) {
-            throw new \InvalidArgumentException('No files found for format: *.' . $format);
+            throw new \InvalidArgumentException('No files found for format: *.' . $this->getFormat());
         }
 
         foreach ($files as $file) {
             $valuesSet = 0;
-            $configurations = $reader->parse($file);
+            $configurations = $this->reader->parse($file);
             foreach ($configurations as $configPath => $configValues) {
                 $scopeConfigValues = $this->transformConfigToScopeConfig($configPath, $configValues);
                 foreach ($scopeConfigValues as $scopeConfigValue) {
@@ -117,36 +83,19 @@ class ImportProcessor extends AbstractProcessor implements ImportProcessorInterf
     }
 
     /**
-     * @param string $folder
-     * @throws \InvalidArgumentException
+     * @param ReaderInterface $reader
      */
-    public function setFolder($folder)
+    public function setReader(ReaderInterface $reader)
     {
-        if (false === is_dir($folder) || false === is_readable($folder)) {
-            throw new \InvalidArgumentException('Cannot access folder: ' . $folder);
-        }
-        $this->folder = rtrim($folder, '/');
+        $this->reader = $reader;
     }
 
     /**
-     * @param string $environment
-     * @throws \InvalidArgumentException
+     * @param FinderInterface $finder
      */
-    public function setEnvironment($environment)
+    public function setFinder(FinderInterface $finder)
     {
-        $environmentFolder = $this->folder . DIRECTORY_SEPARATOR . $environment;
-        if (false === is_dir($environmentFolder) || false === is_readable($environmentFolder)) {
-            throw new \InvalidArgumentException('Cannot access folders for environment: ' . $environment);
-        }
-        $this->environment = explode(DIRECTORY_SEPARATOR, trim($environment, DIRECTORY_SEPARATOR));
-    }
-
-    /**
-     * @return string
-     */
-    public function getBaseFolderName()
-    {
-        return $this->getInput()->getOption('base');
+        $this->finder = $finder;
     }
 
     /**

@@ -21,16 +21,6 @@ interface AbstractProcessorInterface
     public function process();
 
     /**
-     * @param InputInterface $input
-     */
-    public function setInput(InputInterface $input);
-
-    /**
-     * @return InputInterface
-     */
-    public function getInput();
-
-    /**
      * @param OutputInterface $output
      */
     public function setOutput(OutputInterface $output);
@@ -39,6 +29,11 @@ interface AbstractProcessorInterface
      * @return OutputInterface
      */
     public function getOutput();
+
+    /**
+     * @param string $format
+     */
+    public function setFormat($format);
 
     /**
      * @return string

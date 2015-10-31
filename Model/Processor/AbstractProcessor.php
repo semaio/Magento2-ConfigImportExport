@@ -5,9 +5,7 @@
  */
 namespace Semaio\ConfigImportExport\Model\Processor;
 
-use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Helper\FormatterHelper;
 
 /**
  * Class AbstractProcessor
@@ -17,30 +15,14 @@ use Symfony\Component\Console\Helper\FormatterHelper;
 abstract class AbstractProcessor implements AbstractProcessorInterface
 {
     /**
-     * @var InputInterface
-     */
-    private $input;
-
-    /**
      * @var OutputInterface
      */
     private $output;
 
     /**
-     * @param InputInterface $input
+     * @var string
      */
-    public function setInput(InputInterface $input)
-    {
-        $this->input = $input;
-    }
-
-    /**
-     * @return InputInterface
-     */
-    public function getInput()
-    {
-        return $this->input;
-    }
+    private $format;
 
     /**
      * @param OutputInterface $output
@@ -59,13 +41,11 @@ abstract class AbstractProcessor implements AbstractProcessorInterface
     }
 
     /**
-     * @param string $text
-     * @param string $style
+     * @param string $format
      */
-    public function writeSection($text, $style = 'bg=blue;fg=white')
+    public function setFormat($format)
     {
-        $formatter = new FormatterHelper();
-        $this->getOutput()->writeln(['', $formatter->formatBlock($text, $style, true), '']);
+        $this->format = $format;
     }
 
     /**
@@ -73,6 +53,6 @@ abstract class AbstractProcessor implements AbstractProcessorInterface
      */
     public function getFormat()
     {
-        return $this->getInput()->getOption('format');
+        return $this->format;
     }
 }
