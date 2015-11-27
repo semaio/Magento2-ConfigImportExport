@@ -132,4 +132,3 @@ class ImportCommand extends AbstractCommand
         $this->getCacheManager()->clean(['config', 'full_page']);
     }
 }
-

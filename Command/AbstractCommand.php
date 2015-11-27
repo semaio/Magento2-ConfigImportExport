@@ -124,4 +124,3 @@ abstract class AbstractCommand extends Command
         $this->output->writeln(['', $formatter->formatBlock($text, $style, true), '']);
     }
 }
-

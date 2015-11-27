@@ -87,4 +87,3 @@ class ExportCommand extends AbstractCommand
         $this->exportProcessor->process();
     }
 }
-
