@@ -104,7 +104,7 @@ class ImportCommand extends AbstractCommand
         }
 
         /** @var \Semaio\ConfigImportExport\Model\File\Reader\ReaderInterface $reader */
-        $reader = new $this->readers[$format];
+        $reader = $this->getObjectManager()->create($this->readers[$format]);
         if (!$reader || !is_object($reader)) {
             throw new \InvalidArgumentException(ucfirst($format) . ' file reader could not be instantiated."');
         }

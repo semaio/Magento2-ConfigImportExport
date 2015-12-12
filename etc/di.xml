@@ -28,4 +28,13 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Semaio\ConfigImportExport\Command\ExportCommand">
+        <arguments>
+            <argument name="writers" xsi:type="array">
+                <item name="yaml" xsi:type="string">Semaio\ConfigImportExport\Model\File\Writer\YamlWriter</item>
+                <item name="json" xsi:type="string">Semaio\ConfigImportExport\Model\File\Writer\JsonWriter</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

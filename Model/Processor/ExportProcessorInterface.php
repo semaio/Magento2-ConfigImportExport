@@ -5,6 +5,8 @@
  */
 namespace Semaio\ConfigImportExport\Model\Processor;
 
+use Semaio\ConfigImportExport\Model\File\Writer\WriterInterface;
+
 /**
  * Interface ExportProcessorInterface
  *
@@ -13,13 +15,22 @@ namespace Semaio\ConfigImportExport\Model\Processor;
 interface ExportProcessorInterface extends AbstractProcessorInterface
 {
     /**
-     * @param bool $isHierarchical
-     * @return $this
+     * @param WriterInterface $writer
      */
-    public function setIsHierarchical($isHierarchical);
+    public function setWriter(WriterInterface $writer);
 
     /**
-     * @return bool
+     * @param string $include
      */
-    public function getIsHierarchical();
+    public function setInclude($include);
+
+    /**
+     * @param string $includeScope
+     */
+    public function setIncludeScope($includeScope);
+
+    /**
+     * @param string $exclude
+     */
+    public function setExclude($exclude);
 }

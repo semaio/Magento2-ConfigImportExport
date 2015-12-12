@@ -123,4 +123,12 @@ abstract class AbstractCommand extends Command
         $formatter = new FormatterHelper();
         $this->output->writeln(['', $formatter->formatBlock($text, $style, true), '']);
     }
+
+    /**
+     * @return ObjectManagerInterface
+     */
+    public function getObjectManager()
+    {
+        return $this->objectManager;
+    }
 }
