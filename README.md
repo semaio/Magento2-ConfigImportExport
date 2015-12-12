@@ -1,29 +1,102 @@
-ConfigImportExport
-==================
+# ConfigImportExport
 
 This module provides new CLI commands for Magento 2 to import/export data in/from core_config_data.
 
 This module is inspired by the awesome n98-magerun plugin "HarrisStreet ImpEx" by @SchumacherFM for Magento 1 which you can find [here](https://github.com/Zookal/HarrisStreet-ImpEx).
 
-Functionality
--------------
+## Functionality
 
-This module is a work in progress and will be extended in the near future with more functionality.
+This module is a work in progress and will be extended in the near future with more functionality and support for other file formats.
 
-Currently implemented is only the import of yaml files. Other file formats and export functionality will be added later.
+Currently are the following file formats supported:
 
-Support
--------
+* Yaml (default)
+* Json
+
+### Import
+
+#### Usage
+
+```
+$ ./bin/magento config:data:import --help
+ Usage:
+  config:data:import [--base[="..."]] [-m|--format[="..."]] folder environment
+
+ Arguments:
+  folder                Import folder name
+  environment           Environment name. SubEnvs separated by slash e.g.: development/osx/developer01
+
+ Options:
+  --base                Base folder name (default: "base")
+  --format (-m)         Format: yaml, json (Default: yaml) (default: "yaml")
+```
+
+#### Folder Setup
+
+To import the Magento configuration you'll need to setup a specific folder structure in the root directory of your Magento installation:
+
+```
+magento_root
+├── app
+├── bin
+│   └── magento
+├── config
+│   └── store
+│       ├── base
+│       │   ├── allowsymlinks.yaml
+│       │   └── general.yaml
+│       ├── dev
+│       │   ├── admin.yaml
+│       │   └── therouv
+│       │       └── web.yaml
+│       ├── production
+│       │   └── web.yaml
+│       └── staging
+│           └── web.yaml
+├── lib
+└── pub
+```
+
+To import my (@therouv) specific Magento configuration settings, I would run the following command in the "magento_root" directory:
+
+`./bin/magento config:data:import config/store dev/therouv`
+
+### Export
+
+#### Usage
+
+```
+$ ./bin/magento config:data:export --help
+Usage:
+ config:data:export [-m|--format[="..."]] [-a|--hierarchical[="..."]] [-f|--filename[="..."]] [-i|--include[="..."]] [--includeScope[="..."]] [-x|--exclude[="..."]] [-s|--filePerNameSpace[="..."]]
+
+Options:
+ --format (-m)           Format: yaml, json (default: "yaml")
+ --hierarchical (-a)     Create a hierarchical or a flat structure (not all export format supports that). Enable with: y (default: "n")
+ --filename (-f)         File name into which should the export be written. Defaults into var directory.
+ --include (-i)          Path prefix, multiple values can be comma separated; exports only those paths
+ --includeScope          Scope name, multiple values can be comma separated; exports only those scopes
+ --exclude (-x)          Path prefix, multiple values can be comma separated; exports everything except ...
+ --filePerNameSpace (-s) Export each namespace into its own file. Enable with: y (default: "n")
+```
+
+#### Exported files
+
+The files are written to the **var** directory of your Magento installation.
+
+
+## Support
+
 If you encounter any problems or bugs, please create an issue on [GitHub](https://github.com/semaio/Magento2-ConfigImportExport/issues).
 
-Contribution
-------------
+## Contribution
+
 Any contribution to the development of MageSetup is highly welcome. The best possibility to provide any code is to open a [pull request on GitHub](https://help.github.com/articles/using-pull-requests).
 
-Licence
--------
+## Licence
+
 [Open Software License (OSL 3.0)](http://opensource.org/licenses/osl-3.0.php)
 
-Copyright
----------
+## Copyright
+
 (c) 2015 Rouven Alexander Rieker
