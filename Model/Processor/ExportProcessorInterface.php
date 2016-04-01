@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Rouven Alexander Rieker
+ * Copyright © 2016 Rouven Alexander Rieker
  * See LICENSE.md bundled with this module for license details.
  */
 namespace Semaio\ConfigImportExport\Model\Processor;

@@ -99,4 +99,4 @@ Any contribution to the development of MageSetup is highly welcome. The best pos
 
 ## Copyright
 
-(c) 2015 Rouven Alexander Rieker
+(c) 2016 Rouven Alexander Rieker
