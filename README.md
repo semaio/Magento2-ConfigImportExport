@@ -4,6 +4,10 @@ This module provides new CLI commands for Magento 2 to import/export data in/fro
 
 This module is inspired by the awesome n98-magerun plugin "HarrisStreet ImpEx" by @SchumacherFM for Magento 1 which you can find [here](https://github.com/Zookal/HarrisStreet-ImpEx).
 
+## Facts
+
+Version: 2.0.0
+
 ## Functionality
 
 This module is a work in progress and will be extended in the near future with more functionality and support for other file formats.
