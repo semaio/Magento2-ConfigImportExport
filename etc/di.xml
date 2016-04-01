@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2016 Rouven Alexander Rieker
+ * See LICENSE.md bundled with this module for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Semaio\ConfigImportExport\Model\Processor\ExportProcessorInterface" type="Semaio\ConfigImportExport\Model\Processor\ExportProcessor"/>
+    <preference for="Semaio\ConfigImportExport\Model\Processor\ImportProcessorInterface" type="Semaio\ConfigImportExport\Model\Processor\ImportProcessor"/>
+    <preference for="Semaio\ConfigImportExport\Model\Validator\ScopeValidatorInterface" type="Semaio\ConfigImportExport\Model\Validator\ScopeValidator"/>
+    <preference for="Semaio\ConfigImportExport\Model\File\FinderInterface" type="Semaio\ConfigImportExport\Model\File\Finder"/>
+
+    <type name="Magento\Framework\Console\CommandList">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="SemaioConfigExportCommand" xsi:type="object">Semaio\ConfigImportExport\Command\ExportCommand</item>
+                <item name="SemaioConfigImportCommand" xsi:type="object">Semaio\ConfigImportExport\Command\ImportCommand</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Semaio\ConfigImportExport\Command\ImportCommand">
+        <arguments>
+            <argument name="readers" xsi:type="array">
+                <item name="yaml" xsi:type="string">Semaio\ConfigImportExport\Model\File\Reader\YamlReader</item>
+                <item name="json" xsi:type="string">Semaio\ConfigImportExport\Model\File\Reader\JsonReader</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Semaio\ConfigImportExport\Command\ExportCommand">
+        <arguments>
+            <argument name="writers" xsi:type="array">
+                <item name="yaml" xsi:type="string">Semaio\ConfigImportExport\Model\File\Writer\YamlWriter</item>
+                <item name="json" xsi:type="string">Semaio\ConfigImportExport\Model\File\Writer\JsonWriter</item>
+            </argument>
+        </arguments>
+    </type>
+</config>
