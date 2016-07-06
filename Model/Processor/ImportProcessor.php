@@ -107,6 +107,10 @@ class ImportProcessor extends AbstractProcessor implements ImportProcessorInterf
     {
         $return = [];
         foreach ($config as $scope => $scopeIdValue) {
+            if (!$scopeIdValue) {
+                continue;
+            }
+
             foreach ($scopeIdValue as $scopeId => $value) {
                 $scopeId = (int)$scopeId;
 
