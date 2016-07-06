@@ -126,10 +126,6 @@ class ImportProcessor extends AbstractProcessor implements ImportProcessorInterf
                     continue;
                 }
 
-                // Valid scope Write output
-                $value = str_replace("\r", '', addcslashes($value, '"'));
-                $value = str_replace("\n", '\\n', $value);
-
                 $return[] = [
                     'value'    => $value,
                     'scope'    => $scope,
