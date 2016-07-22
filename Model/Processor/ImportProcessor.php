@@ -112,8 +112,6 @@ class ImportProcessor extends AbstractProcessor implements ImportProcessorInterf
             }
 
             foreach ($scopeIdValue as $scopeId => $value) {
-                $scopeId = (int)$scopeId;
-
                 if (!$this->scopeValidator->validate($scope, $scopeId)) {
                     $errorMsg = sprintf(
                         '<error>ERROR: Invalid scopeId "%s" for scope "%s" (%s => %s)</error>',
