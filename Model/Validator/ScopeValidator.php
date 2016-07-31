@@ -5,7 +5,9 @@
  */
 namespace Semaio\ConfigImportExport\Model\Validator;
 
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\Website;
 
 /**
  * Class ScopeValidator
@@ -63,6 +65,18 @@ class ScopeValidator implements ScopeValidatorInterface
             return true;
         }
 
+        if (is_numeric($websiteId)) {
+            // Dont bother checking website codes on numeric input
+            return false;
+        }
+        // @todo hs: build up array of websiteCodes, to prevent wasting time looping
+        /** @var Website $website */
+        foreach ($websites as $website) {
+            if ($website->getCode() == $websiteId) {
+                return true;
+            }
+        }
+
         return false;
     }
 
@@ -77,6 +91,18 @@ class ScopeValidator implements ScopeValidatorInterface
         $stores = $this->storeManager->getStores();
         if (array_key_exists($storeId, $stores)) {
             return true;
+        }
+
+        // @todo hs: build up array of storeCodes, to prevent wasting time looping
+        if (is_numeric($storeId)) {
+            // Dont bother checking store codes on numeric input
+            return false;
+        }
+        /** @var Store $store */
+        foreach ($stores as $store) {
+            if ($store->getCode() == $storeId) {
+                return true;
+            }
         }
 
         return false;

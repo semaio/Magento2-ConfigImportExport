@@ -9,6 +9,7 @@ use Magento\Framework\App\ObjectManager\ConfigLoader;
 use Magento\Framework\App\State as AppState;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
+use Magento\Framework\App\Area;
 use Magento\Framework\App\Cache\Manager as CacheManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -58,12 +59,12 @@ abstract class AbstractCommand extends Command
     private $cacheManager;
 
     /**
-     * @param Registry                 $registry
-     * @param AppState                 $appState
-     * @param ConfigLoader             $configLoader
-     * @param ObjectManagerInterface   $objectManager
-     * @param CacheManager             $cacheManager
-     * @param null                     $name
+     * @param Registry               $registry
+     * @param AppState               $appState
+     * @param ConfigLoader           $configLoader
+     * @param ObjectManagerInterface $objectManager
+     * @param CacheManager           $cacheManager
+     * @param null                   $name
      */
     public function __construct(
         Registry $registry,
@@ -91,8 +92,19 @@ abstract class AbstractCommand extends Command
         $this->input = $input;
         $this->output = $output;
 
-        $this->appState->setAreaCode('adminhtml');
-        $this->objectManager->configure($this->configLoader->load('adminhtml'));
+        try {
+            $area = $this->appState->getAreaCode();
+            if ($area != Area::AREA_ADMINHTML) {
+                $this->appState->setAreaCode(Area::AREA_ADMINHTML);
+            }
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            $this->appState->setAreaCode(Area::AREA_ADMINHTML);
+        }
+
+        $area = $this->appState->getAreaCode();
+        $configLoader = $this->objectManager->get('Magento\Framework\ObjectManager\ConfigLoaderInterface');
+        $this->objectManager->configure($configLoader->load($area));
+
         $this->registry->register('isSecureArea', true);
     }
 
