@@ -1,13 +1,20 @@
 <?php
-
+/**
+ * Copyright © 2016 Rouven Alexander Rieker
+ * See LICENSE.md bundled with this module for license details.
+ */
 namespace Semaio\ConfigImportExport\Test\Unit\Model\Converter;
-
 
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Semaio\ConfigImportExport\Model\Converter\ScopeConverter;
 
+/**
+ * Class ScopeConverterTest
+ *
+ * @package Semaio\ConfigImportExport\Test\Unit\Model\Converter
+ */
 class ScopeConverterTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -20,10 +27,12 @@ class ScopeConverterTest extends \PHPUnit_Framework_TestCase
      */
     private $converter;
 
+    /**
+     * Set up test class
+     */
     protected function setUp()
     {
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)->getMock();
-
         $this->converter = new ScopeConverter($this->storeManagerMock);
     }
 
