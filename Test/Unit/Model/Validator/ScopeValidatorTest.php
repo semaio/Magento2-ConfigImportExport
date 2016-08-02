@@ -22,11 +22,9 @@ class ScopeValidatorTest extends \PHPUnit_Framework_TestCase
     private $validator;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|WebsiteInterface
+     * @var \PHPUnit_Framework_MockObject_MockObject|WebsiteInterface
      */
-    protected  $mockWebsiteOne = null;
-
-
+    protected $mockWebsiteOne = null;
 
     /**
      * Set up test class
@@ -35,8 +33,7 @@ class ScopeValidatorTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        $this->mockWebsiteOne = $this->getMockBuilder(
-            WebsiteInterface::class)
+        $this->mockWebsiteOne = $this->getMockBuilder(WebsiteInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getCode'])
             ->getMockForAbstractClass();
@@ -70,7 +67,7 @@ class ScopeValidatorTest extends \PHPUnit_Framework_TestCase
     {
         $existingWebsiteCode = 'my-cool-website';
 
-        $this->mockWebsiteOne ->expects($this->any())->method('getCode')
+        $this->mockWebsiteOne->expects($this->any())->method('getCode')
             ->will($this->returnValue($existingWebsiteCode));
 
         $this->assertTrue($this->validator->validate('websites', $existingWebsiteCode));

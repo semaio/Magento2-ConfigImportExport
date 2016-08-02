@@ -6,7 +6,7 @@ This module is inspired by the awesome n98-magerun plugin "HarrisStreet ImpEx" b
 
 ## Facts
 
-Version: 2.1.0
+Version: 2.1.1
 
 ## Functionality
 
@@ -100,6 +100,10 @@ Any contribution to the development of MageSetup is highly welcome. The best pos
 ## Licence
 
 [Open Software License (OSL 3.0)](http://opensource.org/licenses/osl-3.0.php)
+
+## Contributors
+
+Huge thanks to all [contributors](https://github.com/semaio/Magento2-ConfigImportExport/graphs/contributors) who contributed to this module.
 
 ## Copyright
 
