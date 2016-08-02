@@ -10,6 +10,7 @@
     <preference for="Semaio\ConfigImportExport\Model\Processor\ImportProcessorInterface" type="Semaio\ConfigImportExport\Model\Processor\ImportProcessor"/>
     <preference for="Semaio\ConfigImportExport\Model\Validator\ScopeValidatorInterface" type="Semaio\ConfigImportExport\Model\Validator\ScopeValidator"/>
     <preference for="Semaio\ConfigImportExport\Model\File\FinderInterface" type="Semaio\ConfigImportExport\Model\File\Finder"/>
+    <preference for="Semaio\ConfigImportExport\Model\Converter\ScopeConverterInterface" type="Semaio\ConfigImportExport\Model\Converter\ScopeConverter" />
 
     <type name="Magento\Framework\Console\CommandList">
         <arguments>

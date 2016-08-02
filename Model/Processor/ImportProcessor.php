@@ -6,6 +6,7 @@
 namespace Semaio\ConfigImportExport\Model\Processor;
 
 use Magento\Framework\App\Config\Storage\WriterInterface;
+use Semaio\ConfigImportExport\Model\Converter\ScopeConverterInterface;
 use Semaio\ConfigImportExport\Model\Validator\ScopeValidatorInterface;
 use Semaio\ConfigImportExport\Model\File\FinderInterface;
 use Semaio\ConfigImportExport\Model\File\Reader\ReaderInterface;
@@ -38,15 +39,23 @@ class ImportProcessor extends AbstractProcessor implements ImportProcessorInterf
     private $reader;
 
     /**
-     * @param WriterInterface         $configWriter
+     * @var ScopeConverterInterface
+     */
+    private $scopeConverter;
+
+    /**
+     * @param WriterInterface $configWriter
      * @param ScopeValidatorInterface $scopeValidator
+     * @param ScopeConverterInterface $scopeConverter
      */
     public function __construct(
         WriterInterface $configWriter,
-        ScopeValidatorInterface $scopeValidator
+        ScopeValidatorInterface $scopeValidator,
+        ScopeConverterInterface $scopeConverter
     ) {
         $this->configWriter = $configWriter;
         $this->scopeValidator = $scopeValidator;
+        $this->scopeConverter = $scopeConverter;
     }
 
     /**
@@ -70,7 +79,7 @@ class ImportProcessor extends AbstractProcessor implements ImportProcessorInterf
                         $configPath,
                         $scopeConfigValue['value'],
                         $scopeConfigValue['scope'],
-                        $scopeConfigValue['scope_id']
+                        $this->scopeConverter->convert($scopeConfigValue['scope_id'], $scopeConfigValue['scope'])
                     );
 
                     $this->getOutput()->writeln(sprintf('<comment>%s => %s</comment>', $configPath, $scopeConfigValue['value']));

@@ -5,7 +5,11 @@
  */
 namespace Semaio\ConfigImportExport\Test\Unit\Model\Processor;
 
+use Magento\Framework\App\Config\Storage\WriterInterface;
+use Semaio\ConfigImportExport\Model\Converter\ScopeConverterInterface;
 use Semaio\ConfigImportExport\Model\Processor\ImportProcessor;
+use Semaio\ConfigImportExport\Model\Validator\ScopeValidatorInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class ImportProcessorTest
@@ -15,19 +19,24 @@ use Semaio\ConfigImportExport\Model\Processor\ImportProcessor;
 class ImportProcessorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Symfony\Component\Console\Output\OutputInterface
+     * @var OutputInterface
      */
     private $outputMock;
 
     /**
-     * @var \Magento\Framework\App\Config\Storage\WriterInterface
+     * @var WriterInterface
      */
     private $configWriterMock;
 
     /**
-     * @var \Semaio\ConfigImportExport\Model\Validator\ScopeValidatorInterface
+     * @var ScopeValidatorInterface
      */
     private $scopeValidatorMock;
+
+    /**
+     * @var ScopeConverterInterface
+     */
+    private $scopeConverterMock;
 
     /**
      * Set up test class
@@ -35,9 +44,10 @@ class ImportProcessorTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->outputMock = $this->getMock('Symfony\Component\Console\Output\OutputInterface');
-        $this->configWriterMock = $this->getMock('Magento\Framework\App\Config\Storage\WriterInterface');
-        $this->scopeValidatorMock = $this->getMock('Semaio\ConfigImportExport\Model\Validator\ScopeValidatorInterface');
+        $this->outputMock = $this->getMockBuilder(OutputInterface::class)->getMock();
+        $this->configWriterMock = $this->getMockBuilder(WriterInterface::class)->getMock();
+        $this->scopeValidatorMock = $this->getMockBuilder(ScopeValidatorInterface::class)->getMock();
+        $this->scopeConverterMock = $this->getMockBuilder(ScopeConverterInterface::class)->getMock();
     }
 
     /**
@@ -50,7 +60,7 @@ class ImportProcessorTest extends \PHPUnit_Framework_TestCase
 
         $this->setExpectedException('InvalidArgumentException');
 
-        $processor = new ImportProcessor($this->configWriterMock, $this->scopeValidatorMock);
+        $processor = new ImportProcessor($this->configWriterMock, $this->scopeValidatorMock, $this->scopeConverterMock);
         $processor->setFinder($finderMock);
         $processor->process();
     }
@@ -77,7 +87,7 @@ class ImportProcessorTest extends \PHPUnit_Framework_TestCase
         $this->scopeValidatorMock->expects($this->once())->method('validate')->willReturn(false);
         $this->configWriterMock->expects($this->never())->method('save');
 
-        $processor = new ImportProcessor($this->configWriterMock, $this->scopeValidatorMock);
+        $processor = new ImportProcessor($this->configWriterMock, $this->scopeValidatorMock, $this->scopeConverterMock);
         $processor->setFormat('yaml');
         $processor->setOutput($this->outputMock);
         $processor->setFinder($finderMock);
@@ -108,7 +118,7 @@ class ImportProcessorTest extends \PHPUnit_Framework_TestCase
         $this->scopeValidatorMock->expects($this->once())->method('validate')->willReturn(true);
         $this->configWriterMock->expects($this->once())->method('save');
 
-        $processor = new ImportProcessor($this->configWriterMock, $this->scopeValidatorMock);
+        $processor = new ImportProcessor($this->configWriterMock, $this->scopeValidatorMock, $this->scopeConverterMock);
         $processor->setOutput($this->outputMock);
         $processor->setFinder($finderMock);
         $processor->setReader($readerMock);
