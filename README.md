@@ -101,6 +101,10 @@ Any contribution to the development of MageSetup is highly welcome. The best pos
 
 [Open Software License (OSL 3.0)](http://opensource.org/licenses/osl-3.0.php)
 
+## Contributors
+
+Huge thanks to all [contributors](https://github.com/semaio/Magento2-ConfigImportExport/graphs/contributors) who contributed to this module.
+
 ## Copyright
 
 (c) 2016 Rouven Alexander Rieker
