@@ -71,7 +71,7 @@ class ImportProcessor extends AbstractProcessor implements ImportProcessorInterf
 
         foreach ($files as $file) {
             $valuesSet = 0;
-            $configurations = $this->reader->parse($file);
+            $configurations = $this->getConfigurationsFromFile($file);
             foreach ($configurations as $configPath => $configValues) {
                 $scopeConfigValues = $this->transformConfigToScopeConfig($configPath, $configValues);
                 foreach ($scopeConfigValues as $scopeConfigValue) {
@@ -89,6 +89,22 @@ class ImportProcessor extends AbstractProcessor implements ImportProcessorInterf
 
             $this->getOutput()->writeln(sprintf('<info>Processed: %s with %s value(s).</info>', $file, $valuesSet));
         }
+    }
+
+    /**
+     * @param string $file
+     * @return array
+     */
+    private function getConfigurationsFromFile($file)
+    {
+        $configurations = $this->reader->parse($file);
+        if (!is_array($configurations)) {
+            $this->getOutput()->writeln(
+                sprintf("<error>Skipped: '%s' (not an array: %s).</error>", $file, var_export($configurations, true))
+            );
+            $configurations = [];
+        }
+        return $configurations;
     }
 
     /**
