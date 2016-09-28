@@ -14,7 +14,7 @@ interface ReaderInterface
 {
     /**
      * @param string $fileName
-     * @return array
+     * @return mixed
      */
     public function parse($fileName);
 }
