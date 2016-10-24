@@ -16,12 +16,14 @@ class YamlReader extends AbstractReader
 {
     /**
      * @param string $fileName
-     * @return array
+     * @return mixed
      */
     public function parse($fileName)
     {
         $content = SymfonyYaml::parse($fileName);
 
-        return $this->normalize($content);
+        return is_array($content)
+            ? $this->normalize($content)
+            : $content;
     }
 }
