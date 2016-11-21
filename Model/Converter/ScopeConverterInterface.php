@@ -12,6 +12,9 @@ namespace Semaio\ConfigImportExport\Model\Converter;
  */
 interface ScopeConverterInterface
 {
+    const SCOPE_STORES = 'stores';
+    const SCOPE_WEBSITES = 'websites';
+
     /**
      * Converts a string scope to integer scope id if needed
      *
