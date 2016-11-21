@@ -14,8 +14,6 @@ use Magento\Store\Model\StoreManagerInterface;
  */
 class ScopeConverter implements ScopeConverterInterface
 {
-    const SCOPE_STORES = 'stores';
-    const SCOPE_WEBSITES = 'websites';
     /**
      * @var StoreManagerInterface
      */
@@ -56,8 +54,9 @@ class ScopeConverter implements ScopeConverterInterface
     }
 
     /**
-     * @param $scope
+     * Retrieve the entities for the given scope
      *
+     * @param  string $scope Scope
      * @return \Magento\Store\Api\Data\WebsiteInterface[]|\Magento\Store\Api\Data\StoreInterface[]
      */
     private function getEntityStore($scope)
@@ -66,8 +65,7 @@ class ScopeConverter implements ScopeConverterInterface
             return $this->entityStore[$scope];
         }
 
-        switch ($scope)
-        {
+        switch ($scope) {
             case self::SCOPE_STORES:
                 $this->entityStore[$scope] = $this->storeManager->getStores(true, true);
                 break;
