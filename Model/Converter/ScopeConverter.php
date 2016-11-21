@@ -14,10 +14,17 @@ use Magento\Store\Model\StoreManagerInterface;
  */
 class ScopeConverter implements ScopeConverterInterface
 {
+    const SCOPE_STORES = 'stores';
+    const SCOPE_WEBSITES = 'websites';
     /**
      * @var StoreManagerInterface
      */
     private $storeManager;
+
+    /**
+     * @var array
+     */
+    private $entityStore;
 
     /**
      * @param StoreManagerInterface $storeManager
@@ -40,20 +47,39 @@ class ScopeConverter implements ScopeConverterInterface
             return $scopeId;
         }
 
-        if ($scope == 'stores') {
-            $store = $this->storeManager->getStore($scopeId);
-            if ($store->getId() > 0) {
-                return $store->getId();
-            }
+        $entities = $this->getEntityStore($scope);
+        if (isset($entities[$scopeId])) {
+            return $entities[$scopeId]->getId();
         }
 
-        if ($scope == 'websites') {
-            $website = $this->storeManager->getWebsite($scopeId);
-            if ($website->getId() > 0) {
-                return $website->getId();
-            }
+        throw new ScopeConvertException(sprintf('Unable to process code "%s" for scope "%s"', $scopeId, $scope));
+    }
+
+    /**
+     * @param $scope
+     *
+     * @return \Magento\Store\Api\Data\WebsiteInterface[]|\Magento\Store\Api\Data\StoreInterface[]
+     */
+    private function getEntityStore($scope)
+    {
+        if (isset($this->entityStore[$scope])) {
+            return $this->entityStore[$scope];
         }
 
-        return $scopeId;
+        switch ($scope)
+        {
+            case self::SCOPE_STORES:
+                $this->entityStore[$scope] = $this->storeManager->getStores(true, true);
+                break;
+
+            case self::SCOPE_WEBSITES:
+                $this->entityStore[$scope] = $this->storeManager->getWebsites(true, true);
+                break;
+
+            default:
+                throw new ScopeConvertException(sprintf('Unknown scope "%s"', $scope));
+        }
+
+        return $this->entityStore[$scope];
     }
 }
