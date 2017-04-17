@@ -88,7 +88,7 @@ class ScopeValidator implements ScopeValidatorInterface
      */
     private function isValidStoreId($storeId)
     {
-        $stores = $this->storeManager->getStores();
+        $stores = $this->storeManager->getStores(true);
         if (array_key_exists($storeId, $stores)) {
             return true;
         }
