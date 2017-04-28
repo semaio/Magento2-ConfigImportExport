@@ -93,20 +93,8 @@ abstract class AbstractWriter implements WriterInterface
     {
         $return = array();
         foreach ($exportData as $row) {
-            $pathDetails = explode('/', $row['path']);
-            if (!isset($return[$pathDetails[0]])) {
-                $return[$pathDetails[0]] = array();
-            }
-            if (!isset($return[$pathDetails[0]][$pathDetails[1]])) {
-                $return[$pathDetails[0]][$pathDetails[1]] = array();
-            }
-            if (!isset($return[$pathDetails[0]][$pathDetails[1]][$pathDetails[2]])) {
-                $return[$pathDetails[0]][$pathDetails[1]][$pathDetails[2]] = array();
-            }
-            if (!isset($return[$pathDetails[0]][$pathDetails[1]][$pathDetails[2]][$row['scope']])) {
-                $return[$pathDetails[0]][$pathDetails[1]][$pathDetails[2]][$row['scope']] = array();
-            }
-            $return[$pathDetails[0]][$pathDetails[1]][$pathDetails[2]][$row['scope']][$row['scope_id']] = $row['value'];
+            list($firstPart, $secondPart, $thirdPart) = explode('/', $row['path'], 3);
+            $return[$firstPart][$secondPart][$thirdPart][$row['scope']][$row['scope_id']] = $row['value'];
         }
 
         return $return;
