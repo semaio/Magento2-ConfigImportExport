@@ -110,6 +110,6 @@ class YamlWriter extends AbstractWriter
             return "|\n" . $value;
         }
 
-        return '\'' . addcslashes($value, '\'') . '\'';
+        return '\'' . str_replace('\'', '\'\'', $value) . '\'';
     }
 }
