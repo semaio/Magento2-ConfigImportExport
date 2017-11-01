@@ -149,6 +149,18 @@ class ImportProcessor extends AbstractProcessor implements ImportProcessorInterf
                     continue;
                 }
 
+                try {
+                    $value = $this->resolveValue($value);
+                } catch (\UnexpectedValueException $e) {
+                    $errorMsg = sprintf(
+                        '<error>' . $e->getMessage() . ' (%s => %s)</error>',
+                        $path,
+                        $value
+                    );
+                    $this->getOutput()->writeln($errorMsg);
+                    continue;
+                }
+
                 $return[] = [
                     'value'    => $value,
                     'scope'    => $scope,
@@ -158,5 +170,31 @@ class ImportProcessor extends AbstractProcessor implements ImportProcessorInterf
         }
 
         return $return;
+    }
+
+    /**
+     * Resolve the config value if it's an environment
+     * variable reference.
+     *
+     * @throws \UnexpectedValueException
+     *
+     * @param string $value
+     * @return string|false the original string, or the resolved
+     * string if it's a reference or false on error
+     */
+    public function resolveValue($value)
+    {
+        $value = preg_replace_callback(
+            '/\{env:([^:\}\{]+?)\}/',
+            function ($matches) {
+                $value = getenv($matches[1]);
+                if ($value === false) {
+                    throw new \UnexpectedValueException('Environment variable does not exist');
+                }
+                return getenv($matches[1]);
+            },
+            $value
+        );
+        return $value;
     }
 }
