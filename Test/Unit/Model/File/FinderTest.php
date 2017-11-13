@@ -12,7 +12,7 @@ use Semaio\ConfigImportExport\Model\File\Finder;
  *
  * @package Semaio\ConfigImportExport\Test\Unit\Model\File
  */
-class FinderTest extends \PHPUnit_Framework_TestCase
+class FinderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Finder
@@ -56,7 +56,7 @@ class FinderTest extends \PHPUnit_Framework_TestCase
         $this->finder->setFolder($folder);
         $this->finder->setEnvironment('dev');
 
-        $this->setExpectedException('InvalidArgumentException');
+        $this->expectException('InvalidArgumentException');
         $this->finder->find();
     }
 
@@ -71,7 +71,7 @@ class FinderTest extends \PHPUnit_Framework_TestCase
         $this->finder->setFolder($folder);
         $this->finder->setEnvironment('dev2');
 
-        $this->setExpectedException('InvalidArgumentException');
+        $this->expectException('InvalidArgumentException');
         $this->finder->find();
     }
 
@@ -80,7 +80,7 @@ class FinderTest extends \PHPUnit_Framework_TestCase
      */
     public function setEnvironment()
     {
-        $this->setExpectedException('InvalidArgumentException');
+        $this->expectException('InvalidArgumentException');
         $folder = __DIR__ . DIRECTORY_SEPARATOR . 'Finder' . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'store' . DIRECTORY_SEPARATOR;
         $this->finder->setFolder($folder);
         $this->finder->setEnvironment('abc');
@@ -91,7 +91,7 @@ class FinderTest extends \PHPUnit_Framework_TestCase
      */
     public function setFolder()
     {
-        $this->setExpectedException('InvalidArgumentException');
+        $this->expectException('InvalidArgumentException');
         $folder = __DIR__ . DIRECTORY_SEPARATOR . 'Finder' . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'test';
         $this->finder->setFolder($folder);
     }

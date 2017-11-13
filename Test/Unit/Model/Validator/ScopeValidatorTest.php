@@ -14,7 +14,7 @@ use Semaio\ConfigImportExport\Model\Validator\ScopeValidator;
  *
  * @package Semaio\ConfigImportExport\Test\Unit\Model\Validator
  */
-class ScopeValidatorTest extends \PHPUnit_Framework_TestCase
+class ScopeValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ScopeValidator
@@ -38,7 +38,8 @@ class ScopeValidatorTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getCode'])
             ->getMockForAbstractClass();
 
-        $storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
+        $storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+            ->getMock();
         $storeManagerMock->expects($this->any())->method('getWebsites')->willReturn([1 => $this->mockWebsiteOne]);
         $storeManagerMock->expects($this->any())->method('getStores')->willReturn([2 => 'ABC']);
 
