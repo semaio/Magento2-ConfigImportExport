@@ -12,7 +12,7 @@ use Semaio\ConfigImportExport\Model\File\Reader\YamlReader;
  *
  * @package Semaio\ConfigImportExport\Test\Unit\Model\File\Reader
  */
-class YamlReaderTest extends \PHPUnit_Framework_TestCase
+class YamlReaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var YamlReader
