@@ -3,6 +3,7 @@
  * Copyright © 2016 Rouven Alexander Rieker
  * See LICENSE.md bundled with this module for license details.
  */
+
 namespace Semaio\ConfigImportExport\Test\Unit\Model\Converter;
 
 use Magento\Store\Api\Data\StoreInterface;
@@ -15,10 +16,10 @@ use Semaio\ConfigImportExport\Model\Converter\ScopeConverter;
  *
  * @package Semaio\ConfigImportExport\Test\Unit\Model\Converter
  */
-class ScopeConverterTest extends \PHPUnit_Framework_TestCase
+class ScopeConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface
      */
     private $storeManagerMock;
 
@@ -70,9 +71,13 @@ class ScopeConverterTest extends \PHPUnit_Framework_TestCase
 
         $this->storeManagerMock
             ->expects($this->once())
-            ->method('getStore')
-            ->with($storeCode)
-            ->willReturn($storeStub);
+            ->method('getStores')
+            ->with($this->equalTo(true), $this->equalTo(true))
+            ->willReturn(
+                [
+                    $storeCode => $storeStub,
+                ]
+            );
 
         $this->assertEquals($storeId, $this->converter->convert($storeCode, $scope));
     }
@@ -94,9 +99,13 @@ class ScopeConverterTest extends \PHPUnit_Framework_TestCase
 
         $this->storeManagerMock
             ->expects($this->once())
-            ->method('getWebsite')
-            ->with($websiteCode)
-            ->willReturn($storeStub);
+            ->method('getWebsites')
+            ->with($this->equalTo(true), $this->equalTo(true))
+            ->willReturn(
+                [
+                    $websiteCode => $storeStub,
+                ]
+            );
 
         $this->assertEquals($websiteId, $this->converter->convert($websiteCode, $scope));
     }
