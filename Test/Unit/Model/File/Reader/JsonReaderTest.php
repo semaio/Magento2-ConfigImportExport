@@ -12,7 +12,7 @@ use Semaio\ConfigImportExport\Model\File\Reader\JsonReader;
  *
  * @package Semaio\ConfigImportExport\Test\Unit\Model\File\Reader
  */
-class JsonReaderTest extends \PHPUnit_Framework_TestCase
+class JsonReaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var JsonReader
@@ -48,7 +48,7 @@ class JsonReaderTest extends \PHPUnit_Framework_TestCase
     {
         $baseDir = __DIR__ . DIRECTORY_SEPARATOR . 'JsonReaderTest' . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR;
 
-        $this->setExpectedException('InvalidArgumentException');
+        $this->expectException('InvalidArgumentException');
 
         $this->reader->parse($baseDir . 'fx-test-invalid.json');
     }

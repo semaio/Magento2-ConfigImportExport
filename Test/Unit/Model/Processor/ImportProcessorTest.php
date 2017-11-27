@@ -16,7 +16,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @package Semaio\ConfigImportExport\Test\Unit\Model\Processor
  */
-class ImportProcessorTest extends \PHPUnit_Framework_TestCase
+class ImportProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var OutputInterface
@@ -55,10 +55,15 @@ class ImportProcessorTest extends \PHPUnit_Framework_TestCase
      */
     public function processWithoutFiles()
     {
-        $finderMock = $this->getMock('Semaio\ConfigImportExport\Model\File\Finder', ['find']);
-        $finderMock->expects($this->once())->method('find')->willReturn([]);
+        $finderMock = $this->getMockBuilder('Semaio\ConfigImportExport\Model\File\Finder')
+            ->setMethods(['find'])
+            ->getMock();
+        $finderMock
+            ->expects($this->once())
+            ->method('find')
+            ->willReturn([]);
 
-        $this->setExpectedException('InvalidArgumentException');
+        $this->expectException('InvalidArgumentException');
 
         $processor = new ImportProcessor($this->configWriterMock, $this->scopeValidatorMock, $this->scopeConverterMock);
         $processor->setFinder($finderMock);
@@ -70,7 +75,9 @@ class ImportProcessorTest extends \PHPUnit_Framework_TestCase
      */
     public function processWithInvalidScopeData()
     {
-        $finderMock = $this->getMock('Semaio\ConfigImportExport\Model\File\Finder', ['find']);
+        $finderMock = $this->getMockBuilder('Semaio\ConfigImportExport\Model\File\Finder')
+            ->setMethods(['find'])
+            ->getMock();
         $finderMock->expects($this->once())->method('find')->willReturn(['abc.yaml']);
 
         $parseResult = [
@@ -81,7 +88,9 @@ class ImportProcessorTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        $readerMock = $this->getMock('Semaio\ConfigImportExport\Model\File\Reader\YamlReader', ['parse']);
+        $readerMock = $this->getMockBuilder('Semaio\ConfigImportExport\Model\File\Reader\YamlReader')
+            ->setMethods(['parse'])
+            ->getMock();
         $readerMock->expects($this->once())->method('parse')->willReturn($parseResult);
 
         $this->scopeValidatorMock->expects($this->once())->method('validate')->willReturn(false);
@@ -101,7 +110,9 @@ class ImportProcessorTest extends \PHPUnit_Framework_TestCase
      */
     public function process()
     {
-        $finderMock = $this->getMock('Semaio\ConfigImportExport\Model\File\Finder', ['find']);
+        $finderMock = $this->getMockBuilder('Semaio\ConfigImportExport\Model\File\Finder')
+            ->setMethods(['find'])
+            ->getMock();
         $finderMock->expects($this->once())->method('find')->willReturn(['abc.yaml']);
 
         $parseResult = [
@@ -112,7 +123,9 @@ class ImportProcessorTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        $readerMock = $this->getMock('Semaio\ConfigImportExport\Model\File\Reader\YamlReader', ['parse']);
+        $readerMock = $this->getMockBuilder('Semaio\ConfigImportExport\Model\File\Reader\YamlReader')
+            ->setMethods(['parse'])
+            ->getMock();
         $readerMock->expects($this->once())->method('parse')->willReturn($parseResult);
 
         $this->scopeValidatorMock->expects($this->once())->method('validate')->willReturn(true);
