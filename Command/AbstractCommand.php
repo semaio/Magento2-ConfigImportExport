@@ -104,7 +104,8 @@ abstract class AbstractCommand extends Command
         $area = $this->appState->getAreaCode();
         $configLoader = $this->objectManager->get('Magento\Framework\ObjectManager\ConfigLoaderInterface');
         $this->objectManager->configure($configLoader->load($area));
-
+        
+        $this->registry->unregister('isSecureArea', true);
         $this->registry->register('isSecureArea', true);
     }
 
