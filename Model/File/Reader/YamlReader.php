@@ -20,7 +20,7 @@ class YamlReader extends AbstractReader
      */
     public function parse($fileName)
     {
-        $content = SymfonyYaml::parse($fileName);
+        $content = SymfonyYaml::parseFile($fileName);
 
         return is_array($content)
             ? $this->normalize($content)
