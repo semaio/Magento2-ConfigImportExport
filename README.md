@@ -37,7 +37,7 @@ Currently are the following file formats supported:
 
 #### Usage
 
-```
+```bash
 $ ./bin/magento config:data:import --help
  Usage:
   config:data:import [--base[="..."]] [-m|--format[="..."]] folder environment
@@ -85,7 +85,7 @@ To import my (@therouv) specific Magento configuration settings, I would run the
 
 #### Usage
 
-```
+```bash
 $ ./bin/magento config:data:export --help
 Usage:
  config:data:export [-m|--format[="..."]] [-a|--hierarchical[="..."]] [-f|--filename[="..."]] [-i|--include[="..."]] [--includeScope[="..."]] [-x|--exclude[="..."]] [-s|--filePerNameSpace[="..."]]
@@ -98,6 +98,25 @@ Options:
  --includeScope          Scope name, multiple values can be comma separated; exports only those scopes
  --exclude (-x)          Path prefix, multiple values can be comma separated; exports everything except ...
  --filePerNameSpace (-s) Export each namespace into its own file. Enable with: y (default: "n")
+```
+
+#### Yaml File Format
+
+```yaml
+# Default scope
+web/unsecure/base_url:
+  default:
+    0: 'http://example.com/my-base-url/'
+
+# Store view scope -> "Example Store-ID 1"
+web/unsecure/base_url:    
+  stores:
+    1: 'http://example.com/my-base-url/'  
+
+# Store view scope -> "Example with store-view code"
+web/unsecure/base_url:    
+  stores:
+    my_store_code: 'http://example.com/another-base-url/'  
 ```
 
 #### Exported files
