@@ -6,7 +6,7 @@ This module is inspired by the awesome n98-magerun plugin "HarrisStreet ImpEx" b
 
 ## Installation
 
-**Add the Package to your composer.json** 
+**Add the Package to your composer.json**
 
 ``` bash
 composer require semaio/magento2-configimportexport
@@ -20,13 +20,13 @@ php bin/magento module:enable Semaio_ConfigImportExport
 
 ## Facts
 
-* Version: 3.0.0
-* Magento Support: >= 2.2
-* PHP Versions: 7.0 + 7.1 + 7.2 + 7.3 + 7.4
+* Supported Magento versions are 2.3 and 2.4
+* Supported PHP versions are 7.2, 7.3 and 7.4
 
 ## Functionality
 
-This module is a work in progress and will be extended in the near future with more functionality and support for other file formats.
+This module is a work in progress and will be extended in the near future with more functionality
+and support for other file formats.
 
 Currently are the following file formats supported:
 
@@ -109,14 +109,14 @@ web/unsecure/base_url:
     0: 'http://example.com/my-base-url/'
 
 # Store view scope -> "Example Store-ID 1"
-web/unsecure/base_url:    
+web/unsecure/base_url:
   stores:
-    1: 'http://example.com/my-base-url/'  
+    1: 'http://example.com/my-base-url/'
 
 # Store view scope -> "Example with store-view code"
-web/unsecure/base_url:    
+web/unsecure/base_url:
   stores:
-    my_store_code: 'http://example.com/another-base-url/'  
+    my_store_code: 'http://example.com/another-base-url/'
 ```
 
 #### Exported files
@@ -128,13 +128,16 @@ The files are written to the **var** directory of your Magento installation.
 
 If you encounter any problems or bugs, please create an issue on [GitHub](https://github.com/semaio/Magento2-ConfigImportExport/issues).
 
+
 ## Contribution
 
 Any contribution to the development of MageSetup is highly welcome. The best possibility to provide any code is to open a [pull request on GitHub](https://help.github.com/articles/using-pull-requests).
 
+
 ## Licence
 
 [Open Software License (OSL 3.0)](http://opensource.org/licenses/osl-3.0.php)
+
 
 ## Contributors
 
@@ -142,4 +145,4 @@ Huge thanks to all [contributors](https://github.com/semaio/Magento2-ConfigImpor
 
 ## Copyright
 
-(c) 2016 Rouven Alexander Rieker
+(c) 2016-2020 semaio GmbH / Rouven Alexander Rieker
