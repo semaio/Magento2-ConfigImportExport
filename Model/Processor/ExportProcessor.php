@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Rouven Alexander Rieker
+ * Copyright © semaio GmbH. All rights reserved.
  * See LICENSE.md bundled with this module for license details.
  */
+
 namespace Semaio\ConfigImportExport\Model\Processor;
 
-use Magento\Framework\Api\SortOrder;
 use Magento\Config\Model\ResourceModel\Config\Data\Collection as ConfigDataCollection;
 use Magento\Config\Model\ResourceModel\Config\Data\CollectionFactory as ConfigDataCollectionFactory;
+use Magento\Framework\Api\SortOrder;
 use Semaio\ConfigImportExport\Model\File\Writer\WriterInterface;
 
 /**
@@ -64,7 +65,7 @@ class ExportProcessor extends AbstractProcessor implements ExportProcessorInterf
         // Filter collection by includes
         if (null !== $this->include) {
             $includes = explode(',', $this->include);
-            $orWhere = array();
+            $orWhere = [];
             foreach ($includes as $singlePath) {
                 $singlePath = trim($singlePath);
                 if (!empty($singlePath)) {
@@ -79,7 +80,7 @@ class ExportProcessor extends AbstractProcessor implements ExportProcessorInterf
         // Filter collection by scope
         if (null !== $this->includeScope) {
             $includeScopes = explode(',', $this->includeScope);
-            $orWhere = array();
+            $orWhere = [];
             foreach ($includeScopes as $singlePath) {
                 $singlePath = trim($singlePath);
                 if (!empty($singlePath)) {
@@ -102,7 +103,6 @@ class ExportProcessor extends AbstractProcessor implements ExportProcessorInterf
             }
         }
 
-
         $exportData = [];
         foreach ($collection as $item) {
             $data = $item->getData();
@@ -110,7 +110,6 @@ class ExportProcessor extends AbstractProcessor implements ExportProcessorInterf
             ksort($data);
             $exportData[] = $data;
         }
-
 
         if (count($exportData) == 0) {
             $this->getOutput()->writeln('<error>No export data found.</error>');

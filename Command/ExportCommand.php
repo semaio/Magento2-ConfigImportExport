@@ -1,19 +1,20 @@
 <?php
 /**
- * Copyright © 2016 Rouven Alexander Rieker
+ * Copyright © semaio GmbH. All rights reserved.
  * See LICENSE.md bundled with this module for license details.
  */
+
 namespace Semaio\ConfigImportExport\Command;
 
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
+use Magento\Framework\App\Cache\Manager as CacheManager;
 use Magento\Framework\App\ObjectManager\ConfigLoader;
 use Magento\Framework\App\State as AppState;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
-use Magento\Framework\App\Cache\Manager as CacheManager;
 use Semaio\ConfigImportExport\Model\Processor\ExportProcessorInterface;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class ExportCommand
@@ -69,13 +70,58 @@ class ExportCommand extends AbstractCommand
     {
         $this->setName(self::COMMAND_NAME);
         $this->setDescription('Export settings from "core_config_data" into a file');
-        $this->addOption('format', 'm', InputOption::VALUE_OPTIONAL, 'Format: yaml, json', 'yaml');
-        $this->addOption('hierarchical', 'a', InputOption::VALUE_OPTIONAL, 'Create a hierarchical or a flat structure (not all export format supports that). Enable with: y', 'n');
-        $this->addOption('filename', 'f', InputOption::VALUE_OPTIONAL, 'File name into which should the export be written. Defaults into var directory.');
-        $this->addOption('include', 'i', InputOption::VALUE_OPTIONAL, 'Path prefix, multiple values can be comma separated; exports only those paths');
-        $this->addOption('includeScope', null, InputOption::VALUE_OPTIONAL, 'Scope name, multiple values can be comma separated; exports only those scopes');
-        $this->addOption('exclude', 'x', InputOption::VALUE_OPTIONAL, 'Path prefix, multiple values can be comma separated; exports everything except ...');
-        $this->addOption('filePerNameSpace', 's', InputOption::VALUE_OPTIONAL, 'Export each namespace into its own file. Enable with: y', 'n');
+
+        $this->addOption(
+            'format',
+            'm',
+            InputOption::VALUE_OPTIONAL,
+            'Format: yaml, json',
+            'yaml'
+        );
+
+        $this->addOption(
+            'hierarchical',
+            'a',
+            InputOption::VALUE_OPTIONAL,
+            'Create a hierarchical or a flat structure (not all export format supports that). Enable with: y',
+            'n'
+        );
+
+        $this->addOption(
+            'filename',
+            'f',
+            InputOption::VALUE_OPTIONAL,
+            'File name into which should the export be written. Defaults into var directory.'
+        );
+
+        $this->addOption(
+            'include',
+            'i',
+            InputOption::VALUE_OPTIONAL,
+            'Path prefix, multiple values can be comma separated; exports only those paths'
+        );
+
+        $this->addOption(
+            'includeScope',
+            null,
+            InputOption::VALUE_OPTIONAL,
+            'Scope name, multiple values can be comma separated; exports only those scopes'
+        );
+
+        $this->addOption(
+            'exclude',
+            'x',
+            InputOption::VALUE_OPTIONAL,
+            'Path prefix, multiple values can be comma separated; exports everything except ...'
+        );
+
+        $this->addOption(
+            'filePerNameSpace',
+            's',
+            InputOption::VALUE_OPTIONAL,
+            'Export each namespace into its own file. Enable with: y',
+            'n'
+        );
 
         parent::configure();
     }
@@ -101,7 +147,7 @@ class ExportCommand extends AbstractCommand
             throw new \InvalidArgumentException(ucfirst($format) . ' file writer could not be instantiated."');
         }
 
-        $filename = (string)$input->getOption('filename');
+        $filename = (string) $input->getOption('filename');
         if ($filename != '') {
             $writer->setBaseFilename($filename);
         }

@@ -1,1 +1,3 @@
-.idea
+/.idea
+/.php_cs.cache
+/phpunit.xml

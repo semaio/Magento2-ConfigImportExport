@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © 2016 Rouven Alexander Rieker
+ * Copyright © semaio GmbH. All rights reserved.
  * See LICENSE.md bundled with this module for license details.
  */
+
 namespace Semaio\ConfigImportExport\Model\File\Writer;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -56,8 +57,8 @@ class YamlWriter extends AbstractWriter
      */
     private function generateYaml(array $data)
     {
-        $fileContent = array();
-        $header = array();
+        $fileContent = [];
+        $header = [];
         foreach ($data as $path => $scopes) {
             $paths = explode('/', $path);
             if (!isset($header[$paths[0]])) {

@@ -142,7 +142,8 @@ Any contribution to the development of MageSetup is highly welcome. The best pos
 
 ## Contributors
 
-Huge thanks to all [contributors](https://github.com/semaio/Magento2-ConfigImportExport/graphs/contributors) who contributed to this module.
+Thanks to all [contributors](https://github.com/semaio/Magento2-ConfigImportExport/graphs/contributors) who invested their valuable time to contribute to this module. Much appreciated!
+
 
 ## Copyright
 

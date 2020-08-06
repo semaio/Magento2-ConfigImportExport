@@ -1,15 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Rouven Alexander Rieker
+ * Copyright © semaio GmbH. All rights reserved.
  * See LICENSE.md bundled with this module for license details.
  */
+
 namespace Semaio\ConfigImportExport\Model\Processor;
 
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Semaio\ConfigImportExport\Model\Converter\ScopeConverterInterface;
-use Semaio\ConfigImportExport\Model\Validator\ScopeValidatorInterface;
 use Semaio\ConfigImportExport\Model\File\FinderInterface;
 use Semaio\ConfigImportExport\Model\File\Reader\ReaderInterface;
+use Semaio\ConfigImportExport\Model\Validator\ScopeValidatorInterface;
 
 /**
  * Class ImportProcessor

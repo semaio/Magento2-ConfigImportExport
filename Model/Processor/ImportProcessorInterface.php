@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Rouven Alexander Rieker
+ * Copyright © semaio GmbH. All rights reserved.
  * See LICENSE.md bundled with this module for license details.
  */
+
 namespace Semaio\ConfigImportExport\Model\Processor;
 
-use Semaio\ConfigImportExport\Model\File\Reader\ReaderInterface;
 use Semaio\ConfigImportExport\Model\File\FinderInterface;
+use Semaio\ConfigImportExport\Model\File\Reader\ReaderInterface;
 
 /**
  * Interface ImportProcessorInterface
