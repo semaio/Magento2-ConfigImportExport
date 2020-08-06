@@ -2,7 +2,7 @@
 
 Export all config values from your Magento installation to a yaml or json file.
 
-The files will be written to the **var** directory of your Magento installation
+The file(s) will be written to the **var** directory of your Magento installation
 after successful export.
 
 

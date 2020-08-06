@@ -1,4 +1,7 @@
-# Export config data
+# Import config data
+
+Import configuration values in Magento in an automated way instead of manually clicking through the store configuration.
+
 
 ## Usage
 
