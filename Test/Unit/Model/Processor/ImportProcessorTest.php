@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © 2016 Rouven Alexander Rieker
+ * Copyright © semaio GmbH. All rights reserved.
  * See LICENSE.md bundled with this module for license details.
  */
+
 namespace Semaio\ConfigImportExport\Test\Unit\Model\Processor;
 
 use Magento\Framework\App\Config\Storage\WriterInterface;
@@ -103,7 +104,6 @@ class ImportProcessorTest extends \PHPUnit\Framework\TestCase
         $processor->setReader($readerMock);
         $processor->process();
     }
-
 
     /**
      * @test

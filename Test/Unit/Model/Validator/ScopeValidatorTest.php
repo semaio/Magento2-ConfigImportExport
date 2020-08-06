@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Rouven Alexander Rieker
+ * Copyright © semaio GmbH. All rights reserved.
  * See LICENSE.md bundled with this module for license details.
  */
+
 namespace Semaio\ConfigImportExport\Test\Unit\Model\Validator;
 
 use Magento\Store\Api\Data\WebsiteInterface;
-use Magento\Store\Model\Website;
 use Semaio\ConfigImportExport\Model\Validator\ScopeValidator;
 
 /**

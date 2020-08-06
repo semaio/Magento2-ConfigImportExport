@@ -1,20 +1,20 @@
 <?php
 /**
- * Copyright © 2016 Rouven Alexander Rieker
+ * Copyright © semaio GmbH. All rights reserved.
  * See LICENSE.md bundled with this module for license details.
  */
 namespace Semaio\ConfigImportExport\Command;
 
+use Magento\Framework\App\Area;
+use Magento\Framework\App\Cache\Manager as CacheManager;
 use Magento\Framework\App\ObjectManager\ConfigLoader;
 use Magento\Framework\App\State as AppState;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
-use Magento\Framework\App\Area;
-use Magento\Framework\App\Cache\Manager as CacheManager;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\FormatterHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Helper\FormatterHelper;
 
 /**
  * Class AbstractCommand
@@ -105,7 +105,11 @@ abstract class AbstractCommand extends Command
         $configLoader = $this->objectManager->get('Magento\Framework\ObjectManager\ConfigLoaderInterface');
         $this->objectManager->configure($configLoader->load($area));
 
-        $this->registry->register('isSecureArea', true);
+        if ($this->registry->registry('isSecureArea') !== true) {
+            // Unregister isSecureArea if it is already set and register again
+            $this->registry->unregister('isSecureArea');
+            $this->registry->register('isSecureArea', true);
+        }
     }
 
     /**

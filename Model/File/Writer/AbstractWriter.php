@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Rouven Alexander Rieker
+ * Copyright © semaio GmbH. All rights reserved.
  * See LICENSE.md bundled with this module for license details.
  */
+
 namespace Semaio\ConfigImportExport\Model\File\Writer;
 
-use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\Filesystem;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class AbstractWriter
@@ -91,7 +92,7 @@ abstract class AbstractWriter implements WriterInterface
      */
     protected function _prepareDataHierarchical(array $exportData)
     {
-        $return = array();
+        $return = [];
         foreach ($exportData as $row) {
             list($firstPart, $secondPart, $thirdPart) = explode('/', $row['path'], 3);
             $return[$firstPart][$secondPart][$thirdPart][$row['scope']][$row['scope_id']] = $row['value'];
@@ -106,13 +107,13 @@ abstract class AbstractWriter implements WriterInterface
      */
     protected function _prepareDataFlat(array $exportData)
     {
-        $return = array();
+        $return = [];
         foreach ($exportData as $row) {
             if (!isset($return[$row['path']])) {
-                $return[$row['path']] = array();
+                $return[$row['path']] = [];
             }
             if (!isset($return[$row['path']][$row['scope']])) {
-                $return[$row['path']][$row['scope']] = array();
+                $return[$row['path']][$row['scope']] = [];
             }
             $return[$row['path']][$row['scope']]['' . $row['scope_id']] = $row['value'];
         }

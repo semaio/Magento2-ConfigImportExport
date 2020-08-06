@@ -6,121 +6,73 @@ This module is inspired by the awesome n98-magerun plugin "HarrisStreet ImpEx" b
 
 ## Installation
 
-**Add the Package to your composer.json** 
+**Add the package to your composer.json**
 
-``` bash
+```bash
 composer require semaio/magento2-configimportexport
 ```
 
 
-**Enable and install the Module**
-``` bash
+**Enable and install the module**
+
+```bash
 php bin/magento module:enable Semaio_ConfigImportExport
+php bin/magento setup:upgrade
 ```
+
 
 ## Facts
 
-* Version: 3.0.0
-* Magento Support: >= 2.2
-* PHP Versions: 7.0 + 7.1
+* Supported Magento versions are 2.3 and 2.4
+* Supported PHP versions are 7.2, 7.3 and 7.4
+
 
 ## Functionality
 
-This module is a work in progress and will be extended in the near future with more functionality and support for other file formats.
+This module is a work in progress and will be extended in the future with more functionality
+and support for other file formats.
 
-Currently are the following file formats supported:
 
-* Yaml (default)
-* Json
+### File formats
 
-### Import
+This module currently supports the following file formats:
 
-#### Usage
+* YAML (default)
+* JSON
 
-```
-$ ./bin/magento config:data:import --help
- Usage:
-  config:data:import [--base[="..."]] [-m|--format[="..."]] folder environment
+See [docs/file-formats.md](docs/file-formats.md) for more information and examples.
 
- Arguments:
-  folder                Import folder name
-  environment           Environment name. SubEnvs separated by slash e.g.: development/osx/developer01
 
- Options:
-  --base                Base folder name (default: "base")
-  --format (-m)         Format: yaml, json (Default: yaml) (default: "yaml")
-```
+### Import config data
 
-#### Folder Setup
+See [docs/config-import.md](docs/config-import.md) for more information.
 
-To import the Magento configuration you'll need to setup a specific folder structure in the root directory of your Magento installation:
 
-```
-magento_root
-├── app
-├── bin
-│   └── magento
-├── config
-│   └── store
-│       ├── base
-│       │   ├── allowsymlinks.yaml
-│       │   └── general.yaml
-│       ├── dev
-│       │   ├── admin.yaml
-│       │   └── therouv
-│       │       └── web.yaml
-│       ├── production
-│       │   └── web.yaml
-│       └── staging
-│           └── web.yaml
-├── lib
-└── pub
-```
+### Export config data
 
-To import my (@therouv) specific Magento configuration settings, I would run the following command in the "magento_root" directory:
-
-`./bin/magento config:data:import config/store dev/therouv`
-
-### Export
-
-#### Usage
-
-```
-$ ./bin/magento config:data:export --help
-Usage:
- config:data:export [-m|--format[="..."]] [-a|--hierarchical[="..."]] [-f|--filename[="..."]] [-i|--include[="..."]] [--includeScope[="..."]] [-x|--exclude[="..."]] [-s|--filePerNameSpace[="..."]]
-
-Options:
- --format (-m)           Format: yaml, json (default: "yaml")
- --hierarchical (-a)     Create a hierarchical or a flat structure (not all export format supports that). Enable with: y (default: "n")
- --filename (-f)         File name into which should the export be written. Defaults into var directory.
- --include (-i)          Path prefix, multiple values can be comma separated; exports only those paths
- --includeScope          Scope name, multiple values can be comma separated; exports only those scopes
- --exclude (-x)          Path prefix, multiple values can be comma separated; exports everything except ...
- --filePerNameSpace (-s) Export each namespace into its own file. Enable with: y (default: "n")
-```
-
-#### Exported files
-
-The files are written to the **var** directory of your Magento installation.
+See [docs/config-export.md](docs/config-export.md) for more information.
 
 
 ## Support
 
 If you encounter any problems or bugs, please create an issue on [GitHub](https://github.com/semaio/Magento2-ConfigImportExport/issues).
 
+
 ## Contribution
 
 Any contribution to the development of MageSetup is highly welcome. The best possibility to provide any code is to open a [pull request on GitHub](https://help.github.com/articles/using-pull-requests).
+
 
 ## Licence
 
 [Open Software License (OSL 3.0)](http://opensource.org/licenses/osl-3.0.php)
 
+
 ## Contributors
 
-Huge thanks to all [contributors](https://github.com/semaio/Magento2-ConfigImportExport/graphs/contributors) who contributed to this module.
+Thanks to all [contributors](https://github.com/semaio/Magento2-ConfigImportExport/graphs/contributors) who invested their valuable time to contribute to this module. Much appreciated!
+
 
 ## Copyright
 
-(c) 2016 Rouven Alexander Rieker
+(c) 2016-2020 semaio GmbH / Rouven Alexander Rieker

@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © 2016 Rouven Alexander Rieker
+ * Copyright © semaio GmbH. All rights reserved.
  * See LICENSE.md bundled with this module for license details.
  */
+
 namespace Semaio\ConfigImportExport\Model\File\Reader;
 
 use Symfony\Component\Yaml\Yaml as SymfonyYaml;
@@ -20,7 +21,7 @@ class YamlReader extends AbstractReader
      */
     public function parse($fileName)
     {
-        $content = SymfonyYaml::parse($fileName);
+        $content = SymfonyYaml::parseFile($fileName);
 
         return is_array($content)
             ? $this->normalize($content)
