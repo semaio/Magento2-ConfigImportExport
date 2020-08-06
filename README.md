@@ -49,6 +49,7 @@ $ ./bin/magento config:data:import --help
  Options:
   --base                Base folder name (default: "base")
   --format (-m)         Format: yaml, json (Default: yaml) (default: "yaml")
+  --no-cache            Do not clear cache after config data import.
 ```
 
 #### Folder Setup

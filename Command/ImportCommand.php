@@ -3,19 +3,20 @@
  * Copyright © 2016 Rouven Alexander Rieker
  * See LICENSE.md bundled with this module for license details.
  */
+
 namespace Semaio\ConfigImportExport\Command;
 
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
+use Magento\Framework\App\Cache\Manager as CacheManager;
 use Magento\Framework\App\ObjectManager\ConfigLoader;
 use Magento\Framework\App\State as AppState;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
-use Magento\Framework\App\Cache\Manager as CacheManager;
-use Semaio\ConfigImportExport\Model\Processor\ImportProcessorInterface;
 use Semaio\ConfigImportExport\Model\File\FinderInterface;
+use Semaio\ConfigImportExport\Model\Processor\ImportProcessorInterface;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class ImportCommand
@@ -69,6 +70,7 @@ class ImportCommand extends AbstractCommand
         $this->importProcessor = $importProcessor;
         $this->readers = $readers;
         $this->finder = $finder;
+
         parent::__construct($registry, $appState, $configLoader, $objectManager, $cacheManager, $name);
     }
 
@@ -79,10 +81,41 @@ class ImportCommand extends AbstractCommand
     {
         $this->setName(self::COMMAND_NAME);
         $this->setDescription('Import "core_config_data" settings for an environment');
-        $this->addArgument('folder', InputArgument::REQUIRED, 'Import folder name');
-        $this->addArgument('environment', InputArgument::REQUIRED, 'Environment name. SubEnvs separated by slash e.g.: development/osx/developer01');
-        $this->addOption('base', null, InputOption::VALUE_OPTIONAL, 'Base folder name', 'base');
-        $this->addOption('format', 'm', InputOption::VALUE_OPTIONAL, 'Format: yaml, json (Default: yaml)', 'yaml');
+
+        $this->addArgument(
+            'folder',
+            InputArgument::REQUIRED,
+            'Import folder name'
+        );
+
+        $this->addArgument(
+            'environment',
+            InputArgument::REQUIRED,
+            'Environment name. SubEnvs separated by slash e.g.: development/osx/developer01'
+        );
+
+        $this->addOption(
+            'base',
+            null,
+            InputOption::VALUE_OPTIONAL,
+            'Base folder name',
+            'base'
+        );
+
+        $this->addOption(
+            'format',
+            'm',
+            InputOption::VALUE_OPTIONAL,
+            'Format: yaml, json (Default: yaml)',
+            'yaml'
+        );
+
+        $this->addOption(
+            'no-cache',
+            null,
+            InputOption::VALUE_NONE,
+            'Do not clear cache after config data import.',
+        );
 
         parent::configure();
     }
@@ -95,6 +128,7 @@ class ImportCommand extends AbstractCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         parent::execute($input, $output);
+
         $this->writeSection('Start Import');
 
         // Check if there is a reader for the given file extension
@@ -129,6 +163,12 @@ class ImportCommand extends AbstractCommand
         $this->importProcessor->process();
 
         // Clear the cache after import
-        $this->getCacheManager()->clean(['config', 'full_page']);
+        if ($input->getOption('no-cache') === false) {
+            $this->writeSection('Clear cache');
+
+            $this->getCacheManager()->clean(['config', 'full_page']);
+
+            $output->writeln(sprintf('<info>Cache cleared.</info>'));
+        }
     }
 }
