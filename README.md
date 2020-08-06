@@ -6,123 +6,51 @@ This module is inspired by the awesome n98-magerun plugin "HarrisStreet ImpEx" b
 
 ## Installation
 
-**Add the Package to your composer.json**
+**Add the package to your composer.json**
 
-``` bash
+```bash
 composer require semaio/magento2-configimportexport
 ```
 
 
-**Enable and install the Module**
-``` bash
+**Enable and install the module**
+
+```bash
 php bin/magento module:enable Semaio_ConfigImportExport
+php bin/magento setup:upgrade
 ```
+
 
 ## Facts
 
 * Supported Magento versions are 2.3 and 2.4
 * Supported PHP versions are 7.2, 7.3 and 7.4
 
+
 ## Functionality
 
-This module is a work in progress and will be extended in the near future with more functionality
+This module is a work in progress and will be extended in the future with more functionality
 and support for other file formats.
 
-Currently are the following file formats supported:
 
-* Yaml (default)
-* Json
+### File formats
 
-### Import
+This module currently supports the following file formats:
 
-#### Usage
+* YAML (default)
+* JSON
 
-```bash
-$ ./bin/magento config:data:import --help
- Usage:
-  config:data:import [--base[="..."]] [-m|--format[="..."]] folder environment
+See [docs/file-formats.md](docs/file-formats.md) for more information and examples.
 
- Arguments:
-  folder                Import folder name
-  environment           Environment name. SubEnvs separated by slash e.g.: development/osx/developer01
 
- Options:
-  --base                Base folder name (default: "base")
-  --format (-m)         Format: yaml, json (Default: yaml) (default: "yaml")
-  --no-cache            Do not clear cache after config data import.
-```
+### Import config data
 
-#### Folder Setup
+See [docs/config-import.md](docs/config-import.md) for more information.
 
-To import the Magento configuration you'll need to setup a specific folder structure in the root directory of your Magento installation:
 
-```
-magento_root
-├── app
-├── bin
-│   └── magento
-├── config
-│   └── store
-│       ├── base
-│       │   ├── allowsymlinks.yaml
-│       │   └── general.yaml
-│       ├── dev
-│       │   ├── admin.yaml
-│       │   └── therouv
-│       │       └── web.yaml
-│       ├── production
-│       │   └── web.yaml
-│       └── staging
-│           └── web.yaml
-├── lib
-└── pub
-```
+### Export config data
 
-To import my (@therouv) specific Magento configuration settings, I would run the following command in the "magento_root" directory:
-
-`./bin/magento config:data:import config/store dev/therouv`
-
-### Export
-
-#### Usage
-
-```bash
-$ ./bin/magento config:data:export --help
-Usage:
- config:data:export [-m|--format[="..."]] [-a|--hierarchical[="..."]] [-f|--filename[="..."]] [-i|--include[="..."]] [--includeScope[="..."]] [-x|--exclude[="..."]] [-s|--filePerNameSpace[="..."]]
-
-Options:
- --format (-m)           Format: yaml, json (default: "yaml")
- --hierarchical (-a)     Create a hierarchical or a flat structure (not all export format supports that). Enable with: y (default: "n")
- --filename (-f)         File name into which should the export be written. Defaults into var directory.
- --include (-i)          Path prefix, multiple values can be comma separated; exports only those paths
- --includeScope          Scope name, multiple values can be comma separated; exports only those scopes
- --exclude (-x)          Path prefix, multiple values can be comma separated; exports everything except ...
- --filePerNameSpace (-s) Export each namespace into its own file. Enable with: y (default: "n")
-```
-
-#### Yaml File Format
-
-```yaml
-# Default scope
-web/unsecure/base_url:
-  default:
-    0: 'http://example.com/my-base-url/'
-
-# Store view scope -> "Example Store-ID 1"
-web/unsecure/base_url:
-  stores:
-    1: 'http://example.com/my-base-url/'
-
-# Store view scope -> "Example with store-view code"
-web/unsecure/base_url:
-  stores:
-    my_store_code: 'http://example.com/another-base-url/'
-```
-
-#### Exported files
-
-The files are written to the **var** directory of your Magento installation.
+See [docs/config-export.md](docs/config-export.md) for more information.
 
 
 ## Support
