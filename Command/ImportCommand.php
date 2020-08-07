@@ -114,7 +114,7 @@ class ImportCommand extends AbstractCommand
             'no-cache',
             null,
             InputOption::VALUE_NONE,
-            'Do not clear cache after config data import.',
+            'Do not clear cache after config data import.'
         );
 
         parent::configure();
