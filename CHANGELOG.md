@@ -1,5 +1,10 @@
 # Changelog
 
+## Release 3.4.0 (2020-12-21)
+
+* Update dependency version constraints [@therouv](https://github.com/therouv)
+
+
 ## Release 3.3.1 (2020-08-07)
 
 * Remove trailing comma for PHP 7.2 compatibility [@therouv](https://github.com/therouv)
