@@ -37,4 +37,9 @@ interface FinderInterface
      * @param mixed $format
      */
     public function setFormat($format);
+
+    /**
+     * @param mixed $depth
+     */
+    public function setDepth($depth);
 }

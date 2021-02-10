@@ -117,6 +117,13 @@ class ImportCommand extends AbstractCommand
             'Do not clear cache after config data import.'
         );
 
+        $this->addOption(
+            'recursive',
+            'r',
+            InputOption::VALUE_NONE,
+            'Recursively go over subdirectories and import configs.'
+        );
+
         parent::configure();
     }
 
@@ -147,6 +154,7 @@ class ImportCommand extends AbstractCommand
         $folder = $input->getArgument('folder');
         $baseFolder = $input->getOption('base');
         $environment = $input->getArgument('environment');
+        $depth = ($input->getOption('recursive') === false) ? '0' : '>= 1';
 
         // Configure the finder
         $finder = $this->finder;
@@ -154,6 +162,7 @@ class ImportCommand extends AbstractCommand
         $finder->setBaseFolder($baseFolder);
         $finder->setEnvironment($environment);
         $finder->setFormat($format);
+        $finder->setDepth($depth);
 
         // Process the import
         $this->importProcessor->setFormat($format);

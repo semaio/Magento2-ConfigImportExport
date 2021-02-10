@@ -18,6 +18,7 @@ $ php bin/magento config:data:import --help
   --base                Base folder name (default: "base")
   --format (-m)         Format: yaml, json (Default: yaml) (default: "yaml")
   --no-cache            Do not clear cache after config data import.
+  --recursive (-r)      Recursively go over subdirectories and import configs.
 ```
 
 :exclamation: Only use the `no-cache` option if you clear the cache afterwards, e.g. in a deployment process. Otherwise the changes will have no effect.
@@ -49,9 +50,9 @@ magento_root
 └── pub
 ```
 
-To import my ([@therouv](https://github.com/therouv)) specific Magento configuration settings, 
+To import my ([@therouv](https://github.com/therouv)) specific Magento configuration settings,
 I would run the following command in the "magento_root" directory:
 
-```bash 
+```bash
 php bin/magento config:data:import config/store dev/therouv
 ```
