@@ -9,14 +9,10 @@ namespace Semaio\ConfigImportExport\Test\Unit\Model\Converter;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\TestCase;
 use Semaio\ConfigImportExport\Model\Converter\ScopeConverter;
 
-/**
- * Class ScopeConverterTest
- *
- * @package Semaio\ConfigImportExport\Test\Unit\Model\Converter
- */
-class ScopeConverterTest extends \PHPUnit\Framework\TestCase
+class ScopeConverterTest extends TestCase
 {
     /**
      * @var StoreManagerInterface
@@ -31,7 +27,7 @@ class ScopeConverterTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up test class
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)->getMock();
         $this->converter = new ScopeConverter($this->storeManagerMock);
@@ -41,7 +37,7 @@ class ScopeConverterTest extends \PHPUnit\Framework\TestCase
      * @test
      * @dataProvider itShouldNotConvertNumericScopeIdsProvider
      */
-    public function itShouldNotConvertNumericScopeIds($scopeId, $scope)
+    public function itShouldNotConvertNumericScopeIds($scopeId, $scope): void
     {
         $this->storeManagerMock
             ->expects($this->never())
@@ -57,7 +53,7 @@ class ScopeConverterTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function itShouldNotConvertStoreCodeValues()
+    public function itShouldNotConvertStoreCodeValues(): void
     {
         $storeCode = 'mystore';
         $scope = 'stores';
@@ -85,7 +81,7 @@ class ScopeConverterTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function itShouldNotConvertWebsiteCodeValues()
+    public function itShouldNotConvertWebsiteCodeValues(): void
     {
         $websiteCode = 'mywebsite';
         $scope = 'websites';
@@ -110,10 +106,7 @@ class ScopeConverterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($websiteId, $this->converter->convert($websiteCode, $scope));
     }
 
-    /**
-     * @return array
-     */
-    public function itShouldNotConvertNumericScopeIdsProvider()
+    public function itShouldNotConvertNumericScopeIdsProvider(): array
     {
         return [
             [1, 'default'],

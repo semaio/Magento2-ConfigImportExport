@@ -6,11 +6,6 @@
 
 namespace Semaio\ConfigImportExport\Model\Validator;
 
-/**
- * Interface ScopeValidatorInterface
- *
- * @package Semaio\ConfigImportExport\Model\Validator
- */
 interface ScopeValidatorInterface
 {
     /**

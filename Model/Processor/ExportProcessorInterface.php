@@ -8,11 +8,6 @@ namespace Semaio\ConfigImportExport\Model\Processor;
 
 use Semaio\ConfigImportExport\Model\File\Writer\WriterInterface;
 
-/**
- * Interface ExportProcessorInterface
- *
- * @package Semaio\ConfigImportExport\Model\Processor
- */
 interface ExportProcessorInterface extends AbstractProcessorInterface
 {
     /**

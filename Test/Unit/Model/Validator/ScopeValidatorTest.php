@@ -7,14 +7,12 @@
 namespace Semaio\ConfigImportExport\Test\Unit\Model\Validator;
 
 use Magento\Store\Api\Data\WebsiteInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Semaio\ConfigImportExport\Model\Validator\ScopeValidator;
 
-/**
- * Class ScopeValidatorTest
- *
- * @package Semaio\ConfigImportExport\Test\Unit\Model\Validator
- */
-class ScopeValidatorTest extends \PHPUnit\Framework\TestCase
+class ScopeValidatorTest extends TestCase
 {
     /**
      * @var ScopeValidator
@@ -22,24 +20,23 @@ class ScopeValidatorTest extends \PHPUnit\Framework\TestCase
     private $validator;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|WebsiteInterface
+     * @var MockObject|WebsiteInterface
      */
     protected $mockWebsiteOne = null;
 
     /**
      * Set up test class
      */
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->mockWebsiteOne = $this->getMockBuilder(WebsiteInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCode'])
+            ->onlyMethods(['getCode'])
             ->getMockForAbstractClass();
 
-        $storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
-            ->getMock();
+        $storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)->getMock();
         $storeManagerMock->expects($this->any())->method('getWebsites')->willReturn([1 => $this->mockWebsiteOne]);
         $storeManagerMock->expects($this->any())->method('getStores')->willReturn([2 => 'ABC']);
 
@@ -49,7 +46,7 @@ class ScopeValidatorTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function validate()
+    public function validate(): void
     {
         $this->assertTrue($this->validator->validate('default', 0));
         $this->assertFalse($this->validator->validate('default', 1));
@@ -64,7 +61,7 @@ class ScopeValidatorTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function validateNonNumericWebsite()
+    public function validateNonNumericWebsite(): void
     {
         $existingWebsiteCode = 'my-cool-website';
 

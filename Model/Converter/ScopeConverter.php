@@ -8,11 +8,6 @@ namespace Semaio\ConfigImportExport\Model\Converter;
 
 use Magento\Store\Model\StoreManagerInterface;
 
-/**
- * Class ScopeConverter
- *
- * @package Semaio\ConfigImportExport\Model\Converter
- */
 class ScopeConverter implements ScopeConverterInterface
 {
     /**

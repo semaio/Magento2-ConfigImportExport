@@ -12,17 +12,13 @@ use Magento\Framework\App\State as AppState;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Semaio\ConfigImportExport\Model\File\FinderInterface;
+use Semaio\ConfigImportExport\Model\File\Reader\ReaderInterface;
 use Semaio\ConfigImportExport\Model\Processor\ImportProcessorInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-/**
- * Class ImportCommand
- *
- * @package Semaio\ConfigImportExport\Command
- */
 class ImportCommand extends AbstractCommand
 {
     /**
@@ -117,6 +113,13 @@ class ImportCommand extends AbstractCommand
             'Do not clear cache after config data import.'
         );
 
+        $this->addOption(
+            'recursive',
+            'r',
+            InputOption::VALUE_NONE,
+            'Recursively go over subdirectories and import configs.'
+        );
+
         parent::configure();
     }
 
@@ -137,7 +140,7 @@ class ImportCommand extends AbstractCommand
             throw new \InvalidArgumentException('Format "' . $format . '" is currently not supported."');
         }
 
-        /** @var \Semaio\ConfigImportExport\Model\File\Reader\ReaderInterface $reader */
+        /** @var ReaderInterface $reader */
         $reader = $this->getObjectManager()->create($this->readers[$format]);
         if (!$reader || !is_object($reader)) {
             throw new \InvalidArgumentException(ucfirst($format) . ' file reader could not be instantiated."');
@@ -147,6 +150,7 @@ class ImportCommand extends AbstractCommand
         $folder = $input->getArgument('folder');
         $baseFolder = $input->getOption('base');
         $environment = $input->getArgument('environment');
+        $depth = ($input->getOption('recursive') === false) ? '0' : '>= 0';
 
         // Configure the finder
         $finder = $this->finder;
@@ -154,6 +158,7 @@ class ImportCommand extends AbstractCommand
         $finder->setBaseFolder($baseFolder);
         $finder->setEnvironment($environment);
         $finder->setFormat($format);
+        $finder->setDepth($depth);
 
         // Process the import
         $this->importProcessor->setFormat($format);

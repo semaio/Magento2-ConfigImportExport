@@ -16,11 +16,6 @@ use Symfony\Component\Console\Helper\FormatterHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-/**
- * Class AbstractCommand
- *
- * @package Semaio\ConfigImportExport\Command
- */
 abstract class AbstractCommand extends Command
 {
     /**

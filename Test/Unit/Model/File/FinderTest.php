@@ -6,14 +6,11 @@
 
 namespace Semaio\ConfigImportExport\Test\Unit\Model\File;
 
+use InvalidArgumentException;
+use PHPUnit\Framework\TestCase;
 use Semaio\ConfigImportExport\Model\File\Finder;
 
-/**
- * Class FinderTest
- *
- * @package Semaio\ConfigImportExport\Test\Unit\Model\File
- */
-class FinderTest extends \PHPUnit\Framework\TestCase
+class FinderTest extends TestCase
 {
     /**
      * @var Finder
@@ -23,65 +20,100 @@ class FinderTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up test class
      */
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
+
         $this->finder = new Finder();
     }
 
     /**
      * @test
      */
-    public function find()
+    public function find(): void
     {
-        $this->finder->setBaseFolder('base');
-        $this->finder->setFormat('yaml');
         $folder = __DIR__ . DIRECTORY_SEPARATOR . 'Finder' . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'store' . DIRECTORY_SEPARATOR;
-        $this->finder->setFolder($folder);
-        $this->finder->setEnvironment('dev');
 
-        $result = $this->finder->find();
+        $finder = new Finder();
+        $finder->setFolder($folder);
+        $finder->setBaseFolder('base');
+        $finder->setEnvironment('dev');
+        $finder->setFormat('yaml');
+        $finder->setDepth('0');
+
+        $result = $finder->find();
+
         $this->assertCount(2, $result);
-        $this->assertContains('base.yaml', $result[0]);
-        $this->assertContains('env.yaml', $result[1]);
+        $this->assertStringContainsString('base.yaml', $result[0]);
+        $this->assertStringContainsString('env.yaml', $result[1]);
     }
 
     /**
      * @test
      */
-    public function findWithoutBaseFiles()
+    public function findWithoutBaseFiles(): void
     {
-        $this->finder->setBaseFolder('base2');
-        $this->finder->setFormat('yaml');
         $folder = __DIR__ . DIRECTORY_SEPARATOR . 'Finder' . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'store' . DIRECTORY_SEPARATOR;
-        $this->finder->setFolder($folder);
-        $this->finder->setEnvironment('dev');
 
-        $this->expectException('InvalidArgumentException');
-        $this->finder->find();
+        $finder = new Finder();
+        $finder->setFolder($folder);
+        $finder->setBaseFolder('base2');
+        $finder->setEnvironment('dev');
+        $finder->setFormat('yaml');
+        $finder->setDepth('0');
+
+        $result = $finder->find();
+
+        $this->assertCount(1, $result);
+        $this->assertStringContainsString('env.yaml', $result[0]);
     }
 
     /**
      * @test
      */
-    public function findWithoutEnvFiles()
+    public function findWithoutEnvFiles(): void
     {
-        $this->finder->setBaseFolder('base');
-        $this->finder->setFormat('yaml');
         $folder = __DIR__ . DIRECTORY_SEPARATOR . 'Finder' . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'store' . DIRECTORY_SEPARATOR;
-        $this->finder->setFolder($folder);
-        $this->finder->setEnvironment('dev2');
 
-        $this->expectException('InvalidArgumentException');
-        $this->finder->find();
+        $finder = new Finder();
+        $finder->setFolder($folder);
+        $finder->setBaseFolder('base');
+        $finder->setEnvironment('dev2');
+        $finder->setFormat('yaml');
+        $finder->setDepth('0');
+
+        $result = $finder->find();
+
+        $this->assertCount(1, $result);
+        $this->assertStringContainsString('base.yaml', $result[0]);
     }
 
     /**
      * @test
      */
-    public function setEnvironment()
+    public function findFilesRecursively(): void
     {
-        $this->expectException('InvalidArgumentException');
+        $folder = __DIR__ . DIRECTORY_SEPARATOR . 'Finder' . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'store' . DIRECTORY_SEPARATOR;
+
+        $finder = new Finder();
+        $finder->setFolder($folder);
+        $finder->setBaseFolder('base');
+        $finder->setEnvironment('dev');
+        $finder->setFormat('yaml');
+        $finder->setDepth('>= 0');
+
+        $result = $finder->find();
+
+        $this->assertCount(3, $result);
+    }
+
+    /**
+     * @test
+     */
+    public function setEnvironment(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+
         $folder = __DIR__ . DIRECTORY_SEPARATOR . 'Finder' . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'store' . DIRECTORY_SEPARATOR;
         $this->finder->setFolder($folder);
         $this->finder->setEnvironment('abc');
@@ -90,9 +122,10 @@ class FinderTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function setFolder()
+    public function setFolder(): void
     {
-        $this->expectException('InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
+
         $folder = __DIR__ . DIRECTORY_SEPARATOR . 'Finder' . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'test';
         $this->finder->setFolder($folder);
     }

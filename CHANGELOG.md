@@ -1,5 +1,10 @@
 # Changelog
 
+## Release 3.5.0 (2021-03-13)
+
+* Use `\Magento\Framework\Console\CommandListInterface` instead of `\Magento\Framework\Console\CommandList` (#40) [@therouv](https://github.com/therouv)
+* Add feature to recursively import configuration data (#41) [@Maksold](https://github.com/Maksold) [@therouv](https://github.com/therouv)
+
 ## Release 3.4.0 (2020-12-21)
 
 * Update dependency version constraints [@therouv](https://github.com/therouv)

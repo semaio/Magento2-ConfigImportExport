@@ -8,11 +8,6 @@ namespace Semaio\ConfigImportExport\Model\File;
 
 use Symfony\Component\Finder\Finder as SymfonyFinder;
 
-/**
- * Class Finder
- *
- * @package Semaio\ConfigImportExport\Model\File
- */
 class Finder implements FinderInterface
 {
     /**
@@ -36,25 +31,30 @@ class Finder implements FinderInterface
     private $environment;
 
     /**
+     * @var string
+     */
+    private $depth;
+
+    /**
      * @return array
      */
     public function find()
     {
-        $baseFiles = $this->search($this->folder . DIRECTORY_SEPARATOR . $this->baseFolder . DIRECTORY_SEPARATOR);
+        $baseFiles = $this->search($this->folder . DIRECTORY_SEPARATOR . $this->baseFolder . DIRECTORY_SEPARATOR, $this->depth);
         if (0 === count($baseFiles)) {
-            throw new \InvalidArgumentException('No base files found for format: *.' . $this->format);
+            $baseFiles = [];
         }
 
         $fullEnvPath = '';
         $envFiles = [];
         foreach ($this->environment as $envPath) {
             $fullEnvPath .= $envPath . DIRECTORY_SEPARATOR;
-            $find = $this->search($this->folder . DIRECTORY_SEPARATOR . $fullEnvPath, '0');
+            $find = $this->search($this->folder . DIRECTORY_SEPARATOR . $fullEnvPath, $this->depth);
             $envFiles = array_merge($envFiles, $find);
         }
 
         if (0 === count($envFiles)) {
-            throw new \InvalidArgumentException('No env files found for format: *.' . $this->format);
+            $envFiles = [];
         }
 
         return array_merge($baseFiles, $envFiles);
@@ -129,5 +129,13 @@ class Finder implements FinderInterface
         }
 
         return $files;
+    }
+
+    /**
+     * @param string $depth
+     */
+    public function setDepth($depth): void
+    {
+        $this->depth = $depth;
     }
 }

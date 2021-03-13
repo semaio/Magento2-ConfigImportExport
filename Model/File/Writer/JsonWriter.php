@@ -8,11 +8,6 @@ namespace Semaio\ConfigImportExport\Model\File\Writer;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-/**
- * Class JsonWriter
- *
- * @package Semaio\ConfigImportExport\Model\File\Writer
- */
 class JsonWriter extends AbstractWriter
 {
     /**

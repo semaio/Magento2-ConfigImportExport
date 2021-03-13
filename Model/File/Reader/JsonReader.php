@@ -6,11 +6,6 @@
 
 namespace Semaio\ConfigImportExport\Model\File\Reader;
 
-/**
- * Class YamlReader
- *
- * @package Semaio\ConfigImportExport\Model\File\Reader
- */
 class JsonReader extends AbstractReader
 {
     /**
