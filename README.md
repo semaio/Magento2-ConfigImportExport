@@ -29,8 +29,7 @@ php bin/magento setup:upgrade
 
 ## Functionality
 
-This module is a work in progress and will be extended in the future with more functionality
-and support for other file formats.
+This module is a work in progress and will be extended in the future with more functionality and support for other file formats.
 
 
 ### File formats

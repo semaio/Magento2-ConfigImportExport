@@ -36,11 +36,16 @@ class Finder implements FinderInterface
     private $environment;
 
     /**
+     * @var string
+     */
+    private $depth;
+
+    /**
      * @return array
      */
     public function find()
     {
-        $baseFiles = $this->search($this->folder . DIRECTORY_SEPARATOR . $this->baseFolder . DIRECTORY_SEPARATOR);
+        $baseFiles = $this->search($this->folder . DIRECTORY_SEPARATOR . $this->baseFolder . DIRECTORY_SEPARATOR, $this->depth);
         if (0 === count($baseFiles)) {
             throw new \InvalidArgumentException('No base files found for format: *.' . $this->format);
         }
@@ -49,7 +54,7 @@ class Finder implements FinderInterface
         $envFiles = [];
         foreach ($this->environment as $envPath) {
             $fullEnvPath .= $envPath . DIRECTORY_SEPARATOR;
-            $find = $this->search($this->folder . DIRECTORY_SEPARATOR . $fullEnvPath, '0');
+            $find = $this->search($this->folder . DIRECTORY_SEPARATOR . $fullEnvPath, $this->depth);
             $envFiles = array_merge($envFiles, $find);
         }
 
@@ -129,5 +134,13 @@ class Finder implements FinderInterface
         }
 
         return $files;
+    }
+
+    /**
+     * @param string $depth
+     */
+    public function setDepth($depth): void
+    {
+        $this->depth = $depth;
     }
 }

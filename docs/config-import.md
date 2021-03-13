@@ -18,6 +18,7 @@ $ php bin/magento config:data:import --help
   --base                Base folder name (default: "base")
   --format (-m)         Format: yaml, json (Default: yaml) (default: "yaml")
   --no-cache            Do not clear cache after config data import.
+  --recursive (-r)      Recursively go over subdirectories and import configs.
 ```
 
 :exclamation: Only use the `no-cache` option if you clear the cache afterwards, e.g. in a deployment process. Otherwise the changes will have no effect.
@@ -49,9 +50,50 @@ magento_root
 └── pub
 ```
 
-To import my ([@therouv](https://github.com/therouv)) specific Magento configuration settings, 
-I would run the following command in the "magento_root" directory:
+To import the Magento configuration settings for ([@therouv](https://github.com/therouv)), you would run the following command in the "magento_root" directory:
 
-```bash 
+```bash
 php bin/magento config:data:import config/store dev/therouv
+```
+
+### Recursive folder setup
+
+If you choose to store your configuration files in subdirectories, e.g. per vendor, the recommended folder setup should look like this:
+
+```
+magento_root
+├── app
+├── bin
+│   └── magento
+├── config
+│   └── store
+│       ├── base
+│       │   ├── allowsymlinks.yaml
+│       │   └── general.yaml
+│       │   └── vendor
+│       │       └── package1.yaml
+│       │       └── package2.yaml
+│       ├── dev
+│       │   ├── admin.yaml
+│       │   ├── web.yaml
+│       │   └── vendor
+│       │       └── package1.yaml
+│       ├── production
+│       │   └── web.yaml
+│       └── staging
+│           └── web.yaml
+├── lib
+└── pub
+```
+
+You would run the following command in the "magento_root" directory to import the configuration settings:
+
+```bash
+php bin/magento config:data:import config/store dev --recursive
+```
+
+Or with shortcut:
+
+```bash
+php bin/magento config:data:import config/store dev -r
 ```
