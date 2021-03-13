@@ -9,11 +9,6 @@ namespace Semaio\ConfigImportExport\Model\File\Writer;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Symfony\Component\Yaml\Dumper;
 
-/**
- * Class YamlWriter
- *
- * @package Semaio\ConfigImportExport\Model\File\Writer
- */
 class YamlWriter extends AbstractWriter
 {
     /**

@@ -9,11 +9,6 @@ namespace Semaio\ConfigImportExport\Model\File\Writer;
 use Magento\Framework\Filesystem;
 use Symfony\Component\Console\Output\OutputInterface;
 
-/**
- * Class AbstractWriter
- *
- * @package Semaio\ConfigImportExport\Model\File\Writer
- */
 abstract class AbstractWriter implements WriterInterface
 {
     /**

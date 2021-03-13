@@ -10,11 +10,6 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\Website;
 
-/**
- * Class ScopeValidator
- *
- * @package Semaio\ConfigImportExport\Model\Validator
- */
 class ScopeValidator implements ScopeValidatorInterface
 {
     /**

@@ -12,17 +12,13 @@ use Magento\Framework\App\State as AppState;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Semaio\ConfigImportExport\Model\File\FinderInterface;
+use Semaio\ConfigImportExport\Model\File\Reader\ReaderInterface;
 use Semaio\ConfigImportExport\Model\Processor\ImportProcessorInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-/**
- * Class ImportCommand
- *
- * @package Semaio\ConfigImportExport\Command
- */
 class ImportCommand extends AbstractCommand
 {
     /**
@@ -144,7 +140,7 @@ class ImportCommand extends AbstractCommand
             throw new \InvalidArgumentException('Format "' . $format . '" is currently not supported."');
         }
 
-        /** @var \Semaio\ConfigImportExport\Model\File\Reader\ReaderInterface $reader */
+        /** @var ReaderInterface $reader */
         $reader = $this->getObjectManager()->create($this->readers[$format]);
         if (!$reader || !is_object($reader)) {
             throw new \InvalidArgumentException(ucfirst($format) . ' file reader could not be instantiated."');

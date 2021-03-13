@@ -6,14 +6,10 @@
 
 namespace Semaio\ConfigImportExport\Test\Unit\Model\File\Reader;
 
+use PHPUnit\Framework\TestCase;
 use Semaio\ConfigImportExport\Model\File\Reader\JsonReader;
 
-/**
- * Class JsonReaderTest
- *
- * @package Semaio\ConfigImportExport\Test\Unit\Model\File\Reader
- */
-class JsonReaderTest extends \PHPUnit\Framework\TestCase
+class JsonReaderTest extends TestCase
 {
     /**
      * @var JsonReader
@@ -23,7 +19,7 @@ class JsonReaderTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up test class
      */
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -34,7 +30,7 @@ class JsonReaderTest extends \PHPUnit\Framework\TestCase
      * @test
      * @dataProvider provideFiles
      */
-    public function parse($file)
+    public function parse($file): void
     {
         $baseDir = __DIR__ . DIRECTORY_SEPARATOR . 'JsonReaderTest' . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR;
         $result = $this->reader->parse($baseDir . $file);
@@ -45,7 +41,7 @@ class JsonReaderTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function parseInvalidFile()
+    public function parseInvalidFile(): void
     {
         $baseDir = __DIR__ . DIRECTORY_SEPARATOR . 'JsonReaderTest' . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR;
 
@@ -57,11 +53,11 @@ class JsonReaderTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function provideFiles()
+    public function provideFiles(): array
     {
         return [
             ['file' => 'fx-test.json'],
-            ['file' => 'fx-test-hierarchical.json']
+            ['file' => 'fx-test-hierarchical.json'],
         ];
     }
 }

@@ -6,11 +6,6 @@
 
 namespace Semaio\ConfigImportExport\Model\File;
 
-/**
- * Interface FinderInterface
- *
- * @package Semaio\ConfigImportExport\Model\File
- */
 interface FinderInterface
 {
     /**

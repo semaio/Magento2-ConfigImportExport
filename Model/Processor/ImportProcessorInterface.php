@@ -9,11 +9,6 @@ namespace Semaio\ConfigImportExport\Model\Processor;
 use Semaio\ConfigImportExport\Model\File\FinderInterface;
 use Semaio\ConfigImportExport\Model\File\Reader\ReaderInterface;
 
-/**
- * Interface ImportProcessorInterface
- *
- * @package Semaio\ConfigImportExport\Model\Processor
- */
 interface ImportProcessorInterface extends AbstractProcessorInterface
 {
     /**

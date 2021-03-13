@@ -6,11 +6,6 @@
 
 namespace Semaio\ConfigImportExport\Model\Converter;
 
-/**
- * Interface ScopeConverterInterface
- *
- * @package Semaio\ConfigImportExport\Model\Converter
- */
 interface ScopeConverterInterface
 {
     const SCOPE_STORES = 'stores';

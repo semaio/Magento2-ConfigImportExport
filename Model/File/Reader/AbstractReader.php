@@ -6,11 +6,6 @@
 
 namespace Semaio\ConfigImportExport\Model\File\Reader;
 
-/**
- * Class AbstractReader
- *
- * @package Semaio\ConfigImportExport\Model\File\Reader
- */
 abstract class AbstractReader implements ReaderInterface
 {
     /**

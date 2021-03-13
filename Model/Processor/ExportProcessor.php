@@ -11,11 +11,6 @@ use Magento\Config\Model\ResourceModel\Config\Data\CollectionFactory as ConfigDa
 use Magento\Framework\Api\SortOrder;
 use Semaio\ConfigImportExport\Model\File\Writer\WriterInterface;
 
-/**
- * Class ExportProcessor
- *
- * @package Semaio\ConfigImportExport\Model\Processor
- */
 class ExportProcessor extends AbstractProcessor implements ExportProcessorInterface
 {
     /**

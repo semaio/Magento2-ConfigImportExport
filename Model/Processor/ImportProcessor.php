@@ -12,11 +12,6 @@ use Semaio\ConfigImportExport\Model\File\FinderInterface;
 use Semaio\ConfigImportExport\Model\File\Reader\ReaderInterface;
 use Semaio\ConfigImportExport\Model\Validator\ScopeValidatorInterface;
 
-/**
- * Class ImportProcessor
- *
- * @package Semaio\ConfigImportExport\Model\Processor
- */
 class ImportProcessor extends AbstractProcessor implements ImportProcessorInterface
 {
     /**

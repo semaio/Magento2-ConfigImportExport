@@ -8,11 +8,6 @@ namespace Semaio\ConfigImportExport\Model\File\Writer;
 
 use Symfony\Component\Console\Output\OutputInterface;
 
-/**
- * Interface WriterInterface
- *
- * @package Semaio\ConfigImportExport\Model\File\Writer
- */
 interface WriterInterface
 {
     /**

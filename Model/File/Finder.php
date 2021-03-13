@@ -8,11 +8,6 @@ namespace Semaio\ConfigImportExport\Model\File;
 
 use Symfony\Component\Finder\Finder as SymfonyFinder;
 
-/**
- * Class Finder
- *
- * @package Semaio\ConfigImportExport\Model\File
- */
 class Finder implements FinderInterface
 {
     /**
@@ -47,7 +42,7 @@ class Finder implements FinderInterface
     {
         $baseFiles = $this->search($this->folder . DIRECTORY_SEPARATOR . $this->baseFolder . DIRECTORY_SEPARATOR, $this->depth);
         if (0 === count($baseFiles)) {
-            throw new \InvalidArgumentException('No base files found for format: *.' . $this->format);
+            $baseFiles = [];
         }
 
         $fullEnvPath = '';
@@ -59,7 +54,7 @@ class Finder implements FinderInterface
         }
 
         if (0 === count($envFiles)) {
-            throw new \InvalidArgumentException('No env files found for format: *.' . $this->format);
+            $envFiles = [];
         }
 
         return array_merge($baseFiles, $envFiles);

@@ -6,14 +6,10 @@
 
 namespace Semaio\ConfigImportExport\Test\Unit\Model\File\Reader;
 
+use PHPUnit\Framework\TestCase;
 use Semaio\ConfigImportExport\Model\File\Reader\YamlReader;
 
-/**
- * Class YamlReaderTest
- *
- * @package Semaio\ConfigImportExport\Test\Unit\Model\File\Reader
- */
-class YamlReaderTest extends \PHPUnit\Framework\TestCase
+class YamlReaderTest extends TestCase
 {
     /**
      * @var YamlReader
@@ -23,7 +19,7 @@ class YamlReaderTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up test class
      */
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -34,7 +30,7 @@ class YamlReaderTest extends \PHPUnit\Framework\TestCase
      * @test
      * @dataProvider provideFiles
      */
-    public function parse($file)
+    public function parse($file): void
     {
         $baseDir = __DIR__ . DIRECTORY_SEPARATOR . 'YamlReaderTest' . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR;
         $result = $this->reader->parse($baseDir . $file);
@@ -45,11 +41,11 @@ class YamlReaderTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function provideFiles()
+    public function provideFiles(): array
     {
         return [
             ['file' => 'fx-test.yaml'],
-            ['file' => 'fx-test-hierarchical.yaml']
+            ['file' => 'fx-test-hierarchical.yaml'],
         ];
     }
 }

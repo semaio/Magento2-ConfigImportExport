@@ -8,11 +8,6 @@ namespace Semaio\ConfigImportExport\Model\Processor;
 
 use Symfony\Component\Console\Output\OutputInterface;
 
-/**
- * Interface AbstractProcessorInterface
- *
- * @package Semaio\ConfigImportExport\Model\Processor
- */
 interface AbstractProcessorInterface
 {
     /**
