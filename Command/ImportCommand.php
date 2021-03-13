@@ -154,7 +154,7 @@ class ImportCommand extends AbstractCommand
         $folder = $input->getArgument('folder');
         $baseFolder = $input->getOption('base');
         $environment = $input->getArgument('environment');
-        $depth = ($input->getOption('recursive') === false) ? '0' : '>= 1';
+        $depth = ($input->getOption('recursive') === false) ? '0' : '>= 0';
 
         // Configure the finder
         $finder = $this->finder;

@@ -50,9 +50,50 @@ magento_root
 └── pub
 ```
 
-To import my ([@therouv](https://github.com/therouv)) specific Magento configuration settings,
-I would run the following command in the "magento_root" directory:
+To import the Magento configuration settings for ([@therouv](https://github.com/therouv)), you would run the following command in the "magento_root" directory:
 
 ```bash
 php bin/magento config:data:import config/store dev/therouv
+```
+
+### Recursive folder setup
+
+If you choose to store your configuration files in subdirectories, e.g. per vendor, the recommended folder setup should look like this:
+
+```
+magento_root
+├── app
+├── bin
+│   └── magento
+├── config
+│   └── store
+│       ├── base
+│       │   ├── allowsymlinks.yaml
+│       │   └── general.yaml
+│       │   └── vendor
+│       │       └── package1.yaml
+│       │       └── package2.yaml
+│       ├── dev
+│       │   ├── admin.yaml
+│       │   ├── web.yaml
+│       │   └── vendor
+│       │       └── package1.yaml
+│       ├── production
+│       │   └── web.yaml
+│       └── staging
+│           └── web.yaml
+├── lib
+└── pub
+```
+
+You would run the following command in the "magento_root" directory to import the configuration settings:
+
+```bash
+php bin/magento config:data:import config/store dev --recursive
+```
+
+Or with shortcut:
+
+```bash
+php bin/magento config:data:import config/store dev -r
 ```
