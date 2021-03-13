@@ -12,7 +12,7 @@
     <preference for="Semaio\ConfigImportExport\Model\File\FinderInterface" type="Semaio\ConfigImportExport\Model\File\Finder"/>
     <preference for="Semaio\ConfigImportExport\Model\Converter\ScopeConverterInterface" type="Semaio\ConfigImportExport\Model\Converter\ScopeConverter" />
 
-    <type name="Magento\Framework\Console\CommandList">
+    <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="SemaioConfigExportCommand" xsi:type="object">Semaio\ConfigImportExport\Command\ExportCommand</item>
