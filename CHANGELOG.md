@@ -1,5 +1,10 @@
 # Changelog
 
+## Release 3.5.1 (2022-03-23)
+
+* Add compatibility to new `symfony/yaml` releases to fix config export command when using `--hierarchical=y` option.
+* Allow `symfony/yaml:^6.0`.
+
 ## Release 3.5.0 (2021-03-13)
 
 * Use `\Magento\Framework\Console\CommandListInterface` instead of `\Magento\Framework\Console\CommandList` (#40) [@therouv](https://github.com/therouv)
