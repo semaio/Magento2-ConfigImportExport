@@ -8,6 +8,7 @@ namespace Semaio\ConfigImportExport\Model\File\Writer;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Symfony\Component\Yaml\Dumper;
+use Symfony\Component\Yaml\Yaml;
 
 class YamlWriter extends AbstractWriter
 {
@@ -19,9 +20,10 @@ class YamlWriter extends AbstractWriter
     {
         // Prepare data
         if (true === $this->getIsHierarchical()) {
-            $yaml = new Dumper();
-            $yaml->setIndentation(2);
-            $content = $yaml->dump($data, 5, 0, false, true);
+            $flags = 0;
+            $flags |= Yaml::DUMP_OBJECT;
+
+            $content = (new Dumper(2))->dump($data, 5, 0, $flags);
         } else {
             $content = $this->generateYaml($data);
         }
