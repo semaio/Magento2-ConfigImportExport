@@ -2,7 +2,7 @@
   "name": "semaio/magento2-configimportexport",
   "description": "Import/Export core_config_data values in Magento 2",
   "require": {
-    "php": "^7.2",
+    "php": ">=7.2",
     "symfony/yaml": "^3.4|^4.0|^5.0|^6.0",
     "magento/module-config": "*",
     "magento/module-store": "*",
