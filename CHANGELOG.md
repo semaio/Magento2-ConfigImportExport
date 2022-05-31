@@ -1,5 +1,9 @@
 # Changelog
 
+## Release 3.6.0 (2022-05-31)
+
+* Allow PHP 8.1 for Magento 2.4.4 compatibiltiy
+
 ## Release 3.5.1 (2022-03-23)
 
 * Add compatibility to new `symfony/yaml` releases to fix config export command when using `--hierarchical=y` option.
