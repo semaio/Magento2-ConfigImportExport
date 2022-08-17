@@ -94,6 +94,10 @@ class YamlWriter extends AbstractWriter
      */
     private function prepareValue($value)
     {
+        if ($value === null) {
+            return '';
+        }
+
         if (is_numeric($value)) {
             return $value;
         }
