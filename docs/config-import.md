@@ -56,6 +56,20 @@ To import the Magento configuration settings for ([@therouv](https://github.com/
 php bin/magento config:data:import config/store dev/therouv
 ```
 
+### Environment Variables substitution
+
+If you do not want to store your secrets in version control, you can use placeholders for environment variables in the configuration files. This is done with the notation `{env:ENV_VAR_NAME}`.
+
+For example, this might be the content of your config file:
+
+```
+vendorx/general/api_key:
+  default:
+    0: {env:VENDORX_API_KEY}
+```
+
+You can then set the environment variable `VENDORX_API_KEY` in your CI/CD configuration to the secret API key. 
+
 ### Recursive folder setup
 
 If you choose to store your configuration files in subdirectories, e.g. per vendor, the recommended folder setup should look like this:
