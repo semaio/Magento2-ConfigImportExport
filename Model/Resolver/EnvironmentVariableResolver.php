@@ -1,6 +1,9 @@
 <?php
 
-declare(strict_types=1);
+/**
+ * Copyright © semaio GmbH. All rights reserved.
+ * See LICENSE.md bundled with this module for license details.
+ */
 
 namespace Semaio\ConfigImportExport\Model\Resolver;
 
