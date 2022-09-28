@@ -56,6 +56,8 @@ To import the Magento configuration settings for ([@therouv](https://github.com/
 php bin/magento config:data:import config/store dev/therouv
 ```
 
+The files in the `base` folder will always be imported (if they exist), regardless of which environment parameter has been passed. If the base and environment configurations have the same configuration field set, then the environment value for that configuration will overwrite the base configuration.
+
 ### Recursive folder setup
 
 If you choose to store your configuration files in subdirectories, e.g. per vendor, the recommended folder setup should look like this:
