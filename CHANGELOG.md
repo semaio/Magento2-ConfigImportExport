@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * ...
 
+## [3.9.0] - 2022-09-29
+
+### Changed
+
+* Added some validation checks for environment variables by [@peterjaap](https://github.com/peterjaap)
+
 ## [3.8.0] - 2022-09-29
 
 ### Added
