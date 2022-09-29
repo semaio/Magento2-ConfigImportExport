@@ -10,6 +10,7 @@ use Magento\Framework\App\Config\Storage\WriterInterface;
 use Semaio\ConfigImportExport\Model\Converter\ScopeConverterInterface;
 use Semaio\ConfigImportExport\Model\File\FinderInterface;
 use Semaio\ConfigImportExport\Model\File\Reader\ReaderInterface;
+use Semaio\ConfigImportExport\Model\Resolver\EnvironmentVariableResolver;
 use Semaio\ConfigImportExport\Model\Validator\ScopeValidatorInterface;
 
 class ImportProcessor extends AbstractProcessor implements ImportProcessorInterface
@@ -40,18 +41,26 @@ class ImportProcessor extends AbstractProcessor implements ImportProcessorInterf
     private $scopeConverter;
 
     /**
+     * @var EnvironmentVariableResolver
+     */
+    private $environmentVariableResolver;
+
+    /**
      * @param WriterInterface $configWriter
      * @param ScopeValidatorInterface $scopeValidator
      * @param ScopeConverterInterface $scopeConverter
+     * @param EnvironmentVariableResolver $environmentVariableResolver
      */
     public function __construct(
         WriterInterface $configWriter,
         ScopeValidatorInterface $scopeValidator,
-        ScopeConverterInterface $scopeConverter
+        ScopeConverterInterface $scopeConverter,
+        EnvironmentVariableResolver $environmentVariableResolver
     ) {
         $this->configWriter = $configWriter;
         $this->scopeValidator = $scopeValidator;
         $this->scopeConverter = $scopeConverter;
+        $this->environmentVariableResolver = $environmentVariableResolver;
     }
 
     /**
@@ -138,6 +147,19 @@ class ImportProcessor extends AbstractProcessor implements ImportProcessorInterf
                         '<error>ERROR: Invalid scopeId "%s" for scope "%s" (%s => %s)</error>',
                         $scopeId,
                         $scope,
+                        $path,
+                        $value
+                    );
+                    $this->getOutput()->writeln($errorMsg);
+                    continue;
+                }
+
+                try {
+                    $value = $this->environmentVariableResolver->resolveValue($value);
+                } catch (\UnexpectedValueException $e) {
+                    $errorMsg = sprintf(
+                        '<error>%s (%s => %s)</error>',
+                        $e->getMessage(),
                         $path,
                         $value
                     );
