@@ -56,6 +56,8 @@ To import the Magento configuration settings for ([@therouv](https://github.com/
 php bin/magento config:data:import config/store dev/therouv
 ```
 
+The files in the `base` folder will always be imported (if they exist), regardless of which environment parameter has been passed. If the base and environment configurations have the same configuration field set, then the environment value for that configuration will overwrite the base configuration.
+
 ### Environment Variables substitution
 
 If you do not want to store your secrets in version control, you can use placeholders for environment variables in the configuration files. This is done with the notation `%env(ENV_VAR_NAME)%`.
