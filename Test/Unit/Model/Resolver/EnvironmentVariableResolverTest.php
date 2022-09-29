@@ -41,6 +41,15 @@ class EnvironmentVariableResolverTest extends TestCase
     {
         $this->assertEquals($this->environmentVariableResolver->resolveValue('test_without_env_var'), 'test_without_env_var');
 
+        $this->assertEquals($this->environmentVariableResolver->resolveValue('%env(PA)%'), '%env(PA)%');
+        $this->assertEquals($this->environmentVariableResolver->resolveValue('%env(lowercase)%'), '%env(lowercase)%');
+        $this->assertEquals($this->environmentVariableResolver->resolveValue('%env(SCRIPT_SOMETHING)%'), '%env(SCRIPT_SOMETHING)%');
+        $this->assertEquals($this->environmentVariableResolver->resolveValue('%env(PHP_SOMETHING)%'), '%env(PHP_SOMETHING)%');
+        $this->assertEquals($this->environmentVariableResolver->resolveValue('%env(HTTP_SOMETHING)%'), '%env(HTTP_SOMETHING)%');
+        $this->assertEquals($this->environmentVariableResolver->resolveValue('%env(SERVER_SOMETHING)%'), '%env(SERVER_SOMETHING)%');
+        $this->assertEquals($this->environmentVariableResolver->resolveValue('%env(QUERY_SOMETHING)%'), '%env(QUERY_SOMETHING)%');
+        $this->assertEquals($this->environmentVariableResolver->resolveValue('%env(DOCUMENT_SOMETHING)%'), '%env(DOCUMENT_SOMETHING)%');
+
         $this->assertEquals($this->environmentVariableResolver->resolveValue('%env(HOSTNAME)%'), 'testvalue1');
         $this->assertEquals($this->environmentVariableResolver->resolveValue('https://%env(SUBDOMAIN)%.example.com'), 'https://testvalue2.example.com');
         $this->assertEquals($this->environmentVariableResolver->resolveValue('%env(CONCAT_THIS)%%env(WITH_THIS)%'), 'testvalue3testvalue4');
