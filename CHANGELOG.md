@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * ...
 
+## [3.8.0] - 2022-09-29
+
+### Added
+
+* Added support and documentation for using environment variables by [@peterjaap](https://github.com/peterjaap)
+
+### Changed
+
+* Added documentation for previously undocumented base feature by [@peterjaap](https://github.com/peterjaap)
+
 ## [3.7.0] - 2022-08-17
 
 ### Changed
