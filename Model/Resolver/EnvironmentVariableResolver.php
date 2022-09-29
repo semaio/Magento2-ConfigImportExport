@@ -28,11 +28,11 @@ class EnvironmentVariableResolver
     {
         $this->value = $value;
         return preg_replace_callback(
-            '/\{env:([^:\}\{]+?)\}/',
+            '/\%env\(([^:\%\%]+?)\)\%/',
             function ($matches) {
                 $resolvedValue = getenv($matches[1]);
                 if ($resolvedValue === false) {
-                    throw new \UnexpectedValueException(sprintf('Environment variable %s does not exist', $this->value));
+                    throw new \UnexpectedValueException(sprintf('Environment variable %s does not exist', $matches[1]));
                 }
                 return $resolvedValue;
             },
