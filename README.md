@@ -62,7 +62,6 @@ When using a push approach in CI/CD, the environment variables should be replace
 
 ```
 task('magento:config:set', function () {
-    set('release_path', get('current_path'));
     $resolver = new \Semaio\ConfigImportExport\Model\Resolver\EnvironmentVariableResolver();
     $glob = glob('config/store/**/*.yaml');
     array_walk($glob, function ($file) use ($resolver) {
