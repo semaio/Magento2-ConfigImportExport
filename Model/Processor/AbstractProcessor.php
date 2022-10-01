@@ -13,9 +13,19 @@ use Symfony\Component\Console\Output\OutputInterface;
 abstract class AbstractProcessor implements AbstractProcessorInterface
 {
     /**
+     * @var InputInterface
+     */
+    private $input;
+
+    /**
      * @var OutputInterface
      */
     private $output;
+    
+    /**
+     * @var QuestionHelper
+     */
+    private $questionHelper;
 
     /**
      * @var string
