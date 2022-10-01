@@ -11,14 +11,15 @@ $ php bin/magento config:data:import --help
   config:data:import [--base[="..."]] [-m|--format[="..."]] folder environment
 
  Arguments:
-  folder                Import folder name
-  environment           Environment name. SubEnvs separated by slash e.g.: development/osx/developer01
+  folder                           Import folder name
+  environment                      Environment name. SubEnvs separated by slash e.g.: development/osx/developer01
 
  Options:
-  --base                Base folder name (default: "base")
-  --format (-m)         Format: yaml, json (Default: yaml) (default: "yaml")
-  --no-cache            Do not clear cache after config data import.
-  --recursive (-r)      Recursively go over subdirectories and import configs.
+  --base (-b)                      Base folder name (default: "base")
+  --format (-m)                    Format: yaml, json (Default: yaml)
+  --no-cache                       Do not clear cache after config data import.
+  --recursive (-r)                 Recursively go over subdirectories and import configs.
+  --prompt-missing-env-vars (-p)   Prompt in interactive mode when environment variables are found but not configured (Default: true)
 ```
 
 :exclamation: Only use the `no-cache` option if you clear the cache afterwards, e.g. in a deployment process. Otherwise the changes will have no effect.
