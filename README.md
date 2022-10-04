@@ -56,6 +56,22 @@ See [docs/config-import.md](docs/config-import.md) for more information.
 
 See [docs/config-export.md](docs/config-export.md) for more information.
 
+## Usage with Deployer
+
+When using a push approach in CI/CD, the environment variables should be replaced on the runner and not on the initiating host or target host. For this, you can use this Deployer task to do this and import the config settings;
+
+```
+task('magento:config:set', function () {
+    $resolver = new \Semaio\ConfigImportExport\Model\Resolver\EnvironmentVariableResolver();
+    $glob = glob('config/store/**/*.yaml');
+    array_walk($glob, function ($file) use ($resolver) {
+        if (file_put_contents($tempFile = tempnam('/tmp', get('clientslug')), $resolver->resolveValue(file_get_contents($file)))) {
+            upload($tempFile, get('release_path') . '/' . $file);
+        }
+    });
+    run('{{bin/php}} {{release_path}}/bin/magento config:data:import {{release_path}}/config/store ' . get('environment'));
+});
+```
 
 ## Support
 
