@@ -12,6 +12,7 @@ use Semaio\ConfigImportExport\Model\File\FinderInterface;
 use Semaio\ConfigImportExport\Model\File\Reader\ReaderInterface;
 use Semaio\ConfigImportExport\Model\Resolver\EnvironmentVariableResolver;
 use Semaio\ConfigImportExport\Model\Validator\ScopeValidatorInterface;
+use Symfony\Component\Console\Question\Question;
 
 class ImportProcessor extends AbstractProcessor implements ImportProcessorInterface
 {
@@ -157,14 +158,18 @@ class ImportProcessor extends AbstractProcessor implements ImportProcessorInterf
                 try {
                     $value = $this->environmentVariableResolver->resolveValue($value);
                 } catch (\UnexpectedValueException $e) {
-                    $errorMsg = sprintf(
-                        '<error>%s (%s => %s)</error>',
-                        $e->getMessage(),
-                        $path,
-                        $value
-                    );
-                    $this->getOutput()->writeln($errorMsg);
-                    continue;
+                    if ($this->getInput()->getOption('prompt-missing-env-vars') && $this->getInput()->isInteractive()) {
+                        $value = $this->getQuestionHelper()->ask($this->getInput(), $this->getOutput(), new Question($path . ': '));
+                    } else {
+                        $errorMsg = sprintf(
+                            '<error>%s (%s => %s)</error>',
+                            $e->getMessage(),
+                            $path,
+                            $value
+                        );
+                        $this->getOutput()->writeln($errorMsg);
+                        continue;
+                    }
                 }
 
                 $return[] = [
