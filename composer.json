@@ -1,34 +1,34 @@
 {
-    "name": "semaio/magento2-configimportexport",
-    "description": "Import/Export core_config_data values in Magento 2",
-    "require": {
-        "php": "^7.2|^8.1",
-        "symfony/yaml": "^3.4|^4.0|^5.0|^6.0",
-        "magento/module-config": "*",
-        "magento/module-store": "*",
-        "magento/framework": "*"
+  "name": "semaio/magento2-configimportexport",
+  "description": "Import/Export core_config_data values in Magento 2",
+  "require": {
+    "php": "^7.2",
+    "symfony/yaml": "^3.4|^4.0|^5.0|^6.0",
+    "magento/module-config": "*",
+    "magento/module-store": "*",
+    "magento/framework": "*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "*"
+  },
+  "type": "magento2-module",
+  "license": "OSL-3.0",
+  "authors": [
+    {
+      "name": "Rouven Alexander Rieker",
+      "email": "therouv@googlemail.com"
     },
-    "require-dev": {
-        "phpunit/phpunit": "*"
-    },
-    "type": "magento2-module",
-    "license": "OSL-3.0",
-    "authors": [
-        {
-            "name": "Rouven Alexander Rieker",
-            "email": "therouv@googlemail.com"
-        },
-        {
-            "name": "David Lambauer",
-            "email": "david@run-as-root.sh"
-        }
-    ],
-    "autoload": {
-        "files": [
-            "registration.php"
-        ],
-        "psr-4": {
-            "Semaio\\ConfigImportExport\\": ""
-        }
+    {
+      "name": "David Lambauer",
+      "email": "david@run-as-root.sh"
     }
+  ],
+  "autoload": {
+    "files": [
+      "registration.php"
+    ],
+    "psr-4": {
+      "Semaio\\ConfigImportExport\\": ""
+    }
+  }
 }
