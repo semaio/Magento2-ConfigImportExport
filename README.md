@@ -1,8 +1,13 @@
 # ConfigImportExport
 
-This module provides new CLI commands for Magento 2 to import/export data in/from core_config_data.
+This extension provides CLI commands for Magento 2 to import/export system configuration data. 
 
-This module is inspired by the awesome n98-magerun plugin "HarrisStreet ImpEx" by @SchumacherFM for Magento 1 which you can find [here](https://github.com/Zookal/HarrisStreet-ImpEx).
+## Why this extension?
+
+While Magento 2 offers the `app:config:dump` / `app:config:import` commands, they're limited to one environment and a little bit hard to manage, especially in CI/CD setups. 
+
+This extension supports managing configuration values for multiple environments (production, staging, etc.) out-of-the-box, defining and overwriting base configuration values in a specific environment. It also allows different file formats (e.g., YAML, JSON). In general, it makes that process a bit more streamlined and easier to manage, with the added benefit of generalization and cross-compatibility with other agencies/merchants using this.
+
 
 ## Installation
 
@@ -23,8 +28,8 @@ php bin/magento setup:upgrade
 
 ## Facts
 
-* Supported Magento versions are 2.3 and 2.4
-* Supported PHP versions are 7.2, 7.3 and 7.4
+* Supported Magento versions are 2.3 and 2.4.
+* Supported PHP versions are 7.2, 7.3, 7.4, and 8.1.
 
 
 ## Functionality
@@ -51,6 +56,22 @@ See [docs/config-import.md](docs/config-import.md) for more information.
 
 See [docs/config-export.md](docs/config-export.md) for more information.
 
+## Usage with Deployer
+
+When using a push approach in CI/CD, the environment variables should be replaced on the runner and not on the initiating host or target host. For this, you can use this Deployer task to do this and import the config settings;
+
+```
+task('magento:config:set', function () {
+    $resolver = new \Semaio\ConfigImportExport\Model\Resolver\EnvironmentVariableResolver();
+    $glob = glob('config/store/**/*.yaml');
+    array_walk($glob, function ($file) use ($resolver) {
+        if (file_put_contents($tempFile = tempnam('/tmp', get('clientslug')), $resolver->resolveValue(file_get_contents($file)))) {
+            upload($tempFile, get('release_path') . '/' . $file);
+        }
+    });
+    run('{{bin/php}} {{release_path}}/bin/magento config:data:import {{release_path}}/config/store ' . get('environment'));
+});
+```
 
 ## Support
 
@@ -72,6 +93,11 @@ Any contribution to the development of MageSetup is highly welcome. The best pos
 Thanks to all [contributors](https://github.com/semaio/Magento2-ConfigImportExport/graphs/contributors) who invested their valuable time to contribute to this module. Much appreciated!
 
 
+## Inspiration
+
+This module is inspired by the awesome n98-magerun plugin "HarrisStreet ImpEx" by @SchumacherFM for Magento 1 which you can find [here](https://github.com/Zookal/HarrisStreet-ImpEx).
+
+
 ## Copyright
 
-(c) 2016-2020 semaio GmbH / Rouven Alexander Rieker
+(c) 2016-2022 semaio GmbH / Rouven Alexander Rieker

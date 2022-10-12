@@ -92,7 +92,7 @@ class ImportCommand extends AbstractCommand
 
         $this->addOption(
             'base',
-            null,
+            'b',
             InputOption::VALUE_OPTIONAL,
             'Base folder name',
             'base'
@@ -118,6 +118,14 @@ class ImportCommand extends AbstractCommand
             'r',
             InputOption::VALUE_NONE,
             'Recursively go over subdirectories and import configs.'
+        );
+
+        $this->addOption(
+            'prompt-missing-env-vars',
+            'p',
+            InputOption::VALUE_OPTIONAL,
+            'Prompt for missing env vars input.',
+            true
         );
 
         parent::configure();
@@ -164,7 +172,9 @@ class ImportCommand extends AbstractCommand
         $this->importProcessor->setFormat($format);
         $this->importProcessor->setReader($reader);
         $this->importProcessor->setFinder($finder);
+        $this->importProcessor->setInput($input);
         $this->importProcessor->setOutput($output);
+        $this->importProcessor->setQuestionHelper($this->getHelper('question'));
         $this->importProcessor->process();
 
         // Clear the cache after import

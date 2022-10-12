@@ -10,12 +10,12 @@ use Magento\Framework\App\Config\Storage\WriterInterface;
 use Semaio\ConfigImportExport\Model\Converter\ScopeConverterInterface;
 use Semaio\ConfigImportExport\Model\File\FinderInterface;
 use Semaio\ConfigImportExport\Model\File\Reader\ReaderInterface;
+use Semaio\ConfigImportExport\Model\Resolver\EnvironmentVariableResolver;
 use Semaio\ConfigImportExport\Model\Validator\ScopeValidatorInterface;
+use Symfony\Component\Console\Question\Question;
 
 class ImportProcessor extends AbstractProcessor implements ImportProcessorInterface
 {
-    private const DELETE_CONFIG_FLAG = '!!DELETE';
-
     /**
      * @var WriterInterface
      */
@@ -42,18 +42,26 @@ class ImportProcessor extends AbstractProcessor implements ImportProcessorInterf
     private $scopeConverter;
 
     /**
+     * @var EnvironmentVariableResolver
+     */
+    private $environmentVariableResolver;
+
+    /**
      * @param WriterInterface $configWriter
      * @param ScopeValidatorInterface $scopeValidator
      * @param ScopeConverterInterface $scopeConverter
+     * @param EnvironmentVariableResolver $environmentVariableResolver
      */
     public function __construct(
         WriterInterface $configWriter,
         ScopeValidatorInterface $scopeValidator,
-        ScopeConverterInterface $scopeConverter
+        ScopeConverterInterface $scopeConverter,
+        EnvironmentVariableResolver $environmentVariableResolver
     ) {
         $this->configWriter = $configWriter;
         $this->scopeValidator = $scopeValidator;
         $this->scopeConverter = $scopeConverter;
+        $this->environmentVariableResolver = $environmentVariableResolver;
     }
 
     /**
@@ -73,17 +81,6 @@ class ImportProcessor extends AbstractProcessor implements ImportProcessorInterf
             foreach ($configurations as $configPath => $configValues) {
                 $scopeConfigValues = $this->transformConfigToScopeConfig($configPath, $configValues);
                 foreach ($scopeConfigValues as $scopeConfigValue) {
-                    if ($scopeConfigValue['value'] === self::DELETE_CONFIG_FLAG) {
-                        $this->configWriter->delete(
-                            $configPath,
-                            $scopeConfigValue['scope'],
-                            $this->scopeConverter->convert($scopeConfigValue['scope_id'], $scopeConfigValue['scope'])
-                        );
-                        $this->getOutput()->writeln(sprintf('<comment>%s => %s</comment>', $configPath, 'DELETED'));
-                        $valuesSet++;
-                        continue;
-                    }
-
                     $this->configWriter->save(
                         $configPath,
                         $scopeConfigValue['value'],
@@ -156,6 +153,23 @@ class ImportProcessor extends AbstractProcessor implements ImportProcessorInterf
                     );
                     $this->getOutput()->writeln($errorMsg);
                     continue;
+                }
+
+                try {
+                    $value = $this->environmentVariableResolver->resolveValue($value);
+                } catch (\UnexpectedValueException $e) {
+                    if ($this->getInput()->getOption('prompt-missing-env-vars') && $this->getInput()->isInteractive()) {
+                        $value = $this->getQuestionHelper()->ask($this->getInput(), $this->getOutput(), new Question($path . ': '));
+                    } else {
+                        $errorMsg = sprintf(
+                            '<error>%s (%s => %s)</error>',
+                            $e->getMessage(),
+                            $path,
+                            $value
+                        );
+                        $this->getOutput()->writeln($errorMsg);
+                        continue;
+                    }
                 }
 
                 $return[] = [
