@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * ...
 
+## [3.10.0] - 2022-10-13
+
+### Added
+
+* Interactive env var support for local environments by [@peterjaap](https://github.com/peterjaap)
+* Option to delete config values by [@DavidLambauer](https://github.com/DavidLambauer)
+
 ## [3.9.0] - 2022-09-29
 
 ### Changed
