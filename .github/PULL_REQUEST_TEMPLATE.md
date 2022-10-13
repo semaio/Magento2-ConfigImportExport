@@ -1,6 +1,6 @@
 Please make sure these boxes are checked before submitting your PR - thank you!
 
-- [ ] Pull request is based against develop branch
+- [ ] Pull request is based against main branch
 - [ ] README.md reflects changes (if applicable)
 - [ ] New files contain a license header
 
