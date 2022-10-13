@@ -2,7 +2,6 @@
 
 Import configuration values in Magento in an automated way instead of manually clicking through the store configuration.
 
-
 ## Usage
 
 ```bash
@@ -72,6 +71,16 @@ vendorx/general/api_key:
 ```
 
 You can then set the environment variable `VENDORX_API_KEY` in your CI/CD configuration to the secret API key. 
+
+### Delete Config
+
+Sometimes, it might be helpful to be able to delete certain config values and get back to the default behavior. To do so, your config value has to be a magic-ish string. 
+
+```yaml
+vendorx/general/api_key:
+  default:
+    0: "!!DELETE"
+```
 
 ### Recursive folder setup
 

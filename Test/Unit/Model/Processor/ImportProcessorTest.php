@@ -121,6 +121,11 @@ class ImportProcessorTest extends TestCase
                     0 => 'ABC',
                 ],
             ],
+            'test/config/custom_field_to_be_deleted' => [
+                'default' => [
+                    0 => '!!DELETE',
+                ],
+            ]
         ];
 
         $readerMock = $this->getMockBuilder(YamlReader::class)
@@ -128,8 +133,9 @@ class ImportProcessorTest extends TestCase
             ->getMock();
         $readerMock->expects($this->once())->method('parse')->willReturn($parseResult);
 
-        $this->scopeValidatorMock->expects($this->once())->method('validate')->willReturn(true);
+        $this->scopeValidatorMock->expects($this->exactly(2))->method('validate')->willReturn(true);
         $this->configWriterMock->expects($this->once())->method('save');
+        $this->configWriterMock->expects($this->once())->method('delete');
 
         $processor = new ImportProcessor($this->configWriterMock, $this->scopeValidatorMock, $this->scopeConverterMock);
         $processor->setOutput($this->outputMock);

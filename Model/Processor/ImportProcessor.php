@@ -16,6 +16,7 @@ use Symfony\Component\Console\Question\Question;
 
 class ImportProcessor extends AbstractProcessor implements ImportProcessorInterface
 {
+    private const DELETE_CONFIG_FLAG = '!!DELETE';
     /**
      * @var WriterInterface
      */
@@ -81,6 +82,17 @@ class ImportProcessor extends AbstractProcessor implements ImportProcessorInterf
             foreach ($configurations as $configPath => $configValues) {
                 $scopeConfigValues = $this->transformConfigToScopeConfig($configPath, $configValues);
                 foreach ($scopeConfigValues as $scopeConfigValue) {
+                    if ($scopeConfigValue['value'] === self::DELETE_CONFIG_FLAG) {
+                        $this->configWriter->delete(
+                            $configPath,
+                            $scopeConfigValue['scope'],
+                            $this->scopeConverter->convert($scopeConfigValue['scope_id'], $scopeConfigValue['scope'])
+                        );
+                        $this->getOutput()->writeln(sprintf('<comment>%s => %s</comment>', $configPath, 'DELETED'));
+                        $valuesSet++;
+                        continue;
+                    }
+
                     $this->configWriter->save(
                         $configPath,
                         $scopeConfigValue['value'],
