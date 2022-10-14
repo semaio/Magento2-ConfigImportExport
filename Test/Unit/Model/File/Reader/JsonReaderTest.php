@@ -7,6 +7,7 @@
 namespace Semaio\ConfigImportExport\Test\Unit\Model\File\Reader;
 
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 use Semaio\ConfigImportExport\Model\File\Reader\JsonReader;
 
 class JsonReaderTest extends TestCase
@@ -46,7 +47,7 @@ class JsonReaderTest extends TestCase
     {
         $baseDir = __DIR__ . DIRECTORY_SEPARATOR . 'JsonReaderTest' . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR;
 
-        $this->expectException('InvalidArgumentException');
+        $this->expectException(RuntimeException::class);
 
         $this->reader->parse($baseDir . 'fx-test-invalid.json');
     }
