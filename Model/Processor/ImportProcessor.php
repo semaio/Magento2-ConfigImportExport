@@ -12,6 +12,8 @@ use Semaio\ConfigImportExport\Model\File\FinderInterface;
 use Semaio\ConfigImportExport\Model\File\Reader\ReaderInterface;
 use Semaio\ConfigImportExport\Model\Resolver\EnvironmentVariableResolver;
 use Semaio\ConfigImportExport\Model\Validator\ScopeValidatorInterface;
+use Symfony\Component\Console\Helper\QuestionHelper;
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Question\Question;
 
 class ImportProcessor extends AbstractProcessor implements ImportProcessorInterface
@@ -33,6 +35,16 @@ class ImportProcessor extends AbstractProcessor implements ImportProcessorInterf
     private $finder;
 
     /**
+     * @var InputInterface
+     */
+    private $input;
+
+    /**
+     * @var QuestionHelper
+     */
+    private $questionHelper;
+
+    /**
      * @var ReaderInterface
      */
     private $reader;
@@ -48,9 +60,9 @@ class ImportProcessor extends AbstractProcessor implements ImportProcessorInterf
     private $environmentVariableResolver;
 
     /**
-     * @param WriterInterface $configWriter
-     * @param ScopeValidatorInterface $scopeValidator
-     * @param ScopeConverterInterface $scopeConverter
+     * @param WriterInterface             $configWriter
+     * @param ScopeValidatorInterface     $scopeValidator
+     * @param ScopeConverterInterface     $scopeConverter
      * @param EnvironmentVariableResolver $environmentVariableResolver
      */
     public function __construct(
@@ -66,7 +78,9 @@ class ImportProcessor extends AbstractProcessor implements ImportProcessorInterf
     }
 
     /**
-     * Process the import.
+     * Process configuration import.
+     *
+     * @return void
      */
     public function process()
     {
@@ -111,7 +125,64 @@ class ImportProcessor extends AbstractProcessor implements ImportProcessorInterf
     }
 
     /**
+     * @param InputInterface $input
+     *
+     * @return void
+     */
+    public function setInput(InputInterface $input)
+    {
+        $this->input = $input;
+    }
+
+    /**
+     * @return InputInterface
+     */
+    public function getInput()
+    {
+        return $this->input;
+    }
+
+    /**
+     * @param QuestionHelper $questionHelper
+     *
+     * @return void
+     */
+    public function setQuestionHelper(QuestionHelper $questionHelper)
+    {
+        $this->questionHelper = $questionHelper;
+    }
+
+    /**
+     * @return QuestionHelper
+     */
+    public function getQuestionHelper()
+    {
+        return $this->questionHelper;
+    }
+
+    /**
+     * @param ReaderInterface $reader
+     *
+     * @return void
+     */
+    public function setReader(ReaderInterface $reader)
+    {
+        $this->reader = $reader;
+    }
+
+    /**
+     * @param FinderInterface $finder
+     *
+     * @return void
+     */
+    public function setFinder(FinderInterface $finder)
+    {
+        $this->finder = $finder;
+    }
+
+    /**
      * @param string $file
+     *
      * @return array
      */
     private function getConfigurationsFromFile($file)
@@ -123,28 +194,14 @@ class ImportProcessor extends AbstractProcessor implements ImportProcessorInterf
             );
             $configurations = [];
         }
+
         return $configurations;
-    }
-
-    /**
-     * @param ReaderInterface $reader
-     */
-    public function setReader(ReaderInterface $reader)
-    {
-        $this->reader = $reader;
-    }
-
-    /**
-     * @param FinderInterface $finder
-     */
-    public function setFinder(FinderInterface $finder)
-    {
-        $this->finder = $finder;
     }
 
     /**
      * @param string $path
      * @param array  $config
+     *
      * @return array
      */
     public function transformConfigToScopeConfig($path, array $config)

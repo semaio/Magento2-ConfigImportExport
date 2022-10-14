@@ -6,9 +6,6 @@
 
 namespace Semaio\ConfigImportExport\Test\Unit\Model\Validator;
 
-use Magento\Store\Api\Data\WebsiteInterface;
-use Magento\Store\Model\StoreManagerInterface;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Semaio\ConfigImportExport\Model\Resolver\EnvironmentVariableResolver;
 
@@ -62,5 +59,4 @@ class EnvironmentVariableResolverTest extends TestCase
         $this->expectException(\UnexpectedValueException::class);
         $this->environmentVariableResolver->resolveValue('%env(DOESNOTEXIST)%');
     }
-
 }

@@ -35,6 +35,7 @@ class ScopeConverterTest extends TestCase
 
     /**
      * @test
+     *
      * @dataProvider itShouldNotConvertNumericScopeIdsProvider
      */
     public function itShouldNotConvertNumericScopeIds($scopeId, $scope): void

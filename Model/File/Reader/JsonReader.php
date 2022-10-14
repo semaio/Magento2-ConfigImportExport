@@ -10,14 +10,20 @@ class JsonReader extends AbstractReader
 {
     /**
      * @param string $fileName
+     *
      * @return array
      */
     public function parse($fileName)
     {
-        $content = json_decode(file_get_contents($fileName), true);
+        $content = file_get_contents($fileName);
+        if ($content === false) {
+            throw new \RuntimeException('Could not load content from JSON file: ' . $fileName);
+        }
+
+        $content = json_decode($content, true);
 
         if (0 !== json_last_error()) {
-            throw new \InvalidArgumentException('Could not parse JSON file: ' . $fileName . '. ' . json_last_error_msg());
+            throw new \RuntimeException('Could not parse JSON file: ' . $fileName . '. ' . json_last_error_msg());
         }
 
         return $this->normalize($content);

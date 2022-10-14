@@ -15,6 +15,8 @@ class YamlWriter extends AbstractWriter
     /**
      * @param string $filename
      * @param array  $data
+     *
+     * @return void
      */
     protected function _write($filename, array $data)
     {
@@ -50,6 +52,7 @@ class YamlWriter extends AbstractWriter
      * Custom format with nice headers only for flat structure available
      *
      * @param array $data
+     *
      * @return string
      */
     private function generateYaml(array $data)
@@ -77,7 +80,7 @@ class YamlWriter extends AbstractWriter
     }
 
     /**
-     * @param  int   $length
+     * @param int    $length
      * @param string $string
      *
      * @return string
@@ -90,7 +93,7 @@ class YamlWriter extends AbstractWriter
     /**
      * @param mixed $value
      *
-     * @return string
+     * @return float|int|string
      */
     private function prepareValue($value)
     {

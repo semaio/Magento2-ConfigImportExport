@@ -33,17 +33,18 @@ class ScopeConverter implements ScopeConverterInterface
      *
      * @param string|int   $scopeId Scope ID
      * @param string|mixed $scope   Scope
+     *
      * @return int
      */
     public function convert($scopeId, $scope)
     {
         if (is_numeric($scopeId)) {
-            return $scopeId;
+            return (int) $scopeId;
         }
 
         $entities = $this->getEntityStore($scope);
         if (isset($entities[$scopeId])) {
-            return $entities[$scopeId]->getId();
+            return (int) $entities[$scopeId]->getId();
         }
 
         throw new ScopeConvertException(sprintf('Unable to process code "%s" for scope "%s"', $scopeId, $scope));
@@ -52,7 +53,8 @@ class ScopeConverter implements ScopeConverterInterface
     /**
      * Retrieve the entities for the given scope
      *
-     * @param  string $scope Scope
+     * @param string $scope Scope
+     *
      * @return \Magento\Store\Api\Data\WebsiteInterface[]|\Magento\Store\Api\Data\StoreInterface[]
      */
     private function getEntityStore($scope)
@@ -64,10 +66,12 @@ class ScopeConverter implements ScopeConverterInterface
         switch ($scope) {
             case self::SCOPE_STORES:
                 $this->entityStore[$scope] = $this->storeManager->getStores(true, true);
+
                 break;
 
             case self::SCOPE_WEBSITES:
                 $this->entityStore[$scope] = $this->storeManager->getWebsites(true, true);
+
                 break;
 
             default:

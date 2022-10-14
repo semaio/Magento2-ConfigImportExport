@@ -7,7 +7,6 @@ namespace Semaio\ConfigImportExport\Command;
 
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Cache\Manager as CacheManager;
-use Magento\Framework\App\ObjectManager\ConfigLoader;
 use Magento\Framework\App\State as AppState;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
@@ -27,11 +26,6 @@ abstract class AbstractCommand extends Command
      * @var ObjectManagerInterface
      */
     private $objectManager;
-
-    /**
-     * @var ConfigLoader
-     */
-    private $configLoader;
 
     /**
      * @var Registry
@@ -56,7 +50,6 @@ abstract class AbstractCommand extends Command
     /**
      * @param Registry               $registry
      * @param AppState               $appState
-     * @param ConfigLoader           $configLoader
      * @param ObjectManagerInterface $objectManager
      * @param CacheManager           $cacheManager
      * @param null                   $name
@@ -64,14 +57,12 @@ abstract class AbstractCommand extends Command
     public function __construct(
         Registry $registry,
         AppState $appState,
-        ConfigLoader $configLoader,
         ObjectManagerInterface $objectManager,
         CacheManager $cacheManager,
         $name = null
     ) {
         $this->registry = $registry;
         $this->appState = $appState;
-        $this->configLoader = $configLoader;
         $this->objectManager = $objectManager;
         $this->cacheManager = $cacheManager;
         parent::__construct($name);
@@ -80,7 +71,8 @@ abstract class AbstractCommand extends Command
     /**
      * @param InputInterface  $input
      * @param OutputInterface $output
-     * @return null|int
+     *
+     * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -105,6 +97,8 @@ abstract class AbstractCommand extends Command
             $this->registry->unregister('isSecureArea');
             $this->registry->register('isSecureArea', true);
         }
+
+        return 0;
     }
 
     /**
@@ -128,6 +122,8 @@ abstract class AbstractCommand extends Command
     /**
      * @param string $text
      * @param string $style
+     *
+     * @return void
      */
     public function writeSection($text, $style = 'bg=blue;fg=white')
     {

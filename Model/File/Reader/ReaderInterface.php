@@ -10,6 +10,7 @@ interface ReaderInterface
 {
     /**
      * @param string $fileName
+     *
      * @return mixed
      */
     public function parse($fileName);

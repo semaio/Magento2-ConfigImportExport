@@ -24,17 +24,17 @@ class ExportProcessor extends AbstractProcessor implements ExportProcessorInterf
     private $writer;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $include = null;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $includeScope = null;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $exclude = null;
 
@@ -47,7 +47,9 @@ class ExportProcessor extends AbstractProcessor implements ExportProcessorInterf
     }
 
     /**
-     * Process the import
+     * Process configuration export.
+     *
+     * @return void
      */
     public function process()
     {
@@ -117,6 +119,8 @@ class ExportProcessor extends AbstractProcessor implements ExportProcessorInterf
 
     /**
      * @param WriterInterface $writer
+     *
+     * @return void
      */
     public function setWriter(WriterInterface $writer)
     {
@@ -124,7 +128,9 @@ class ExportProcessor extends AbstractProcessor implements ExportProcessorInterf
     }
 
     /**
-     * @param string $include
+     * @param string|null $include
+     *
+     * @return void
      */
     public function setInclude($include)
     {
@@ -132,7 +138,9 @@ class ExportProcessor extends AbstractProcessor implements ExportProcessorInterf
     }
 
     /**
-     * @param string $includeScope
+     * @param string|null $includeScope
+     *
+     * @return void
      */
     public function setIncludeScope($includeScope)
     {
@@ -140,7 +148,9 @@ class ExportProcessor extends AbstractProcessor implements ExportProcessorInterf
     }
 
     /**
-     * @param string $exclude
+     * @param string|null $exclude
+     *
+     * @return void
      */
     public function setExclude($exclude)
     {

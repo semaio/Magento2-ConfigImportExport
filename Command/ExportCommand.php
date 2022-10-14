@@ -7,7 +7,6 @@
 namespace Semaio\ConfigImportExport\Command;
 
 use Magento\Framework\App\Cache\Manager as CacheManager;
-use Magento\Framework\App\ObjectManager\ConfigLoader;
 use Magento\Framework\App\State as AppState;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
@@ -36,7 +35,6 @@ class ExportCommand extends AbstractCommand
     /**
      * @param Registry                 $registry
      * @param AppState                 $appState
-     * @param ConfigLoader             $configLoader
      * @param ObjectManagerInterface   $objectManager
      * @param CacheManager             $cacheManager
      * @param ExportProcessorInterface $exportProcessor
@@ -46,7 +44,6 @@ class ExportCommand extends AbstractCommand
     public function __construct(
         Registry $registry,
         AppState $appState,
-        ConfigLoader $configLoader,
         ObjectManagerInterface $objectManager,
         CacheManager $cacheManager,
         ExportProcessorInterface $exportProcessor,
@@ -55,11 +52,13 @@ class ExportCommand extends AbstractCommand
     ) {
         $this->exportProcessor = $exportProcessor;
         $this->writers = $writers;
-        parent::__construct($registry, $appState, $configLoader, $objectManager, $cacheManager, $name);
+        parent::__construct($registry, $appState, $objectManager, $cacheManager, $name);
     }
 
     /**
-     * Configure the command
+     * Configure the command.
+     *
+     * @return void
      */
     protected function configure()
     {
@@ -122,9 +121,7 @@ class ExportCommand extends AbstractCommand
     }
 
     /**
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     * @return null|int
+     * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -138,7 +135,7 @@ class ExportCommand extends AbstractCommand
 
         /** @var \Semaio\ConfigImportExport\Model\File\Writer\WriterInterface $writer */
         $writer = $this->getObjectManager()->create($this->writers[$format]);
-        if (!$writer || !is_object($writer)) {
+        if (!is_object($writer)) {
             throw new \InvalidArgumentException(ucfirst($format) . ' file writer could not be instantiated."');
         }
 
@@ -169,5 +166,7 @@ class ExportCommand extends AbstractCommand
         $this->exportProcessor->setWriter($writer);
         $this->exportProcessor->setOutput($output);
         $this->exportProcessor->process();
+
+        return 0;
     }
 }

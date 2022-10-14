@@ -12,6 +12,8 @@ interface WriterInterface
 {
     /**
      * @param array $data
+     *
+     * @return void
      */
     public function write(array $data = []);
 
@@ -22,6 +24,8 @@ interface WriterInterface
 
     /**
      * @param string $baseFilename
+     *
+     * @return void
      */
     public function setBaseFilename($baseFilename);
 
@@ -32,6 +36,8 @@ interface WriterInterface
 
     /**
      * @param OutputInterface $output
+     *
+     * @return void
      */
     public function setOutput(OutputInterface $output);
 
@@ -42,6 +48,7 @@ interface WriterInterface
 
     /**
      * @param bool $isHierarchical
+     *
      * @return $this
      */
     public function setIsHierarchical($isHierarchical);
@@ -53,6 +60,7 @@ interface WriterInterface
 
     /**
      * @param bool $isFilePerNameSpace
+     *
      * @return $this
      */
     public function setIsFilePerNameSpace($isFilePerNameSpace);

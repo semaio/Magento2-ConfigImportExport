@@ -48,6 +48,8 @@ abstract class AbstractWriter implements WriterInterface
 
     /**
      * @param array $data
+     *
+     * @return void
      */
     public function write(array $data = [])
     {
@@ -78,11 +80,14 @@ abstract class AbstractWriter implements WriterInterface
     /**
      * @param string $filename
      * @param array  $data
+     *
+     * @return void
      */
     abstract protected function _write($filename, array $data);
 
     /**
      * @param array $exportData
+     *
      * @return array
      */
     protected function _prepareDataHierarchical(array $exportData)
@@ -98,6 +103,7 @@ abstract class AbstractWriter implements WriterInterface
 
     /**
      * @param array $exportData
+     *
      * @return array
      */
     protected function _prepareDataFlat(array $exportData)
@@ -126,6 +132,8 @@ abstract class AbstractWriter implements WriterInterface
 
     /**
      * @param string $baseFilename
+     *
+     * @return void
      */
     public function setBaseFilename($baseFilename)
     {
@@ -142,6 +150,8 @@ abstract class AbstractWriter implements WriterInterface
 
     /**
      * @param OutputInterface $output
+     *
+     * @return void
      */
     public function setOutput(OutputInterface $output)
     {
@@ -158,6 +168,7 @@ abstract class AbstractWriter implements WriterInterface
 
     /**
      * @param bool $isHierarchical
+     *
      * @return $this
      */
     public function setIsHierarchical($isHierarchical)
@@ -177,6 +188,7 @@ abstract class AbstractWriter implements WriterInterface
 
     /**
      * @param bool $isFilePerNameSpace
+     *
      * @return $this
      */
     public function setIsFilePerNameSpace($isFilePerNameSpace)
@@ -196,12 +208,13 @@ abstract class AbstractWriter implements WriterInterface
 
     /**
      * @param null|string $namespace
+     *
      * @return string
      */
     public function getFilename($namespace = null)
     {
         $filename = [
-            date('Ymd_His')
+            date('Ymd_His'),
         ];
 
         // Check if the a base filename was given

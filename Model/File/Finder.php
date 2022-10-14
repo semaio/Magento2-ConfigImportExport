@@ -62,6 +62,9 @@ class Finder implements FinderInterface
 
     /**
      * @param string $environment
+     *
+     * @return void
+     *
      * @throws \InvalidArgumentException
      */
     public function setEnvironment($environment)
@@ -75,6 +78,9 @@ class Finder implements FinderInterface
 
     /**
      * @param string $folder
+     *
+     * @return void
+     *
      * @throws \InvalidArgumentException
      */
     public function setFolder($folder)
@@ -87,6 +93,8 @@ class Finder implements FinderInterface
 
     /**
      * @param string $baseFolder
+     *
+     * @return void
      */
     public function setBaseFolder($baseFolder)
     {
@@ -95,6 +103,8 @@ class Finder implements FinderInterface
 
     /**
      * @param string $format
+     *
+     * @return void
      */
     public function setFormat($format)
     {
@@ -102,8 +112,9 @@ class Finder implements FinderInterface
     }
 
     /**
-     * @param string $path
-     * @param null   $depth
+     * @param string                         $path
+     * @param string|int|string[]|int[]|null $depth
+     *
      * @return array
      */
     private function search($path, $depth = null)
@@ -124,7 +135,7 @@ class Finder implements FinderInterface
 
         $files = [];
         foreach ($finder as $file) {
-            /** @var $file \Symfony\Component\Finder\SplFileInfo */
+            /** @var \Symfony\Component\Finder\SplFileInfo $file */
             $files[] = $file->getPathname();
         }
 
