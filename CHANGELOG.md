@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * ...
 
+## [3.10.1] - 2022-10-14
+
+### Changed
+
+* Fix null value regression during import by [@therouv](https://github.com/therouv)
+* Fix unit tests by [@therouv](https://github.com/therouv)
+
 ## [3.10.0] - 2022-10-13
 
 ### Added
