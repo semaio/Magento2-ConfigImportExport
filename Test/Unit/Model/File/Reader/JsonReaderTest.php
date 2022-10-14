@@ -28,6 +28,7 @@ class JsonReaderTest extends TestCase
 
     /**
      * @test
+     *
      * @dataProvider provideFiles
      */
     public function parse($file): void
