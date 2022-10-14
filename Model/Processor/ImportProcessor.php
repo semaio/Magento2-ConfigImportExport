@@ -66,11 +66,10 @@ class ImportProcessor extends AbstractProcessor implements ImportProcessorInterf
     }
 
     /**
-     * Process the import
+     * Process the import.
      */
     public function process()
     {
-        // Find files
         $files = $this->finder->find();
         if (0 === count($files)) {
             throw new \InvalidArgumentException('No files found for format: *.' . $this->getFormat());
@@ -88,8 +87,10 @@ class ImportProcessor extends AbstractProcessor implements ImportProcessorInterf
                             $scopeConfigValue['scope'],
                             $this->scopeConverter->convert($scopeConfigValue['scope_id'], $scopeConfigValue['scope'])
                         );
+
                         $this->getOutput()->writeln(sprintf('<comment>%s => %s</comment>', $configPath, 'DELETED'));
                         $valuesSet++;
+
                         continue;
                     }
 
@@ -149,6 +150,7 @@ class ImportProcessor extends AbstractProcessor implements ImportProcessorInterf
     public function transformConfigToScopeConfig($path, array $config)
     {
         $return = [];
+
         foreach ($config as $scope => $scopeIdValue) {
             if (!$scopeIdValue) {
                 continue;
@@ -156,14 +158,14 @@ class ImportProcessor extends AbstractProcessor implements ImportProcessorInterf
 
             foreach ($scopeIdValue as $scopeId => $value) {
                 if (!$this->scopeValidator->validate($scope, $scopeId)) {
-                    $errorMsg = sprintf(
+                    $this->getOutput()->writeln(sprintf(
                         '<error>ERROR: Invalid scopeId "%s" for scope "%s" (%s => %s)</error>',
                         $scopeId,
                         $scope,
                         $path,
                         $value
-                    );
-                    $this->getOutput()->writeln($errorMsg);
+                    ));
+
                     continue;
                 }
 
@@ -173,13 +175,13 @@ class ImportProcessor extends AbstractProcessor implements ImportProcessorInterf
                     if ($this->getInput()->getOption('prompt-missing-env-vars') && $this->getInput()->isInteractive()) {
                         $value = $this->getQuestionHelper()->ask($this->getInput(), $this->getOutput(), new Question($path . ': '));
                     } else {
-                        $errorMsg = sprintf(
+                        $this->getOutput()->writeln(sprintf(
                             '<error>%s (%s => %s)</error>',
                             $e->getMessage(),
                             $path,
                             $value
-                        );
-                        $this->getOutput()->writeln($errorMsg);
+                        ));
+
                         continue;
                     }
                 }

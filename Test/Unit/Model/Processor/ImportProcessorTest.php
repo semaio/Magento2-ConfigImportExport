@@ -13,6 +13,7 @@ use Semaio\ConfigImportExport\Model\Converter\ScopeConverterInterface;
 use Semaio\ConfigImportExport\Model\File\Finder;
 use Semaio\ConfigImportExport\Model\File\Reader\YamlReader;
 use Semaio\ConfigImportExport\Model\Processor\ImportProcessor;
+use Semaio\ConfigImportExport\Model\Resolver\EnvironmentVariableResolver;
 use Semaio\ConfigImportExport\Model\Validator\ScopeValidatorInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -39,6 +40,11 @@ class ImportProcessorTest extends TestCase
     private $scopeConverterMock;
 
     /**
+     * @var EnvironmentVariableResolver
+     */
+    private $environmentVariableResolver;
+
+    /**
      * Set up test class
      */
     protected function setUp(): void
@@ -49,6 +55,7 @@ class ImportProcessorTest extends TestCase
         $this->configWriterMock = $this->getMockBuilder(WriterInterface::class)->getMock();
         $this->scopeValidatorMock = $this->getMockBuilder(ScopeValidatorInterface::class)->getMock();
         $this->scopeConverterMock = $this->getMockBuilder(ScopeConverterInterface::class)->getMock();
+        $this->environmentVariableResolver = new EnvironmentVariableResolver();
     }
 
     /**
@@ -66,7 +73,7 @@ class ImportProcessorTest extends TestCase
 
         $this->expectException(InvalidArgumentException::class);
 
-        $processor = new ImportProcessor($this->configWriterMock, $this->scopeValidatorMock, $this->scopeConverterMock);
+        $processor = new ImportProcessor($this->configWriterMock, $this->scopeValidatorMock, $this->scopeConverterMock, $this->environmentVariableResolver);
         $processor->setFinder($finderMock);
         $processor->process();
     }
@@ -97,7 +104,7 @@ class ImportProcessorTest extends TestCase
         $this->scopeValidatorMock->expects($this->once())->method('validate')->willReturn(false);
         $this->configWriterMock->expects($this->never())->method('save');
 
-        $processor = new ImportProcessor($this->configWriterMock, $this->scopeValidatorMock, $this->scopeConverterMock);
+        $processor = new ImportProcessor($this->configWriterMock, $this->scopeValidatorMock, $this->scopeConverterMock, $this->environmentVariableResolver);
         $processor->setFormat('yaml');
         $processor->setOutput($this->outputMock);
         $processor->setFinder($finderMock);
@@ -125,7 +132,7 @@ class ImportProcessorTest extends TestCase
                 'default' => [
                     0 => '!!DELETE',
                 ],
-            ]
+            ],
         ];
 
         $readerMock = $this->getMockBuilder(YamlReader::class)
@@ -137,7 +144,7 @@ class ImportProcessorTest extends TestCase
         $this->configWriterMock->expects($this->once())->method('save');
         $this->configWriterMock->expects($this->once())->method('delete');
 
-        $processor = new ImportProcessor($this->configWriterMock, $this->scopeValidatorMock, $this->scopeConverterMock);
+        $processor = new ImportProcessor($this->configWriterMock, $this->scopeValidatorMock, $this->scopeConverterMock, $this->environmentVariableResolver);
         $processor->setOutput($this->outputMock);
         $processor->setFinder($finderMock);
         $processor->setReader($readerMock);

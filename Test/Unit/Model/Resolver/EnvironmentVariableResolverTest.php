@@ -54,6 +54,11 @@ class EnvironmentVariableResolverTest extends TestCase
         $this->assertEquals($this->environmentVariableResolver->resolveValue('https://%env(SUBDOMAIN)%.example.com'), 'https://testvalue2.example.com');
         $this->assertEquals($this->environmentVariableResolver->resolveValue('%env(CONCAT_THIS)%%env(WITH_THIS)%'), 'testvalue3testvalue4');
 
+        $this->assertNull($this->environmentVariableResolver->resolveValue(null));
+        $this->assertEquals($this->environmentVariableResolver->resolveValue(''), '');
+        $this->assertEquals($this->environmentVariableResolver->resolveValue(false), '');
+        $this->assertEquals($this->environmentVariableResolver->resolveValue(true), '1');
+
         $this->expectException(\UnexpectedValueException::class);
         $this->environmentVariableResolver->resolveValue('%env(DOESNOTEXIST)%');
     }
