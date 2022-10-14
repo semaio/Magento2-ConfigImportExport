@@ -12,7 +12,7 @@ jobs:
     name: Magento 2 Unit Tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: extdn/github-actions-m2/magento-unit-tests/7.3@master
         env:
           MAGENTO_VERSION: '2.3.7-p4'
