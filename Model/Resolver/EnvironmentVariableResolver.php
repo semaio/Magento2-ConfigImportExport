@@ -27,6 +27,11 @@ class EnvironmentVariableResolver
     public function resolveValue($value)
     {
         $this->value = $value;
+
+        if ($value === null) {
+            return $value;
+        }
+        
         return preg_replace_callback(
             '/\%env\((?!PHP_|HTTP_|SERVER_|SCRIPT_|QUERY_|DOCUMENT_)([A-Z\_]{3,})\)\%/',
             function ($matches) {
