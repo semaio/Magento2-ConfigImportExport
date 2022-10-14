@@ -14,27 +14,37 @@ interface FinderInterface
     public function find();
 
     /**
-     * @param array $environment
+     * @param string $environment
+     *
+     * @return void
      */
     public function setEnvironment($environment);
 
     /**
      * @param mixed $folder
+     *
+     * @return void
      */
     public function setFolder($folder);
 
     /**
      * @param mixed $baseFolder
+     *
+     * @return void
      */
     public function setBaseFolder($baseFolder);
 
     /**
      * @param mixed $format
+     *
+     * @return void
      */
     public function setFormat($format);
 
     /**
      * @param mixed $depth
+     *
+     * @return void
      */
     public function setDepth($depth);
 }

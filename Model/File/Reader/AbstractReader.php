@@ -10,6 +10,7 @@ abstract class AbstractReader implements ReaderInterface
 {
     /**
      * @param array $content
+     *
      * @return array
      */
     public function normalize(array $content)
@@ -30,6 +31,7 @@ abstract class AbstractReader implements ReaderInterface
     /**
      * @param string $nameSpace1
      * @param array  $settings1
+     *
      * @return array
      */
     public function flatten($nameSpace1, array $settings1)

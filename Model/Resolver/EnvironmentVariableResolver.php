@@ -15,6 +15,7 @@ class EnvironmentVariableResolver
      * @throws \UnexpectedValueException
      *
      * @param string|null $value
+     *
      * @return string|null
      */
     public function resolveValue($value)
@@ -30,6 +31,7 @@ class EnvironmentVariableResolver
                 if ($resolvedValue === false) {
                     throw new \UnexpectedValueException(sprintf('Environment variable %s does not exist', $matches[1]));
                 }
+
                 return $resolvedValue;
             },
             $value

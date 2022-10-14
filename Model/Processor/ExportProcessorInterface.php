@@ -12,21 +12,29 @@ interface ExportProcessorInterface extends AbstractProcessorInterface
 {
     /**
      * @param WriterInterface $writer
+     *
+     * @return void
      */
     public function setWriter(WriterInterface $writer);
 
     /**
      * @param string $include
+     *
+     * @return void
      */
     public function setInclude($include);
 
     /**
      * @param string $includeScope
+     *
+     * @return void
      */
     public function setIncludeScope($includeScope);
 
     /**
      * @param string $exclude
+     *
+     * @return void
      */
     public function setExclude($exclude);
 }

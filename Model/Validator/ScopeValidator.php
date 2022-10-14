@@ -28,30 +28,38 @@ class ScopeValidator implements ScopeValidatorInterface
     /**
      * Validates the given scope and scope id
      *
-     * @param string $scope   Scope
-     * @param int    $scopeId Scope ID
+     * @param string     $scope   Scope
+     * @param string|int $scopeId Scope ID
+     *
      * @return bool
      */
     public function validate($scope, $scopeId)
     {
         $valid = true;
-        if ($scope === 'default') { // Default Store only valid for id 0
-            if ($scopeId !== 0) {
-                $valid = false;
-            }
-        } elseif ($scope === 'websites') { // Check if website with id exists
-            $valid = $this->isValidWebsiteId($scopeId);
-        } elseif ($scope === 'stores') { // Check if store with id exists
-            $valid = $this->isValidStoreId($scopeId);
+
+        // Default scope is only valid for store id 0
+        if ($scope === 'default' && $scopeId !== 0) {
+            return false;
         }
 
-        return $valid;
+        // Check if website with given id/code exists.
+        if ($scope === 'websites') {
+            return $this->isValidWebsiteId($scopeId);
+        }
+
+        // Check if store with given id/code exists.
+        if ($scope === 'stores') {
+            return $this->isValidStoreId($scopeId);
+        }
+
+        return true;
     }
 
     /**
      * Check if the given website id is a valid website id
      *
-     * @param int $websiteId Website ID
+     * @param string|int $websiteId Website ID
+     *
      * @return bool
      */
     private function isValidWebsiteId($websiteId)
@@ -61,11 +69,11 @@ class ScopeValidator implements ScopeValidatorInterface
             return true;
         }
 
+        // Don't bother checking website codes on numeric input.
         if (is_numeric($websiteId)) {
-            // Dont bother checking website codes on numeric input
             return false;
         }
-        // @todo hs: build up array of websiteCodes, to prevent wasting time looping
+
         /** @var Website $website */
         foreach ($websites as $website) {
             if ($website->getCode() == $websiteId) {
@@ -79,7 +87,8 @@ class ScopeValidator implements ScopeValidatorInterface
     /**
      * Check if the given store id is a valid store id
      *
-     * @param int $storeId Store ID
+     * @param string|int $storeId Store ID
+     *
      * @return bool
      */
     private function isValidStoreId($storeId)
@@ -89,11 +98,11 @@ class ScopeValidator implements ScopeValidatorInterface
             return true;
         }
 
-        // @todo hs: build up array of storeCodes, to prevent wasting time looping
+        // Don't bother checking store codes on numeric input.
         if (is_numeric($storeId)) {
-            // Dont bother checking store codes on numeric input
             return false;
         }
+
         /** @var Store $store */
         foreach ($stores as $store) {
             if ($store->getCode() == $storeId) {

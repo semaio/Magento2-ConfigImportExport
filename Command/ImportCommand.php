@@ -7,7 +7,6 @@
 namespace Semaio\ConfigImportExport\Command;
 
 use Magento\Framework\App\Cache\Manager as CacheManager;
-use Magento\Framework\App\ObjectManager\ConfigLoader;
 use Magento\Framework\App\State as AppState;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
@@ -44,7 +43,6 @@ class ImportCommand extends AbstractCommand
     /**
      * @param Registry                 $registry
      * @param AppState                 $appState
-     * @param ConfigLoader             $configLoader
      * @param ObjectManagerInterface   $objectManager
      * @param CacheManager             $cacheManager
      * @param ImportProcessorInterface $importProcessor
@@ -55,7 +53,6 @@ class ImportCommand extends AbstractCommand
     public function __construct(
         Registry $registry,
         AppState $appState,
-        ConfigLoader $configLoader,
         ObjectManagerInterface $objectManager,
         CacheManager $cacheManager,
         ImportProcessorInterface $importProcessor,
@@ -67,11 +64,13 @@ class ImportCommand extends AbstractCommand
         $this->readers = $readers;
         $this->finder = $finder;
 
-        parent::__construct($registry, $appState, $configLoader, $objectManager, $cacheManager, $name);
+        parent::__construct($registry, $appState, $objectManager, $cacheManager, $name);
     }
 
     /**
-     * Configure the command
+     * Configure the command.
+     *
+     * @return void
      */
     protected function configure()
     {
@@ -134,7 +133,8 @@ class ImportCommand extends AbstractCommand
     /**
      * @param InputInterface  $input
      * @param OutputInterface $output
-     * @return null|int
+     *
+     * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -150,7 +150,7 @@ class ImportCommand extends AbstractCommand
 
         /** @var ReaderInterface $reader */
         $reader = $this->getObjectManager()->create($this->readers[$format]);
-        if (!$reader || !is_object($reader)) {
+        if (!is_object($reader)) {
             throw new \InvalidArgumentException(ucfirst($format) . ' file reader could not be instantiated."');
         }
 
@@ -185,5 +185,7 @@ class ImportCommand extends AbstractCommand
 
             $output->writeln(sprintf('<info>Cache cleared.</info>'));
         }
+
+        return 0;
     }
 }

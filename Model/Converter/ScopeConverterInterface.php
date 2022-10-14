@@ -16,6 +16,7 @@ interface ScopeConverterInterface
      *
      * @param string|int   $scopeId Scope ID
      * @param string|mixed $scope   Scope
+     *
      * @return int
      */
     public function convert($scopeId, $scope);

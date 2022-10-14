@@ -11,12 +11,16 @@ use Symfony\Component\Console\Output\OutputInterface;
 interface AbstractProcessorInterface
 {
     /**
-     * Process the import
+     * Process the configuration import/export.
+     *
+     * @return void
      */
     public function process();
 
     /**
      * @param OutputInterface $output
+     *
+     * @return void
      */
     public function setOutput(OutputInterface $output);
 
@@ -27,6 +31,8 @@ interface AbstractProcessorInterface
 
     /**
      * @param string $format
+     *
+     * @return void
      */
     public function setFormat($format);
 
