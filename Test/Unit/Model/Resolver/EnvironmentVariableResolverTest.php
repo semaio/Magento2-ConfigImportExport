@@ -40,6 +40,10 @@ class EnvironmentVariableResolverTest extends TestCase
     public function validate(): void
     {
         $this->assertEquals($this->environmentVariableResolver->resolveValue('test_without_env_var'), 'test_without_env_var');
+        $this->assertEquals($this->environmentVariableResolver->resolveValue(null), null);
+        $this->assertEquals($this->environmentVariableResolver->resolveValue(''), '');
+        $this->assertEquals($this->environmentVariableResolver->resolveValue(false), false);
+        $this->assertEquals($this->environmentVariableResolver->resolveValue(true), true);
 
         $this->assertEquals($this->environmentVariableResolver->resolveValue('%env(PA)%'), '%env(PA)%');
         $this->assertEquals($this->environmentVariableResolver->resolveValue('%env(lowercase)%'), '%env(lowercase)%');
