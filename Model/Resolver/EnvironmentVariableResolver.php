@@ -36,7 +36,7 @@ class EnvironmentVariableResolver
                 }
                 return $resolvedValue;
             },
-            $value
+            is_null($value) ? '' : $value
         );
     }
 }
