@@ -17,6 +17,11 @@ abstract class AbstractWriter implements WriterInterface
     private $baseFilename = null;
 
     /**
+     * @var string
+     */
+    private $baseFilepath = null;
+
+    /**
      * @var bool
      */
     private $isHierarchical = false;
@@ -70,10 +75,10 @@ abstract class AbstractWriter implements WriterInterface
             }
 
             foreach ($namespacedData as $namespace => $configData) {
-                $this->_write($this->getFilename($namespace), $configData);
+                $this->_write($this->getFilenameWithPath($namespace), $configData);
             }
         } else {
-            $this->_write($this->getFilename(), $preparedData);
+            $this->_write($this->getFilenameWithPath(), $preparedData);
         }
     }
 
@@ -137,6 +142,11 @@ abstract class AbstractWriter implements WriterInterface
      */
     public function setBaseFilename($baseFilename)
     {
+        if (strpos($baseFilename, DIRECTORY_SEPARATOR) !== false) {
+            throw new \InvalidArgumentException(
+                'The filename must not contain a directory path. Use --filepath option to set the output directory.'
+            );
+        }
         $this->baseFilename = $baseFilename;
     }
 
@@ -146,6 +156,27 @@ abstract class AbstractWriter implements WriterInterface
     public function getBaseFilename()
     {
         return $this->baseFilename;
+    }
+
+    /**
+     * @param string $baseFilepath
+     *
+     * @return void
+     */
+    public function setBaseFilepath($baseFilepath)
+    {
+        if ($baseFilepath === '') {
+            $baseFilepath = implode(DIRECTORY_SEPARATOR, ['var', 'semaio', 'config_export']);
+        }
+        $this->baseFilepath = ltrim(rtrim($baseFilepath, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR);
+    }
+
+    /**
+     * @return string
+     */
+    public function getBaseFilepath()
+    {
+        return $this->baseFilepath;
     }
 
     /**
@@ -211,24 +242,20 @@ abstract class AbstractWriter implements WriterInterface
      *
      * @return string
      */
-    public function getFilename($namespace = null)
+    private function getFilenameWithPath($namespace = null)
     {
         $filename = [
-            date('Ymd_His'),
+            $this->getBaseFilepath(),
         ];
 
-        // Check if the a base filename was given
-        if ($baseFilename = $this->getBaseFilename()) {
-            $filename[] = $baseFilename;
-        } else {
-            $filename[] = 'config';
-        }
-
-        // Add namespace to filename
         if (null !== $namespace) {
-            $filename[] = $namespace;
+            // Add namespace
+            $filename[] = $this->getBaseFilename() === '' ? $namespace : $this->getBaseFilename() . '_' . $namespace;
+        } else {
+            // Set default
+            $filename[] = $this->getBaseFilename() === '' ? 'config' : $this->getBaseFilename();
         }
 
-        return implode('_', $filename) . '.' . $this->getFileExtension();
+        return implode('', $filename) . '.' . $this->getFileExtension();
     }
 }

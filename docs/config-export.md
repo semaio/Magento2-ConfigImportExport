@@ -16,7 +16,8 @@ Usage:
 Options:
  --format (-m)           Format: yaml, json (default: "yaml")
  --hierarchical (-a)     Create a hierarchical or a flat structure (not all export format supports that). Enable with: y (default: "n")
- --filename (-f)         File name into which should the export be written. Defaults into var directory.
+ --filename (-f)         File name into which should the export be written. Defaults to "config".
+ --filepath (-p)         Path into which should the export be written. Defaults to "var/semaio/config_export/".
  --include (-i)          Path prefix, multiple values can be comma separated; exports only those paths
  --includeScope          Scope name, multiple values can be comma separated; exports only those scopes
  --exclude (-x)          Path prefix, multiple values can be comma separated; exports everything except ...
