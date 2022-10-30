@@ -92,7 +92,7 @@ class ExportCommand extends AbstractCommand
             'filepath',
             'p',
             InputOption::VALUE_OPTIONAL,
-            'Path into which should the export be written. Defaults to "var/semaio/config_export/".'
+            'Path into which should the export be written. Defaults to "var/semaio/config_export/Ymd_His/".'
         );
 
         $this->addOption(
