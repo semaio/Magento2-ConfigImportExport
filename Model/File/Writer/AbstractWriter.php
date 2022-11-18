@@ -168,7 +168,7 @@ abstract class AbstractWriter implements WriterInterface
         if ($baseFilepath === '') {
             $baseFilepath = implode(DIRECTORY_SEPARATOR, ['var', 'semaio', 'config_export', date('Ymd_His')]);
         }
-        $this->baseFilepath = ltrim(rtrim($baseFilepath, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR);
+        $this->baseFilepath = ltrim(rtrim($baseFilepath, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR);
     }
 
     /**
