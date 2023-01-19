@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * ...
 
+## [4.0.0] - 2023-01-19
+
+### Added
+
+* Export: Specify export file path through a new command option, refactor export file name and file path logic by [@bluec](https://github.com/bluec) and [@therouv](https://github.com/therouv)
+
+### Changed
+
+* Allow numbers in environment variables by [@therouv](https://github.com/therouv)
+
 ## [3.10.1] - 2022-10-14
 
 ### Changed
