@@ -25,7 +25,7 @@ class EnvironmentVariableResolver
         }
 
         return preg_replace_callback(
-            '/\%env\((?!PHP_|HTTP_|SERVER_|SCRIPT_|QUERY_|DOCUMENT_)([A-Z\_]{3,})\)\%/',
+            '/\%env\((?!PHP_|HTTP_|SERVER_|SCRIPT_|QUERY_|DOCUMENT_)([A-Z0-9\_]{3,})\)\%/',
             function ($matches) {
                 $resolvedValue = getenv($matches[1]);
                 if ($resolvedValue === false) {

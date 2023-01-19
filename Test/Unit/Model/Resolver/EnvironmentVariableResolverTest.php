@@ -27,6 +27,7 @@ class EnvironmentVariableResolverTest extends TestCase
         putenv('SUBDOMAIN=testvalue2');
         putenv('CONCAT_THIS=testvalue3');
         putenv('WITH_THIS=testvalue4');
+        putenv('FEATURE_12345=testvalue5');
 
         $this->environmentVariableResolver = new EnvironmentVariableResolver();
     }
@@ -50,6 +51,8 @@ class EnvironmentVariableResolverTest extends TestCase
         $this->assertEquals($this->environmentVariableResolver->resolveValue('%env(HOSTNAME)%'), 'testvalue1');
         $this->assertEquals($this->environmentVariableResolver->resolveValue('https://%env(SUBDOMAIN)%.example.com'), 'https://testvalue2.example.com');
         $this->assertEquals($this->environmentVariableResolver->resolveValue('%env(CONCAT_THIS)%%env(WITH_THIS)%'), 'testvalue3testvalue4');
+
+        $this->assertEquals($this->environmentVariableResolver->resolveValue('%env(FEATURE_12345)%'), 'testvalue5');
 
         $this->assertNull($this->environmentVariableResolver->resolveValue(null));
         $this->assertEquals($this->environmentVariableResolver->resolveValue(''), '');
