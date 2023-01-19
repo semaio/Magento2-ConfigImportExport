@@ -31,7 +31,7 @@ class YamlWriter extends AbstractWriter
         }
 
         // Write data to file
-        $tmpDirectory = $this->getFilesystem()->getDirectoryWrite(DirectoryList::VAR_DIR);
+        $tmpDirectory = $this->getFilesystem()->getDirectoryWrite(DirectoryList::ROOT);
         $tmpDirectory->writeFile($filename, $content);
         $this->getOutput()->writeln(sprintf(
             '<info>Wrote: %s settings to file %s</info>',
