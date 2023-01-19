@@ -16,7 +16,8 @@ Usage:
 Options:
  --format (-m)           Format: yaml, json (default: "yaml")
  --hierarchical (-a)     Create a hierarchical or a flat structure (not all export format supports that). Enable with: y (default: "n")
- --filename (-f)         File name into which should the export be written. Defaults into var directory.
+ --filename (-f)         Specifies the export file name. Defaults to "config" (when not using "--filePerNameSpace").
+ --filepath (-p)         Specifies the export path where the export file(s) will be written. Defaults to "var/export/config/Ymd_His/".
  --include (-i)          Path prefix, multiple values can be comma separated; exports only those paths
  --includeScope          Scope name, multiple values can be comma separated; exports only those scopes
  --exclude (-x)          Path prefix, multiple values can be comma separated; exports everything except ...

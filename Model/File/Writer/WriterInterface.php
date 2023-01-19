@@ -35,10 +35,23 @@ interface WriterInterface
     public function getBaseFilename();
 
     /**
+     * @param string $baseFilepath
+     *
+     * @return void
+     */
+    public function setBaseFilepath($baseFilepath);
+
+    /**
+     * @return string
+     */
+    public function getBaseFilepath();
+
+    /**
      * @param OutputInterface $output
      *
      * @return void
      */
+
     public function setOutput(OutputInterface $output);
 
     /**

@@ -85,7 +85,14 @@ class ExportCommand extends AbstractCommand
             'filename',
             'f',
             InputOption::VALUE_OPTIONAL,
-            'File name into which should the export be written. Defaults into var directory.'
+            'Specifies the export file name. Defaults to "config".'
+        );
+
+        $this->addOption(
+            'filepath',
+            'p',
+            InputOption::VALUE_OPTIONAL,
+            'Specifies the export path where the export file(s) will be written. Defaults to "var/export/config/Ymd_His/".'
         );
 
         $this->addOption(
@@ -139,10 +146,8 @@ class ExportCommand extends AbstractCommand
             throw new \InvalidArgumentException(ucfirst($format) . ' file writer could not be instantiated."');
         }
 
-        $filename = (string) $input->getOption('filename');
-        if ($filename != '') {
-            $writer->setBaseFilename($filename);
-        }
+        $writer->setBaseFilename((string) $input->getOption('filename'));
+        $writer->setBaseFilepath((string) $input->getOption('filepath'));
 
         $writer->setOutput($output);
         $writer->setIsHierarchical('y' === $input->getOption('hierarchical'));
