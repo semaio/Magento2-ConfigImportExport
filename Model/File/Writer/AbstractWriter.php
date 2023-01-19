@@ -144,9 +144,10 @@ abstract class AbstractWriter implements WriterInterface
     {
         if (strpos($baseFilename, DIRECTORY_SEPARATOR) !== false) {
             throw new \InvalidArgumentException(
-                'The filename must not contain a directory path. Use --filepath option to set the output directory.'
+                'The filename must not contain a directory separator. Use "--filepath" option to set the output directory.'
             );
         }
+
         $this->baseFilename = $baseFilename;
     }
 
@@ -166,8 +167,9 @@ abstract class AbstractWriter implements WriterInterface
     public function setBaseFilepath($baseFilepath)
     {
         if ($baseFilepath === '') {
-            $baseFilepath = implode(DIRECTORY_SEPARATOR, ['var', 'semaio', 'config_export', date('Ymd_His')]);
+            $baseFilepath = implode(DIRECTORY_SEPARATOR, ['var', 'export', 'config', date('Ymd_His')]);
         }
+
         $this->baseFilepath = ltrim(rtrim($baseFilepath, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR);
     }
 
@@ -248,11 +250,10 @@ abstract class AbstractWriter implements WriterInterface
             $this->getBaseFilepath(),
         ];
 
-        if (null !== $namespace) {
-            // Add namespace
-            $filename[] = $this->getBaseFilename() === '' ? $namespace : $this->getBaseFilename() . '_' . $namespace;
+        // Add namespace to file name if specified.
+        if ($namespace !== null) {
+            $filename[] = $this->getBaseFilename() === '' ? 'config' . '_' . $namespace : $this->getBaseFilename() . '_' . $namespace;
         } else {
-            // Set default
             $filename[] = $this->getBaseFilename() === '' ? 'config' : $this->getBaseFilename();
         }
 
