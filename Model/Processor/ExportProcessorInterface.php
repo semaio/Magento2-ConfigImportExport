@@ -32,6 +32,13 @@ interface ExportProcessorInterface extends AbstractProcessorInterface
     public function setIncludeScope($includeScope);
 
     /**
+     * @param string $includeScopeId
+     *
+     * @return void
+     */
+    public function setIncludeScopeId($includeScopeId);
+
+    /**
      * @param string $exclude
      *
      * @return void

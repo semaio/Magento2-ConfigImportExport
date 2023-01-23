@@ -36,6 +36,10 @@ class ExportProcessor extends AbstractProcessor implements ExportProcessorInterf
     /**
      * @var string|null
      */
+    private $includeScopeId = null;
+    /**
+     * @var string|null
+     */
     private $exclude = null;
 
     /**
@@ -84,6 +88,22 @@ class ExportProcessor extends AbstractProcessor implements ExportProcessorInterf
                     $orWhere[] = $collection->getConnection()->quoteInto('`scope` like ?', $singlePath);
                 }
             }
+
+            // if exactly one scope is given scope id(s) can be specified
+            if (count($orWhere) === 1 && null !== $this->includeScopeId) {
+                $includeScopeIds = explode(',', $this->includeScopeId);
+                $idWhere = [];
+                foreach($includeScopeIds as $singleId) {
+                    $singleId = (int)$singleId;
+                    if ($singleId !== 0) {
+                        $idWhere[] = $collection->getConnection()->quoteInto('`scope_id` = ?', $singleId);
+                    }
+                }
+                if (count($idWhere) > 0) {
+                    $orWhere[0] .= ' AND ('.implode(' OR ', $idWhere).')';
+                }
+            }
+
             if (count($orWhere) > 0) {
                 $collection->getSelect()->where(implode(' OR ', $orWhere));
             }
@@ -145,6 +165,16 @@ class ExportProcessor extends AbstractProcessor implements ExportProcessorInterf
     public function setIncludeScope($includeScope)
     {
         $this->includeScope = $includeScope;
+    }
+
+    /**
+     * @param string|null $includeScopeId
+     *
+     * @return void
+     */
+    public function setIncludeScopeId($includeScopeId)
+    {
+        $this->includeScopeId = $includeScopeId;
     }
 
     /**

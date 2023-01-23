@@ -110,6 +110,15 @@ class ExportCommand extends AbstractCommand
         );
 
         $this->addOption(
+            'includeScopeId',
+            null,
+            InputOption::VALUE_OPTIONAL,
+            'Scope ID(s), multiple values can be comma separated. '.
+            'Only applies if exactly one scope is given (websites, groups or stores). '.
+            'In that case values are exported only for the given scope ID(s).'
+        );
+
+        $this->addOption(
             'exclude',
             'x',
             InputOption::VALUE_OPTIONAL,
@@ -161,6 +170,11 @@ class ExportCommand extends AbstractCommand
         $includeScope = $input->getOption('includeScope');
         if (!empty($includeScope) && is_string($includeScope) === true) {
             $this->exportProcessor->setIncludeScope($includeScope);
+        }
+
+        $includeScopeId = $input->getOption('includeScopeId');
+        if (!empty($includeScopeId) && is_string($includeScopeId) === true) {
+            $this->exportProcessor->setIncludeScopeId($includeScopeId);
         }
 
         $exclude = $input->getOption('exclude');
