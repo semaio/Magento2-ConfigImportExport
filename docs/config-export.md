@@ -11,7 +11,7 @@ after successful export.
 ```bash
 $ php bin/magento config:data:export --help
 Usage:
- config:data:export [-m|--format[="..."]] [-a|--hierarchical[="..."]] [-f|--filename[="..."]] [-i|--include[="..."]] [--includeScope[="..."] [--includeScopeId="..."]]  [-x|--exclude[="..."]] [-s|--filePerNameSpace[="..."]]
+ config:data:export [-m|--format[="..."]] [-a|--hierarchical[="..."]] [-f|--filename[="..."]] [-i|--include[="..."]] [--includeScope[="..."]]  [-x|--exclude[="..."]] [-s|--filePerNameSpace[="..."]]
 
 Options:
  --format (-m)           Format: yaml, json (default: "yaml")

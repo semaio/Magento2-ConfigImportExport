@@ -36,10 +36,6 @@ class ExportProcessor extends AbstractProcessor implements ExportProcessorInterf
     /**
      * @var string|null
      */
-    private $includeScopeId = null;
-    /**
-     * @var string|null
-     */
     private $exclude = null;
 
     /**
