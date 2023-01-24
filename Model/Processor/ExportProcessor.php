@@ -182,7 +182,7 @@ class ExportProcessor extends AbstractProcessor implements ExportProcessorInterf
             $parts = explode(':', $singleScope);
             $singleScope = $parts[0];
             $orWhere[] = $collection->getConnection()->quoteInto('`scope` like ?', $singleScope) .
-                ($parts[1] ? $this->getScopeIdRestrictions($parts[1], $collection) : '');
+                (!empty($parts[1]) ? $this->getScopeIdRestrictions($parts[1], $collection) : '');
         }
         return $orWhere;
     }
