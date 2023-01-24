@@ -145,16 +145,6 @@ class ExportProcessor extends AbstractProcessor implements ExportProcessorInterf
     }
 
     /**
-     * @param string|null $includeScopeId
-     *
-     * @return void
-     */
-    public function setIncludeScopeId($includeScopeId)
-    {
-        $this->includeScopeId = $includeScopeId;
-    }
-
-    /**
      * @param string|null $exclude
      *
      * @return void
