@@ -20,9 +20,11 @@ Options:
  --filepath (-p)         Specifies the export path where the export file(s) will be written. Defaults to "var/export/config/Ymd_His/".
  --include (-i)          Path prefix, multiple values can be comma separated; exports only those paths
  --includeScope          Scope name, multiple values can be comma separated; exports only those scopes.
-                         To export only specific scopes add there ID(s) using a colon and separate them with semicolon:
-                         e.g. --includeScope=websites:1;2,stores:1;2;3;4;5 will export the settings for website IDs 1 and 2 and for the
-                         store view IDs 1 to 5
+                         To export only specific scopes add there ID(s) using a colon and separate them with semicolon.
+                         Make sure to use quotes when specifying multiple scope IDs:
+                         e.g. --includeScope="websites:2;3,stores:2;3;4;5" will export the settings for website IDs 2 and 3 and for the
+                         store view IDs 2 to 5
+
  --exclude (-x)          Path prefix, multiple values can be comma separated; exports everything except ...
  --filePerNameSpace (-s) Export each namespace into its own file. Enable with: y (default: "n")
 ```
