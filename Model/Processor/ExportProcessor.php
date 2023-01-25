@@ -155,8 +155,9 @@ class ExportProcessor extends AbstractProcessor implements ExportProcessorInterf
     }
 
     /**
-     * @param string $singleScope
+     * @param string               $singleScope
      * @param ConfigDataCollection $collection
+     *
      * @return array
      */
     private function getScopeRestrictions(string $singleScope, ConfigDataCollection $collection): array
@@ -170,12 +171,14 @@ class ExportProcessor extends AbstractProcessor implements ExportProcessorInterf
             $orWhere[] = $collection->getConnection()->quoteInto('`scope` like ?', $singleScope) .
                 (!empty($parts[1]) ? $this->getScopeIdRestrictions($parts[1], $collection) : '');
         }
+
         return $orWhere;
     }
 
     /**
-     * @param string $scopeIdString
+     * @param string               $scopeIdString
      * @param ConfigDataCollection $collection
+     *
      * @return string
      */
     private function getScopeIdRestrictions(string $scopeIdString, ConfigDataCollection $collection): string
@@ -190,7 +193,7 @@ class ExportProcessor extends AbstractProcessor implements ExportProcessorInterf
             }
         }
         if (count($orWhere) > 0) {
-                return ' AND ('.implode(' OR ', $orWhere).')';
+            return ' AND ('.implode(' OR ', $orWhere).')';
         } else {
             return '';
         }

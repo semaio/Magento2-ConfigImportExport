@@ -106,10 +106,10 @@ class ExportCommand extends AbstractCommand
             'includeScope',
             null,
             InputOption::VALUE_OPTIONAL,
-            "Scope name, multiple values can be comma separated; exports only those scopes.\n".
-            "\t\tTo export only specific scopes add there ID(s) using a colon and separate them with semicolon.\n".
-            "\t\tMake sure to use quotes when specifying multiple scope IDs:\n".
-            "\t\te.g. --includeScope=\"websites:2;3,stores:2;3;4;5\" will export the settings for website IDs 2 and 3 and for the\n".
+            "Scope name, multiple values can be comma separated; exports only those scopes.\n" .
+            "\t\tTo export only specific scopes add there ID(s) using a colon and separate them with semicolon.\n" .
+            "\t\tMake sure to use quotes when specifying multiple scope IDs:\n" .
+            "\t\te.g. --includeScope=\"websites:2;3,stores:2;3;4;5\" will export the settings for website IDs 2 and 3 and for the\n" .
             "\t\tstore view IDs 2 to 5"
         );
 
