@@ -252,7 +252,7 @@ abstract class AbstractWriter implements WriterInterface
 
         // Add namespace to file name if specified.
         if ($namespace !== null) {
-            $filename[] = $this->getBaseFilename() === '' ? 'config' . '_' . $namespace : $this->getBaseFilename() . '_' . $namespace;
+            $filename[] = $this->getBaseFilename() === '' ? $namespace : $this->getBaseFilename() . $namespace;
         } else {
             $filename[] = $this->getBaseFilename() === '' ? 'config' : $this->getBaseFilename();
         }
