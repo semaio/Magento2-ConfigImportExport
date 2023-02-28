@@ -58,6 +58,20 @@ php bin/magento config:data:import config/store dev/therouv
 
 The files in the `base` folder will always be imported (if they exist), regardless of which environment parameter has been passed. If the base and environment configurations have the same configuration field set, then the environment value for that configuration will overwrite the base configuration.
 
+### Theme code substitution
+
+If you do not want to store hard-coded theme IDs in your files, but rather the theme code, you can use placeholders for theme codes in the configuration files. This is done with the notation `%theme(path)%` (make sure to put quotes around it).
+
+For example, this might be the content of your config file:
+
+```
+design/theme/theme_id:
+  default:
+    0: '%theme(frontend/Vendor/theme)%'
+```
+
+Always use theme path that is defined as component name in the `registration.php` file of your theme (including the area (e.g. `frontend`) in front), e.g. `frontend/Vendor/theme` and never `Vendor/theme`.
+
 ### Environment Variables substitution
 
 If you do not want to store your secrets in version control, you can use placeholders for environment variables in the configuration files. This is done with the notation `%env(ENV_VAR_NAME)%` (make sure to put quotes around it).

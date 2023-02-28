@@ -7,14 +7,28 @@
 namespace Semaio\ConfigImportExport\Test\Unit\Model\Validator;
 
 use PHPUnit\Framework\TestCase;
+use Semaio\ConfigImportExport\Exception\UnresolveableValueException;
 use Semaio\ConfigImportExport\Model\Resolver\EnvironmentVariableResolver;
+use Symfony\Component\Console\Helper\QuestionHelper;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class EnvironmentVariableResolverTest extends TestCase
 {
     /**
-     * @var EnvironmentVariableResolver
+     * @var InputInterface
      */
-    private $environmentVariableResolver;
+    private $input;
+
+    /**
+     * @var OutputInterface
+     */
+    private $output;
+
+    /**
+     * @var QuestionHelper
+     */
+    private $questionHelper;
 
     /**
      * Set up test class
@@ -29,37 +43,121 @@ class EnvironmentVariableResolverTest extends TestCase
         putenv('WITH_THIS=testvalue4');
         putenv('FEATURE_12345=testvalue5');
 
-        $this->environmentVariableResolver = new EnvironmentVariableResolver();
+        $this->input = $this->createMock(InputInterface::class);
+        $this->output = $this->createMock(OutputInterface::class);
+        $this->questionHelper = $this->createMock(QuestionHelper::class);
     }
 
     /**
      * @test
+     * @dataProvider resolveDataProvider
      */
-    public function validate(): void
+    public function validate($value, $expectedResult): void
     {
-        $this->assertEquals($this->environmentVariableResolver->resolveValue('test_without_env_var'), 'test_without_env_var');
+        $this->assertEquals(
+            $this->getEnvironmentVariableResolver()->resolve($value),
+            $expectedResult
+        );
+    }
 
-        $this->assertEquals($this->environmentVariableResolver->resolveValue('%env(PA)%'), '%env(PA)%');
-        $this->assertEquals($this->environmentVariableResolver->resolveValue('%env(lowercase)%'), '%env(lowercase)%');
-        $this->assertEquals($this->environmentVariableResolver->resolveValue('%env(SCRIPT_SOMETHING)%'), '%env(SCRIPT_SOMETHING)%');
-        $this->assertEquals($this->environmentVariableResolver->resolveValue('%env(PHP_SOMETHING)%'), '%env(PHP_SOMETHING)%');
-        $this->assertEquals($this->environmentVariableResolver->resolveValue('%env(HTTP_SOMETHING)%'), '%env(HTTP_SOMETHING)%');
-        $this->assertEquals($this->environmentVariableResolver->resolveValue('%env(SERVER_SOMETHING)%'), '%env(SERVER_SOMETHING)%');
-        $this->assertEquals($this->environmentVariableResolver->resolveValue('%env(QUERY_SOMETHING)%'), '%env(QUERY_SOMETHING)%');
-        $this->assertEquals($this->environmentVariableResolver->resolveValue('%env(DOCUMENT_SOMETHING)%'), '%env(DOCUMENT_SOMETHING)%');
+    public function resolveDataProvider(): \Generator
+    {
+        yield [
+            'test_without_env_var',
+            'test_without_env_var',
+        ];
+        yield [
+            '%env(PA)%',
+            '%env(PA)%',
+        ];
+        yield [
+            '%env(lowercase)%',
+            '%env(lowercase)%',
+        ];
+        yield [
+            '%env(SCRIPT_SOMETHING)%',
+            '%env(SCRIPT_SOMETHING)%',
+        ];
+        yield [
+            '%env(PHP_SOMETHING)%',
+            '%env(PHP_SOMETHING)%',
+        ];
+        yield [
+            '%env(HTTP_SOMETHING)%',
+            '%env(HTTP_SOMETHING)%',
+        ];
+        yield [
+            '%env(SERVER_SOMETHING)%',
+            '%env(SERVER_SOMETHING)%',
+        ];
+        yield [
+            '%env(QUERY_SOMETHING)%',
+            '%env(QUERY_SOMETHING)%',
+        ];
+        yield [
+            '%env(DOCUMENT_SOMETHING)%',
+            '%env(DOCUMENT_SOMETHING)%',
+        ];
 
-        $this->assertEquals($this->environmentVariableResolver->resolveValue('%env(HOSTNAME)%'), 'testvalue1');
-        $this->assertEquals($this->environmentVariableResolver->resolveValue('https://%env(SUBDOMAIN)%.example.com'), 'https://testvalue2.example.com');
-        $this->assertEquals($this->environmentVariableResolver->resolveValue('%env(CONCAT_THIS)%%env(WITH_THIS)%'), 'testvalue3testvalue4');
+        yield [
+            '%env(HOSTNAME)%',
+            'testvalue1',
+        ];
+        yield [
+            'https://%env(SUBDOMAIN)%.example.com',
+            'https://testvalue2.example.com',
+        ];
+        yield [
+            '%env(CONCAT_THIS)%%env(WITH_THIS)%',
+            'testvalue3testvalue4',
+        ];
+        yield [
+            '%env(FEATURE_12345)%',
+            'testvalue5',
+        ];
+        yield [
+            null,
+            '',
+        ];
+        yield [
+            false,
+            '',
+        ];
+        yield [
+            true,
+            '1',
+        ];
+    }
 
-        $this->assertEquals($this->environmentVariableResolver->resolveValue('%env(FEATURE_12345)%'), 'testvalue5');
+    public function testItWillPromptForManualValueEntry(): void
+    {
+        $this->input->expects($this->once())->method('getOption')->with('prompt-missing-env-vars')->willReturn(true);
+        $this->input->expects($this->once())->method('isInteractive')->willReturn(true);
+        $this->questionHelper->expects($this->once())->method('ask')->willReturn('foo_bar_baz');
 
-        $this->assertNull($this->environmentVariableResolver->resolveValue(null));
-        $this->assertEquals($this->environmentVariableResolver->resolveValue(''), '');
-        $this->assertEquals($this->environmentVariableResolver->resolveValue(false), '');
-        $this->assertEquals($this->environmentVariableResolver->resolveValue(true), '1');
+        $this->assertEquals('foo_bar_baz', $this->getEnvironmentVariableResolver()->resolve('%env(PROMPT_ENV_VAR)%'));
+    }
 
-        $this->expectException(\UnexpectedValueException::class);
-        $this->environmentVariableResolver->resolveValue('%env(DOESNOTEXIST)%');
+    public function testItWillRaiseErrorIfEnvVarWasNotFound(): void
+    {
+        $this->expectException(UnresolveableValueException::class);
+
+        $this->input->expects($this->once())->method('getOption')->with('prompt-missing-env-vars')->willReturn(false);
+        $this->input->expects($this->never())->method('isInteractive')->willReturn(false);
+
+        $this->getEnvironmentVariableResolver()->resolve('%env(DOESNOTEXIST)%');
+    }
+
+    /**
+     * @return EnvironmentVariableResolver
+     */
+    private function getEnvironmentVariableResolver()
+    {
+        $resolver = new EnvironmentVariableResolver();
+        $resolver->setInput($this->input);
+        $resolver->setOutput($this->output);
+        $resolver->setQuestionHelper($this->questionHelper);
+
+        return $resolver;
     }
 }

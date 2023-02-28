@@ -12,6 +12,15 @@
     <preference for="Semaio\ConfigImportExport\Model\File\FinderInterface" type="Semaio\ConfigImportExport\Model\File\Finder"/>
     <preference for="Semaio\ConfigImportExport\Model\Converter\ScopeConverterInterface" type="Semaio\ConfigImportExport\Model\Converter\ScopeConverter" />
 
+    <type name="Semaio\ConfigImportExport\Model\Processor\ImportProcessor">
+        <arguments>
+            <argument name="resolvers" xsi:type="array">
+                <item name="environmentVariableResolver" xsi:type="object">Semaio\ConfigImportExport\Model\Resolver\EnvironmentVariableResolver</item>
+                <item name="themePathResolver" xsi:type="object">Semaio\ConfigImportExport\Model\Resolver\ThemePathResolver</item>
+            </argument>
+        </arguments>
+    </type>
+
     <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
             <argument name="commands" xsi:type="array">
