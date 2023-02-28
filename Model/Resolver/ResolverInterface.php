@@ -24,8 +24,9 @@ interface ResolverInterface
 
     /**
      * @param string|null $value
+     * @param string|null $configPath
      */
-    public function supports($value): bool;
+    public function supports($value, $configPath = null): bool;
 
     public function setInput(InputInterface $input): void;
 

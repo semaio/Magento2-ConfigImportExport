@@ -59,7 +59,7 @@ class ThemePathResolver extends AbstractResolver
     /**
      * @inheritDoc
      */
-    public function supports($value): bool
+    public function supports($value, $configPath = null): bool
     {
         return 0 === strncmp((string) $value, '%theme', \strlen('%theme'));
     }

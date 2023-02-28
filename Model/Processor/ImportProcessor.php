@@ -228,13 +228,15 @@ class ImportProcessor extends AbstractProcessor implements ImportProcessorInterf
 
                 try {
                     foreach ($this->resolvers as $resolver) {
-                        if ($resolver->supports($value)) {
-                            $resolver->setInput($this->getInput());
-                            $resolver->setOutput($this->getOutput());
-                            $resolver->setQuestionHelper($this->getQuestionHelper());
-
-                            $value = $resolver->resolve($value, $path);
+                        if (!$resolver->supports($value, $path)) {
+                            continue;
                         }
+
+                        $resolver->setInput($this->getInput());
+                        $resolver->setOutput($this->getOutput());
+                        $resolver->setQuestionHelper($this->getQuestionHelper());
+
+                        $value = $resolver->resolve($value, $path);
                     }
                 } catch (UnresolveableValueException $exception) {
                     $this->getOutput()->writeln(sprintf(
