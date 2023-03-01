@@ -12,9 +12,20 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 abstract class AbstractResolver implements ResolverInterface
 {
-    private InputInterface $input;
-    private OutputInterface $output;
-    private QuestionHelper $questionHelper;
+    /**
+     * @var InputInterface
+     */
+    private $input;
+
+    /**
+     * @var OutputInterface
+     */
+    private $output;
+
+    /**
+     * @var QuestionHelper
+     */
+    private $questionHelper;
 
     public function setInput(InputInterface $input): void
     {

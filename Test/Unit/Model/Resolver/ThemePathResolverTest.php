@@ -14,11 +14,6 @@ use Semaio\ConfigImportExport\Model\Resolver\ThemePathResolver;
 
 class ThemePathResolverTest extends TestCase
 {
-    public function setUp(): void
-    {
-        parent::setUp();
-    }
-
     public function testSuccessfulReplacement(): void
     {
         $theme = $this->createMock(ThemeInterface::class);
@@ -56,6 +51,20 @@ class ThemePathResolverTest extends TestCase
             ->method('getThemeByFullPath')
             ->with('frontend/Vendor/invalid')
             ->willReturn($theme);
+
+        $themePathResolver = new ThemePathResolver($themeProvider);
+        $themePathResolver->resolve('%theme(frontend/Vendor/invalid)%');
+    }
+
+    public function testItWillRaiseErrorIfThemeProviderReturnsNoThemeObject(): void
+    {
+        $this->expectException(UnresolveableValueException::class);
+
+        $themeProvider = $this->createMock(ThemeProviderInterface::class);
+        $themeProvider->expects($this->once())
+            ->method('getThemeByFullPath')
+            ->with('frontend/Vendor/invalid')
+            ->willReturn(null);
 
         $themePathResolver = new ThemePathResolver($themeProvider);
         $themePathResolver->resolve('%theme(frontend/Vendor/invalid)%');

@@ -12,7 +12,10 @@ use Semaio\ConfigImportExport\Exception\UnresolveableValueException;
 
 class ThemePathResolver extends AbstractResolver
 {
-    private ThemeProviderInterface $themeProvider;
+    /**
+     * @var ThemeProviderInterface
+     */
+    private $themeProvider;
 
     public function __construct(ThemeProviderInterface $themeProvider)
     {
