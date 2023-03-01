@@ -246,17 +246,14 @@ abstract class AbstractWriter implements WriterInterface
      */
     private function getFilenameWithPath($namespace = null)
     {
-        $filename = [
-            $this->getBaseFilepath(),
-        ];
-
-        // Add namespace to file name if specified.
         if ($namespace !== null) {
-            $filename[] = $this->getBaseFilename() === '' ? 'config' . '_' . $namespace : $this->getBaseFilename() . '_' . $namespace;
+            // Prefix namespace with filename when provided
+            $filename = $this->getBaseFilename() === '' ? $namespace : $this->getBaseFilename() . $namespace;
         } else {
-            $filename[] = $this->getBaseFilename() === '' ? 'config' : $this->getBaseFilename();
+            // Set default filename to 'config' when none provided
+            $filename = $this->getBaseFilename() === '' ? 'config' : $this->getBaseFilename();
         }
 
-        return implode('', $filename) . '.' . $this->getFileExtension();
+        return $this->getBaseFilepath() . $filename . '.' . $this->getFileExtension();
     }
 }
