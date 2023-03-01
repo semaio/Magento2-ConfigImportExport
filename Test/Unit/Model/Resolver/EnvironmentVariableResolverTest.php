@@ -50,6 +50,7 @@ class EnvironmentVariableResolverTest extends TestCase
 
     /**
      * @test
+     *
      * @dataProvider resolveDataProvider
      */
     public function validate($value, $expectedResult): void
