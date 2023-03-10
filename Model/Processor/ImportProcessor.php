@@ -7,14 +7,14 @@
 namespace Semaio\ConfigImportExport\Model\Processor;
 
 use Magento\Framework\App\Config\Storage\WriterInterface;
+use Semaio\ConfigImportExport\Exception\UnresolveableValueException;
 use Semaio\ConfigImportExport\Model\Converter\ScopeConverterInterface;
 use Semaio\ConfigImportExport\Model\File\FinderInterface;
 use Semaio\ConfigImportExport\Model\File\Reader\ReaderInterface;
-use Semaio\ConfigImportExport\Model\Resolver\EnvironmentVariableResolver;
+use Semaio\ConfigImportExport\Model\Resolver\ResolverInterface;
 use Semaio\ConfigImportExport\Model\Validator\ScopeValidatorInterface;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Question\Question;
 
 class ImportProcessor extends AbstractProcessor implements ImportProcessorInterface
 {
@@ -55,26 +55,26 @@ class ImportProcessor extends AbstractProcessor implements ImportProcessorInterf
     private $scopeConverter;
 
     /**
-     * @var EnvironmentVariableResolver
+     * @var ResolverInterface[]
      */
-    private $environmentVariableResolver;
+    private $resolvers;
 
     /**
-     * @param WriterInterface             $configWriter
-     * @param ScopeValidatorInterface     $scopeValidator
-     * @param ScopeConverterInterface     $scopeConverter
-     * @param EnvironmentVariableResolver $environmentVariableResolver
+     * @param WriterInterface         $configWriter
+     * @param ScopeValidatorInterface $scopeValidator
+     * @param ScopeConverterInterface $scopeConverter
+     * @param ResolverInterface[]     $resolvers
      */
     public function __construct(
         WriterInterface $configWriter,
         ScopeValidatorInterface $scopeValidator,
         ScopeConverterInterface $scopeConverter,
-        EnvironmentVariableResolver $environmentVariableResolver
+        array $resolvers = []
     ) {
         $this->configWriter = $configWriter;
         $this->scopeValidator = $scopeValidator;
         $this->scopeConverter = $scopeConverter;
-        $this->environmentVariableResolver = $environmentVariableResolver;
+        $this->resolvers = $resolvers;
     }
 
     /**
@@ -227,20 +227,26 @@ class ImportProcessor extends AbstractProcessor implements ImportProcessorInterf
                 }
 
                 try {
-                    $value = $this->environmentVariableResolver->resolveValue($value);
-                } catch (\UnexpectedValueException $e) {
-                    if ($this->getInput()->getOption('prompt-missing-env-vars') && $this->getInput()->isInteractive()) {
-                        $value = $this->getQuestionHelper()->ask($this->getInput(), $this->getOutput(), new Question($path . ': '));
-                    } else {
-                        $this->getOutput()->writeln(sprintf(
-                            '<error>%s (%s => %s)</error>',
-                            $e->getMessage(),
-                            $path,
-                            $value
-                        ));
+                    foreach ($this->resolvers as $resolver) {
+                        if (!$resolver->supports($value, $path)) {
+                            continue;
+                        }
 
-                        continue;
+                        $resolver->setInput($this->getInput());
+                        $resolver->setOutput($this->getOutput());
+                        $resolver->setQuestionHelper($this->getQuestionHelper());
+
+                        $value = $resolver->resolve($value, $path);
                     }
+                } catch (UnresolveableValueException $exception) {
+                    $this->getOutput()->writeln(sprintf(
+                        '<error>%s (%s => %s)</error>',
+                        $exception->getMessage(),
+                        $path,
+                        $value
+                    ));
+
+                    continue;
                 }
 
                 $return[] = [
