@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * ...
 
+## [4.1.0] - 2023-03-24
+
+### Added
+
+* Support for project-specific resolvers and implement theme code resolver (see [#69](https://github.com/semaio/Magento2-ConfigImportExport/pull/69)) by [@therouv](https://github.com/therouv)
+
+### Changed
+
+* Optimize file export (see [#68](https://github.com/semaio/Magento2-ConfigImportExport/pull/68)) by [@bluec](https://github.com/bluec)
+
 ## [4.0.0] - 2023-01-19
 
 ### Added
