@@ -85,8 +85,11 @@ class ImportProcessor extends AbstractProcessor implements ImportProcessorInterf
     public function process()
     {
         $files = $this->finder->find();
-        if (0 === count($files)) {
+        if (0 === count($files) && false === $this->getInput()->getOption('allow-empty-directories')) {
             throw new \InvalidArgumentException('No files found for format: *.' . $this->getFormat());
+        } else {
+            $this->getOutput()->writeln('No files found for format: *.' . $this->getFormat());
+            $this->getOutput()->writeln('Maybe this is expected behaviour, because you passed the --allow-empty-directories option.');
         }
 
         foreach ($files as $file) {

@@ -127,6 +127,13 @@ class ImportCommand extends AbstractCommand
             true
         );
 
+        $this->addOption(
+            'allow-empty-directories',
+            'e',
+            InputOption::VALUE_NONE,
+            'Allow empty directories during import.'
+        );
+
         parent::configure();
     }
 
