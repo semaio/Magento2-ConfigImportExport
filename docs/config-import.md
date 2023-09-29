@@ -19,6 +19,7 @@ $ php bin/magento config:data:import --help
   --no-cache                       Do not clear cache after config data import.
   --recursive (-r)                 Recursively go over subdirectories and import configs.
   --prompt-missing-env-vars (-p)   Prompt in interactive mode when environment variables are found but not configured (Default: true)
+  --allow-empty-directories (-e)   Do not throw error if import directories are empty.
 ```
 
 :exclamation: Only use the `no-cache` option if you clear the cache afterwards, e.g. in a deployment process. Otherwise the changes will have no effect.
