@@ -44,7 +44,7 @@ class ThemePathResolver extends AbstractResolver
         }
 
         $themeCode = preg_replace_callback(
-            '/\%theme\((?)([a-zA-Z0-9\/\_]{1,})\)\%/',
+            '/\%theme\(([^)]+)\)\%/',
             function ($matches) {
                 return $matches[1];
             },
