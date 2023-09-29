@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * ...
 
+## [4.2.0] - 2023-09-29
+
+### Added
+
+* Allow running import command with empty directories (see [#71](https://github.com/semaio/Magento2-ConfigImportExport/pull/71)) by [@torhoehn](https://github.com/torhoehn)
+
+### Changed
+
+* Fix theme import behavior where theme names containing a dash could not be resolved (see [#72](https://github.com/semaio/Magento2-ConfigImportExport/pull/72)) by [@Morgy93](https://github.com/Morgy93)
+
 ## [4.1.0] - 2023-03-24
 
 ### Added
