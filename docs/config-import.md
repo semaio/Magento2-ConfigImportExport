@@ -19,6 +19,7 @@ $ php bin/magento config:data:import --help
   --no-cache                       Do not clear cache after config data import.
   --recursive (-r)                 Recursively go over subdirectories and import configs.
   --prompt-missing-env-vars (-p)   Prompt in interactive mode when environment variables are found but not configured (Default: true)
+  --allow-empty-directories (-e)   Do not throw error if import directories are empty.
 ```
 
 :exclamation: Only use the `no-cache` option if you clear the cache afterwards, e.g. in a deployment process. Otherwise the changes will have no effect.
@@ -57,6 +58,20 @@ php bin/magento config:data:import config/store dev/therouv
 ```
 
 The files in the `base` folder will always be imported (if they exist), regardless of which environment parameter has been passed. If the base and environment configurations have the same configuration field set, then the environment value for that configuration will overwrite the base configuration.
+
+### Theme code substitution
+
+If you do not want to store hard-coded theme IDs in your files, but rather the theme code, you can use placeholders for theme codes in the configuration files. This is done with the notation `%theme(path)%` (make sure to put quotes around it).
+
+For example, this might be the content of your config file:
+
+```
+design/theme/theme_id:
+  default:
+    0: '%theme(frontend/Vendor/theme)%'
+```
+
+Always use theme path that is defined as component name in the `registration.php` file of your theme (including the area (e.g. `frontend`) in front), e.g. `frontend/Vendor/theme` and never `Vendor/theme`.
 
 ### Environment Variables substitution
 
