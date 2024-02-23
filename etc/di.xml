@@ -17,6 +17,7 @@
             <argument name="resolvers" xsi:type="array">
                 <item name="environmentVariableResolver" xsi:type="object">Semaio\ConfigImportExport\Model\Resolver\EnvironmentVariableResolver</item>
                 <item name="themePathResolver" xsi:type="object">Semaio\ConfigImportExport\Model\Resolver\ThemePathResolver</item>
+                <item name="encryptResolver" xsi:type="object">Semaio\ConfigImportExport\Model\Resolver\EncryptResolver</item>
             </argument>
         </arguments>
     </type>

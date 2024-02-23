@@ -87,6 +87,18 @@ vendorx/general/api_key:
 
 You can then set the environment variable `VENDORX_API_KEY` in your CI/CD configuration to the secret API key. 
 
+### Encryption Value Substitution
+
+For importing encrypted configuration data, such as passwords and API keys, into fields utilizing Magento's `\Magento\Config\Model\Config\Backend\Encrypted` backend model, use `%encrypt(value)%` (make sure to put quotes around it) placeholder within your configuration files.
+
+For example, this could be the content of your configuration file:
+
+```
+payment/provider/secret_key:
+  default:
+    0: '%encrypt(mySecretKey)%'
+```
+
 ### Delete Config
 
 Sometimes, it might be helpful to be able to delete certain config values and get back to the default behavior. To do so, your config value has to be a magic-ish string. 
