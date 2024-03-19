@@ -103,11 +103,13 @@ class ImportProcessor extends AbstractProcessor implements ImportProcessorInterf
                     if ($value === self::DELETE_CONFIG_FLAG) {
                         $this->configWriter->delete($configPath, $scopeType, $scopeId);
                         $this->getOutput()->writeln(sprintf('<comment>[%s] [%s] %s => %s</comment>', $scopeType, $scopeId, $configPath, 'DELETED'));
+
                         continue;
                     }
 
                     if ($value === self::KEEP_CONFIG_FLAG) {
                         $this->getOutput()->writeln(sprintf('<comment>[%s] [%s] %s => %s</comment>', $scopeType, $scopeId, $configPath, 'KEPT'));
+
                         continue;
                     }
 
@@ -120,6 +122,7 @@ class ImportProcessor extends AbstractProcessor implements ImportProcessorInterf
 
     /**
      * @param array $files
+     *
      * @return array
      */
     private function collectConfigs(array $files): array
