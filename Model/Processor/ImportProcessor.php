@@ -19,6 +19,8 @@ use Symfony\Component\Console\Input\InputInterface;
 class ImportProcessor extends AbstractProcessor implements ImportProcessorInterface
 {
     private const DELETE_CONFIG_FLAG = '!!DELETE';
+    private const KEEP_CONFIG_FLAG = '!!KEEP';
+
     /**
      * @var WriterInterface
      */
@@ -92,39 +94,63 @@ class ImportProcessor extends AbstractProcessor implements ImportProcessorInterf
             $this->getOutput()->writeln('Maybe this is expected behaviour, because you passed the --allow-empty-directories option.');
         }
 
-        foreach ($files as $file) {
-            $valuesSet = 0;
-            $configurations = $this->getConfigurationsFromFile($file);
-            foreach ($configurations as $configPath => $configValues) {
-                $scopeConfigValues = $this->transformConfigToScopeConfig($configPath, $configValues);
-                foreach ($scopeConfigValues as $scopeConfigValue) {
-                    if ($scopeConfigValue['value'] === self::DELETE_CONFIG_FLAG) {
-                        $this->configWriter->delete(
-                            $configPath,
-                            $scopeConfigValue['scope'],
-                            $this->scopeConverter->convert($scopeConfigValue['scope_id'], $scopeConfigValue['scope'])
-                        );
+        $configs = $this->collectConfigs($files);
 
-                        $this->getOutput()->writeln(sprintf('<comment>%s => %s</comment>', $configPath, 'DELETED'));
-                        $valuesSet++;
+        foreach ($configs as $configPath => $configValue) {
+            foreach ($configValue as $scopeType => $scopeValue) {
+                foreach ($scopeValue as $scopeId => $value) {
 
+                    if ($value === self::DELETE_CONFIG_FLAG) {
+                        $this->configWriter->delete($configPath, $scopeType, $scopeId);
+                        $this->getOutput()->writeln(sprintf('<comment>[%s] [%s] %s => %s</comment>', $scopeType, $scopeId, $configPath, 'DELETED'));
                         continue;
                     }
 
-                    $this->configWriter->save(
-                        $configPath,
-                        $scopeConfigValue['value'],
-                        $scopeConfigValue['scope'],
-                        $this->scopeConverter->convert($scopeConfigValue['scope_id'], $scopeConfigValue['scope'])
-                    );
+                    if ($value === self::KEEP_CONFIG_FLAG) {
+                        $this->getOutput()->writeln(sprintf('<comment>[%s] [%s] %s => %s</comment>', $scopeType, $scopeId, $configPath, 'KEPT'));
+                        continue;
+                    }
 
-                    $this->getOutput()->writeln(sprintf('<comment>%s => %s</comment>', $configPath, $scopeConfigValue['value']));
+                    $this->configWriter->save($configPath, $value, $scopeType, $scopeId);
+                    $this->getOutput()->writeln(sprintf('<comment>[%s] [%s] %s => %s</comment>', $scopeType, $scopeId, $configPath, $value));
+                }
+            }
+        }
+    }
+
+    /**
+     * @param array $files
+     * @return array
+     */
+    private function collectConfigs(array $files): array
+    {
+        $buffer = [];
+
+        foreach ($files as $file) {
+            $valuesSet = 0;
+            $configurations = $this->getConfigurationsFromFile($file);
+
+            foreach ($configurations as $configPath => $configValues) {
+
+                if (!isset($buffer[$configPath])) {
+                    $buffer[$configPath] = [];
+                }
+
+                $scopeConfigValues = $this->transformConfigToScopeConfig($configPath, $configValues);
+
+                foreach ($scopeConfigValues as $scopeConfigValue) {
+
+                    $scopeType = $scopeConfigValue['scope'];
+                    $scopeId = $this->scopeConverter->convert($scopeConfigValue['scope_id'], $scopeConfigValue['scope']);
+                    $buffer[$configPath][$scopeType][$scopeId] = $scopeConfigValue['value'];
                     $valuesSet++;
                 }
             }
 
-            $this->getOutput()->writeln(sprintf('<info>Processed: %s with %s value(s).</info>', $file, $valuesSet));
+            $this->getOutput()->writeln(sprintf('<info>Configs collected: %s with %s value(s).</info>', $file, $valuesSet));
         }
+
+        return $buffer;
     }
 
     /**
