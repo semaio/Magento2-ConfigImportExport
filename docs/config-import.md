@@ -99,11 +99,7 @@ vendorx/general/api_key:
 
 ### Keep Config
 
-If you want to make sure that config value will not be affected by config importer - use `!!KEEP` magic-ish string.  
-
-#### When would it be helpful?
-When you have a bunch of same configs in different environments, but there one environment ( `X` env ) where you want to keep it as is, but not dispose the exact value of `X` env in config files.  
-Security sensitive data are good examples of such cases - you want them to be kept only in env DB, and definitely not in your GIT repo. 
+To ensure that a specific configuration value will not be changed by the config importer, please use the following string as configuration value:
 
 ```yaml
 vendorx/general/api_key:
@@ -111,6 +107,7 @@ vendorx/general/api_key:
     0: "!!KEEP"
 ```
 
+This is helpful when you've got the same settings across different environments but want to keep one environment ( `X` env) unchanged without showing the exact value in the config file. It's a common scenario, especially when dealing with sensitive data. You really should only keep that kind of info in the environment’s database, not in your GIT repo.
 
 ### Recursive folder setup
 
