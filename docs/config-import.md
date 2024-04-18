@@ -97,6 +97,18 @@ vendorx/general/api_key:
     0: "!!DELETE"
 ```
 
+### Keep Config
+
+To ensure that a specific configuration value will not be changed by the config importer, please use the following string as configuration value:
+
+```yaml
+vendorx/general/api_key:
+  default:
+    0: "!!KEEP"
+```
+
+This is helpful when you've got the same settings across different environments but want to keep one environment ( `X` env) unchanged without showing the exact value in the config file. It's a common scenario, especially when dealing with sensitive data. You really should only keep that kind of info in the environment’s database, not in your GIT repo.
+
 ### Recursive folder setup
 
 If you choose to store your configuration files in subdirectories, e.g. per vendor, the recommended folder setup should look like this:

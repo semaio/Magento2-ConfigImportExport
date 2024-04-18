@@ -14,6 +14,7 @@ use Semaio\ConfigImportExport\Model\File\Finder;
 use Semaio\ConfigImportExport\Model\File\Reader\YamlReader;
 use Semaio\ConfigImportExport\Model\Processor\ImportProcessor;
 use Semaio\ConfigImportExport\Model\Validator\ScopeValidatorInterface;
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ImportProcessorTest extends TestCase
@@ -67,6 +68,9 @@ class ImportProcessorTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
 
         $processor = new ImportProcessor($this->configWriterMock, $this->scopeValidatorMock, $this->scopeConverterMock, []);
+        $inputMock = $this->getMockBuilder(InputInterface::class)->getMock();
+        $inputMock->method('getOption')->with('allow-empty-directories')->willReturn(false);
+        $processor->setInput($inputMock);
         $processor->setFinder($finderMock);
         $processor->process();
     }
@@ -126,6 +130,16 @@ class ImportProcessorTest extends TestCase
                     0 => '!!DELETE',
                 ],
             ],
+            'test/config/custom_field_to_be_keeped' => [
+                'default' => [
+                    0 => 'VALUE_THAT_SHOULD_NOT_BE_PROCESSED',
+                ],
+            ],
+            'test/config/custom_field_to_be_keeped' => [
+                'default' => [
+                    0 => '!!KEEP',
+                ],
+            ],
         ];
 
         $readerMock = $this->getMockBuilder(YamlReader::class)
@@ -133,7 +147,7 @@ class ImportProcessorTest extends TestCase
             ->getMock();
         $readerMock->expects($this->once())->method('parse')->willReturn($parseResult);
 
-        $this->scopeValidatorMock->expects($this->exactly(2))->method('validate')->willReturn(true);
+        $this->scopeValidatorMock->expects($this->exactly(3))->method('validate')->willReturn(true);
         $this->configWriterMock->expects($this->once())->method('save');
         $this->configWriterMock->expects($this->once())->method('delete');
 
