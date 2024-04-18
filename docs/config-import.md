@@ -99,6 +99,8 @@ payment/provider/secret_key:
     0: '%encrypt(mySecretKey)%'
 ```
 
+:exclamation: It is generally not recommended to store sensitive data in your GIT repository but instead keep it securely in the environment's database. Please use this option with caution and at your own risk.
+
 ### Delete Config
 
 Sometimes, it might be helpful to be able to delete certain config values and get back to the default behavior. To do so, your config value has to be a magic-ish string. 
