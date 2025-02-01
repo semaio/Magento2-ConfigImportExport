@@ -9,6 +9,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * ...
 
+## [4.4.0] - 2024-08-29
+
+### Changed
+
+* Update symfony/yaml dependency to include ^7.0 (see [#79](https://github.com/semaio/Magento2-ConfigImportExport/pull/79)) by [@mp-sb](https://github.com/mp-sb)
+
+## [4.3.0] - 2024-04-18
+
+### Added
+
+* Support import for encrypted configuration values (see [#74](https://github.com/semaio/Magento2-ConfigImportExport/pull/74)) by [@Maksold](https://github.com/Maksold)
+* Add support for keeping and not overwriting configuration values in specific environments (see [#75](https://github.com/semaio/Magento2-ConfigImportExport/pull/75)) by [@vpodorozh](https://github.com/vpodorozh)
+
 ## [4.2.0] - 2023-09-29
 
 ### Added
