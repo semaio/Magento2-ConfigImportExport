@@ -117,6 +117,10 @@ class EnvironmentVariableResolverTest extends TestCase
             'testvalue5',
         ];
         yield [
+            '%encrypt(%env(HOSTNAME)%)%',
+            '%encrypt(testvalue1)%',
+        ];
+        yield [
             null,
             '',
         ];
@@ -128,6 +132,27 @@ class EnvironmentVariableResolverTest extends TestCase
             true,
             '1',
         ];
+    }
+
+    /**
+     * @test
+     *
+     * @dataProvider supportsDataProvider
+     */
+    public function supports($value, $expectedResult): void
+    {
+        $resolver = new EnvironmentVariableResolver();
+        $this->assertEquals($expectedResult, $resolver->supports($value));
+    }
+
+    public function supportsDataProvider(): \Generator
+    {
+        yield ['%env(HOSTNAME)%', true];
+        yield ['%encrypt(%env(HOSTNAME)%)%', true];
+        yield ['https://%env(SUBDOMAIN)%.example.com', true];
+        yield ['plain_value', false];
+        yield ['%encrypt(value)%', false];
+        yield [null, false];
     }
 
     public function testItWillPromptForManualValueEntry(): void

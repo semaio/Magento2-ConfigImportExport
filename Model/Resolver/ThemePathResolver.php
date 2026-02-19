@@ -44,7 +44,7 @@ class ThemePathResolver extends AbstractResolver
         }
 
         $themeCode = preg_replace_callback(
-            '/\%theme\(([^)]+)\)\%/',
+            '/\%theme\((.+)\)\%/',
             function ($matches) {
                 return $matches[1];
             },
@@ -64,6 +64,6 @@ class ThemePathResolver extends AbstractResolver
      */
     public function supports($value, $configPath = null): bool
     {
-        return 0 === strncmp((string) $value, '%theme', \strlen('%theme'));
+        return strpos((string) $value, '%theme(') !== false;
     }
 }

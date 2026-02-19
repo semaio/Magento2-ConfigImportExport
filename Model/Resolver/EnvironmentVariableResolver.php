@@ -27,28 +27,24 @@ class EnvironmentVariableResolver extends AbstractResolver
             return null;
         }
 
-        try {
-            $value = (string) $value;
+        $value = (string) $value;
 
-            $value = preg_replace_callback(
-                '/\%env\((?!PHP_|HTTP_|SERVER_|SCRIPT_|QUERY_|DOCUMENT_)([A-Z0-9\_]{3,})\)\%/',
-                function ($matches) {
-                    $resolvedValue = getenv($matches[1]);
-                    if ($resolvedValue === false) {
-                        throw new \UnexpectedValueException(sprintf('Environment variable %s does not exist', $matches[1]));
-                    }
-
+        $value = preg_replace_callback(
+            '/\%env\((?!PHP_|HTTP_|SERVER_|SCRIPT_|QUERY_|DOCUMENT_)([A-Z0-9\_]{3,})\)\%/',
+            function ($matches) use ($configPath) {
+                $resolvedValue = getenv($matches[1]);
+                if ($resolvedValue !== false) {
                     return $resolvedValue;
-                },
-                $value
-            );
-        } catch (\UnexpectedValueException $exception) {
-            if ($this->getInput()->getOption('prompt-missing-env-vars') && $this->getInput()->isInteractive()) {
-                $value = $this->getQuestionHelper()->ask($this->getInput(), $this->getOutput(), new Question($configPath . ': '));
-            } else {
-                throw new UnresolveableValueException($exception->getMessage());
-            }
-        }
+                }
+
+                if ($this->getInput()->getOption('prompt-missing-env-vars') && $this->getInput()->isInteractive()) {
+                    return $this->getQuestionHelper()->ask($this->getInput(), $this->getOutput(), new Question($configPath . ': '));
+                }
+
+                throw new UnresolveableValueException(sprintf('Environment variable %s does not exist', $matches[1]));
+            },
+            $value
+        );
 
         return $value;
     }
@@ -58,6 +54,6 @@ class EnvironmentVariableResolver extends AbstractResolver
      */
     public function supports($value, $configPath = null): bool
     {
-        return 0 === strncmp((string) $value, '%env', \strlen('%env'));
+        return strpos((string) $value, '%env(') !== false;
     }
 }
