@@ -8,7 +8,6 @@ namespace Semaio\ConfigImportExport\Model\Resolver;
 
 use Magento\Framework\Encryption\EncryptorInterface;
 use Semaio\ConfigImportExport\Exception\UnresolveableValueException;
-use function strlen;
 
 class EncryptResolver extends AbstractResolver
 {
@@ -44,7 +43,7 @@ class EncryptResolver extends AbstractResolver
         }
 
         $valueToEncrypt = preg_replace_callback(
-            '/\%encrypt\(([^)]+)\)\%/',
+            '/\%encrypt\((.+)\)\%/',
             function ($matches) {
                 return $matches[1];
             },
@@ -59,6 +58,6 @@ class EncryptResolver extends AbstractResolver
      */
     public function supports($value, $configPath = null): bool
     {
-        return 0 === strncmp((string)$value, '%encrypt', strlen('%encrypt'));
+        return strpos((string) $value, '%encrypt(') !== false;
     }
 }
