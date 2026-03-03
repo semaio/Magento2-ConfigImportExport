@@ -20,6 +20,7 @@ $ php bin/magento config:data:import --help
   --recursive (-r)                 Recursively go over subdirectories and import configs.
   --prompt-missing-env-vars (-p)   Prompt in interactive mode when environment variables are found but not configured (Default: true)
   --allow-empty-directories (-e)   Do not throw error if import directories are empty.
+  --lock-config (-c)               Additionally lock imported values in app/etc/config.php (read-only in Admin).
 ```
 
 :exclamation: Only use the `no-cache` option if you clear the cache afterwards, e.g. in a deployment process. Otherwise the changes will have no effect.
@@ -122,6 +123,20 @@ vendorx/general/api_key:
 ```
 
 This is helpful when you've got the same settings across different environments but want to keep one environment ( `X` env) unchanged without showing the exact value in the config file. It's a common scenario, especially when dealing with sensitive data. You really should only keep that kind of info in the environment’s database, not in your GIT repo.
+
+### Lock Config
+
+By default, imported values are written to the database (`core_config_data`) and remain editable in the Admin panel. If you want to additionally lock the values so they become **read-only in Admin**, use the `--lock-config` option:
+
+```bash
+php bin/magento config:data:import config/store production --lock-config
+```
+
+This writes the imported values to both the database **and** `app/etc/config.php`. Values stored in `config.php` take precedence over database values and appear greyed out (non-editable) in Admin > Stores > Configuration.
+
+:exclamation: When using `--lock-config` together with `!!DELETE`, the value is removed from the database but **not** from `config.php`. If the value was previously locked, you need to remove it from `app/etc/config.php` manually.
+
+:exclamation: The `--lock-config` option writes to the filesystem. Make sure `app/etc/config.php` is writable by the PHP process.
 
 ### Recursive folder setup
 

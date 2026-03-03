@@ -134,6 +134,13 @@ class ImportCommand extends AbstractCommand
             'Allow empty directories during import.'
         );
 
+        $this->addOption(
+            'lock-config',
+            'c',
+            InputOption::VALUE_NONE,
+            'Additionally lock imported values in app/etc/config.php (read-only in Admin).'
+        );
+
         parent::configure();
     }
 

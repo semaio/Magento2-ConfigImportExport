@@ -6,7 +6,12 @@
 
 namespace Semaio\ConfigImportExport\Model\Processor;
 
+use Magento\Config\App\Config\Type\System;
+use Magento\Framework\App\Config\ConfigPathResolver;
 use Magento\Framework\App\Config\Storage\WriterInterface;
+use Magento\Framework\App\DeploymentConfig\Writer as DeploymentConfigWriter;
+use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\Stdlib\ArrayManager;
 use Semaio\ConfigImportExport\Exception\UnresolveableValueException;
 use Semaio\ConfigImportExport\Model\Converter\ScopeConverterInterface;
 use Semaio\ConfigImportExport\Model\File\FinderInterface;
@@ -62,20 +67,44 @@ class ImportProcessor extends AbstractProcessor implements ImportProcessorInterf
     private $resolvers;
 
     /**
+     * @var DeploymentConfigWriter
+     */
+    private $deploymentConfigWriter;
+
+    /**
+     * @var ConfigPathResolver
+     */
+    private $configPathResolver;
+
+    /**
+     * @var ArrayManager
+     */
+    private $arrayManager;
+
+    /**
      * @param WriterInterface         $configWriter
      * @param ScopeValidatorInterface $scopeValidator
      * @param ScopeConverterInterface $scopeConverter
+     * @param DeploymentConfigWriter  $deploymentConfigWriter
+     * @param ConfigPathResolver      $configPathResolver
+     * @param ArrayManager            $arrayManager
      * @param ResolverInterface[]     $resolvers
      */
     public function __construct(
         WriterInterface $configWriter,
         ScopeValidatorInterface $scopeValidator,
         ScopeConverterInterface $scopeConverter,
+        DeploymentConfigWriter $deploymentConfigWriter,
+        ConfigPathResolver $configPathResolver,
+        ArrayManager $arrayManager,
         array $resolvers = []
     ) {
         $this->configWriter = $configWriter;
         $this->scopeValidator = $scopeValidator;
         $this->scopeConverter = $scopeConverter;
+        $this->deploymentConfigWriter = $deploymentConfigWriter;
+        $this->configPathResolver = $configPathResolver;
+        $this->arrayManager = $arrayManager;
         $this->resolvers = $resolvers;
     }
 
@@ -103,12 +132,21 @@ class ImportProcessor extends AbstractProcessor implements ImportProcessorInterf
             return;
         }
 
+        $shouldLock = $this->shouldLockConfig();
+        $lockData = [];
+
         foreach ($configurationValues as $configPath => $configValue) {
             foreach ($configValue as $scopeType => $scopeValue) {
                 foreach ($scopeValue as $scopeId => $value) {
                     if ($value === self::DELETE_CONFIG_FLAG) {
                         $this->configWriter->delete($configPath, $scopeType, $scopeId);
                         $this->getOutput()->writeln(sprintf('<comment>[%s] [%s] %s => %s</comment>', $scopeType, $scopeId, $configPath, 'DELETED'));
+
+                        if ($shouldLock) {
+                            $this->getOutput()->writeln(
+                                sprintf('<info>  Note: If this path is locked in app/etc/config.php, remove it manually.</info>')
+                            );
+                        }
 
                         continue;
                     }
@@ -121,9 +159,62 @@ class ImportProcessor extends AbstractProcessor implements ImportProcessorInterf
 
                     $this->configWriter->save($configPath, $value, $scopeType, $scopeId);
                     $this->getOutput()->writeln(sprintf('<comment>[%s] [%s] %s => %s</comment>', $scopeType, $scopeId, $configPath, $value));
+
+                    if ($shouldLock) {
+                        $lockData[] = [
+                            'path'     => $configPath,
+                            'value'    => $value,
+                            'scope'    => $scopeType,
+                            'scope_id' => $scopeId,
+                        ];
+                    }
                 }
             }
         }
+
+        if ($shouldLock && !empty($lockData)) {
+            $this->writeToConfigPhp($lockData);
+        }
+    }
+
+    /**
+     * Check if --lock-config option is enabled.
+     */
+    private function shouldLockConfig(): bool
+    {
+        $input = $this->getInput();
+        return $input && $input->hasOption('lock-config') && $input->getOption('lock-config');
+    }
+
+    /**
+     * Batch-write collected values to app/etc/config.php.
+     */
+    private function writeToConfigPhp(array $lockData): void
+    {
+        $this->getOutput()->writeln(' ');
+        $this->getOutput()->writeln('<info>Locking values in app/etc/config.php...</info>');
+
+        $configArray = [];
+        foreach ($lockData as $item) {
+            $resolvedPath = $this->configPathResolver->resolve(
+                $item['path'],
+                $item['scope'],
+                $item['scope_id'],
+                System::CONFIG_TYPE
+            );
+            $configArray = $this->arrayManager->set($resolvedPath, $configArray, $item['value']);
+        }
+
+        $this->deploymentConfigWriter->saveConfig(
+            [ConfigFilePool::APP_CONFIG => $configArray],
+            false
+        );
+
+        $this->getOutput()->writeln(sprintf(
+            '<info>%d %s locked in app/etc/config.php.</info>',
+            count($lockData),
+            count($lockData) === 1 ? 'value' : 'values'
+        ));
     }
 
     /**

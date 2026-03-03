@@ -51,6 +51,16 @@ See [docs/file-formats.md](docs/file-formats.md) for more information and exampl
 
 See [docs/config-import.md](docs/config-import.md) for more information.
 
+#### Lock config values
+
+You can lock imported values in `app/etc/config.php` to make them read-only in the Admin panel:
+
+```bash
+php bin/magento config:data:import config/store production --lock-config
+```
+
+This writes values to both the database and `config.php`. Locked values appear greyed out in Admin > Stores > Configuration. See the [import docs](docs/config-import.md#lock-config) for details.
+
 
 ### Export config data
 
