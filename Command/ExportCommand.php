@@ -60,7 +60,7 @@ class ExportCommand extends AbstractCommand
      *
      * @return void
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName(self::COMMAND_NAME);
         $this->setDescription('Export settings from "core_config_data" into a file');
@@ -130,7 +130,7 @@ class ExportCommand extends AbstractCommand
     /**
      * @return int
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         parent::execute($input, $output);
         $this->writeSection('Start Export');
