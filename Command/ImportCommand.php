@@ -72,7 +72,7 @@ class ImportCommand extends AbstractCommand
      *
      * @return void
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName(self::COMMAND_NAME);
         $this->setDescription('Import "core_config_data" settings for an environment');
@@ -143,7 +143,7 @@ class ImportCommand extends AbstractCommand
      *
      * @return int
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         parent::execute($input, $output);
 
