@@ -23,6 +23,9 @@
             "email": "david@run-as-root.sh"
         }
     ],
+    "scripts": {
+        "test": "phpunit"
+    },
     "autoload": {
         "files": [
             "registration.php"

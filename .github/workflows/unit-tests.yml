@@ -1,0 +1,27 @@
+name: Unit Tests
+on: [push, pull_request]
+
+jobs:
+  supported-version:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.supported-version.outputs.matrix }}
+    steps:
+      - uses: mage-os/github-actions/supported-version@main
+        id: supported-version
+        with:
+          kind: currently-supported
+          include_services: 'false'
+
+  unit-tests:
+    needs: supported-version
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: ${{ fromJson(needs.supported-version.outputs.matrix) }}
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: mage-os/github-actions/unit-test@main
+        with:
+          php_version: ${{ matrix.php_version }}
+          composer_auth: ${{ secrets.COMPOSER_AUTH }}
