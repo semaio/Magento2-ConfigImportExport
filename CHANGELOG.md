@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * ...
 
+## [5.0.0] - 2026-05-29
+
+### Changed
+
+* Drop support for PHP 7.x — minimum is now PHP 8.1
+* Drop support for symfony/yaml 3.x, 4.x, and 5.x (all EOL) — constraint is now `^6.0|^7.0`, resolves three low-severity Dependabot security advisories
+* Fix PHP 8.4 compatibility: add missing return types to console command `execute()` and `configure()` methods (see [#85](https://github.com/semaio/Magento2-ConfigImportExport/issues/85)) by [@simonmaass](https://github.com/simonmaass)
+
 ## [4.4.0] - 2024-08-29
 
 ### Changed

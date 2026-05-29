@@ -28,8 +28,8 @@ php bin/magento setup:upgrade
 
 ## Facts
 
-* Supported Magento versions are 2.3 and 2.4.
-* Supported PHP versions are 7.2, 7.3, 7.4, and 8.1.
+* Supported Magento versions are 2.4.4+.
+* Supported PHP versions are 8.1, 8.2, 8.3, and 8.4.
 
 
 ## Functionality
