@@ -74,15 +74,12 @@ class ExportProcessor extends AbstractProcessor implements ExportProcessorInterf
             }
         }
 
-        // Filter collection by scope
+        // Filter collection by scope and ids
         if (null !== $this->includeScope) {
             $includeScopes = explode(',', $this->includeScope);
             $orWhere = [];
-            foreach ($includeScopes as $singlePath) {
-                $singlePath = trim($singlePath);
-                if (!empty($singlePath)) {
-                    $orWhere[] = $collection->getConnection()->quoteInto('`scope` like ?', $singlePath);
-                }
+            foreach ($includeScopes as $singleScope) {
+                $orWhere = array_merge($orWhere, $this->getScopeRestrictions($singleScope, $collection));
             }
             if (count($orWhere) > 0) {
                 $collection->getSelect()->where(implode(' OR ', $orWhere));
@@ -155,5 +152,50 @@ class ExportProcessor extends AbstractProcessor implements ExportProcessorInterf
     public function setExclude($exclude)
     {
         $this->exclude = $exclude;
+    }
+
+    /**
+     * @param string               $singleScope
+     * @param ConfigDataCollection $collection
+     *
+     * @return array
+     */
+    private function getScopeRestrictions(string $singleScope, ConfigDataCollection $collection): array
+    {
+
+        $singleScope = trim($singleScope);
+        $orWhere = [];
+        if (!empty($singleScope)) {
+            $parts = explode(':', $singleScope);
+            $singleScope = $parts[0];
+            $orWhere[] = $collection->getConnection()->quoteInto('`scope` like ?', $singleScope) .
+                (!empty($parts[1]) ? $this->getScopeIdRestrictions($parts[1], $collection) : '');
+        }
+
+        return $orWhere;
+    }
+
+    /**
+     * @param string               $scopeIdString
+     * @param ConfigDataCollection $collection
+     *
+     * @return string
+     */
+    private function getScopeIdRestrictions(string $scopeIdString, ConfigDataCollection $collection): string
+    {
+        $scopeIdString = trim($scopeIdString);
+        $scopeIds = explode(';', $scopeIdString);
+        $orWhere = [];
+        foreach ($scopeIds as $scopeId) {
+            $scopeId = (int)$scopeId;
+            if ($scopeId !== 0) {
+                $orWhere[] = $collection->getConnection()->quoteInto('`scope_id` = ?', $scopeId);
+            }
+        }
+        if (count($orWhere) > 0) {
+            return ' AND ('.implode(' OR ', $orWhere).')';
+        } else {
+            return '';
+        }
     }
 }
