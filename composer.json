@@ -9,7 +9,7 @@
         "magento/framework": "*"
     },
     "require-dev": {
-        "phpunit/phpunit": "^9.5|^10.5"
+        "phpunit/phpunit": "^9.5"
     },
     "type": "magento2-module",
     "license": "OSL-3.0",
