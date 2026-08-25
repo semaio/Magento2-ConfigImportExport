@@ -7,7 +7,10 @@
 namespace Semaio\ConfigImportExport\Test\Unit\Model\Processor;
 
 use InvalidArgumentException;
+use Magento\Framework\App\Config\ConfigPathResolver;
 use Magento\Framework\App\Config\Storage\WriterInterface;
+use Magento\Framework\App\DeploymentConfig\Writer as DeploymentConfigWriter;
+use Magento\Framework\Stdlib\ArrayManager;
 use PHPUnit\Framework\TestCase;
 use Semaio\ConfigImportExport\Model\Converter\ScopeConverterInterface;
 use Semaio\ConfigImportExport\Model\File\Finder;
@@ -40,6 +43,21 @@ class ImportProcessorTest extends TestCase
     private $scopeConverterMock;
 
     /**
+     * @var DeploymentConfigWriter
+     */
+    private $deploymentConfigWriterMock;
+
+    /**
+     * @var ConfigPathResolver
+     */
+    private $configPathResolverMock;
+
+    /**
+     * @var ArrayManager
+     */
+    private $arrayManagerMock;
+
+    /**
      * Set up test class
      */
     protected function setUp(): void
@@ -50,6 +68,25 @@ class ImportProcessorTest extends TestCase
         $this->configWriterMock = $this->getMockBuilder(WriterInterface::class)->getMock();
         $this->scopeValidatorMock = $this->getMockBuilder(ScopeValidatorInterface::class)->getMock();
         $this->scopeConverterMock = $this->getMockBuilder(ScopeConverterInterface::class)->getMock();
+        $this->deploymentConfigWriterMock = $this->getMockBuilder(DeploymentConfigWriter::class)->disableOriginalConstructor()->getMock();
+        $this->configPathResolverMock = $this->getMockBuilder(ConfigPathResolver::class)->disableOriginalConstructor()->getMock();
+        $this->arrayManagerMock = $this->getMockBuilder(ArrayManager::class)->disableOriginalConstructor()->getMock();
+    }
+
+    /**
+     * @return ImportProcessor
+     */
+    private function createProcessor(): ImportProcessor
+    {
+        return new ImportProcessor(
+            $this->configWriterMock,
+            $this->scopeValidatorMock,
+            $this->scopeConverterMock,
+            $this->deploymentConfigWriterMock,
+            $this->configPathResolverMock,
+            $this->arrayManagerMock,
+            []
+        );
     }
 
     /**
@@ -67,7 +104,7 @@ class ImportProcessorTest extends TestCase
 
         $this->expectException(InvalidArgumentException::class);
 
-        $processor = new ImportProcessor($this->configWriterMock, $this->scopeValidatorMock, $this->scopeConverterMock, []);
+        $processor = $this->createProcessor();
         $inputMock = $this->getMockBuilder(InputInterface::class)->getMock();
         $inputMock->method('getOption')->with('allow-empty-directories')->willReturn(false);
         $processor->setInput($inputMock);
@@ -101,7 +138,8 @@ class ImportProcessorTest extends TestCase
         $this->scopeValidatorMock->expects($this->once())->method('validate')->willReturn(false);
         $this->configWriterMock->expects($this->never())->method('save');
 
-        $processor = new ImportProcessor($this->configWriterMock, $this->scopeValidatorMock, $this->scopeConverterMock, []);
+        $processor = $this->createProcessor();
+        $processor->setInput($this->getMockBuilder(InputInterface::class)->getMock());
         $processor->setFormat('yaml');
         $processor->setOutput($this->outputMock);
         $processor->setFinder($finderMock);
@@ -151,7 +189,8 @@ class ImportProcessorTest extends TestCase
         $this->configWriterMock->expects($this->once())->method('save');
         $this->configWriterMock->expects($this->once())->method('delete');
 
-        $processor = new ImportProcessor($this->configWriterMock, $this->scopeValidatorMock, $this->scopeConverterMock, []);
+        $processor = $this->createProcessor();
+        $processor->setInput($this->getMockBuilder(InputInterface::class)->getMock());
         $processor->setOutput($this->outputMock);
         $processor->setFinder($finderMock);
         $processor->setReader($readerMock);
