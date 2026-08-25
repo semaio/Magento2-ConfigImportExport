@@ -132,6 +132,21 @@ vendorx/general/api_key:
 
 This is helpful when you've got the same settings across different environments but want to keep one environment ( `X` env) unchanged without showing the exact value in the config file. It's a common scenario, especially when dealing with sensitive data. You really should only keep that kind of info in the environment’s database, not in your GIT repo.
 
+### If-Not-Set Modifier
+
+To import a configuration value only when no value has been stored for the path yet, add the `if: not-set` modifier to the config path. This is useful to seed initial configuration for third-party extensions (similar to `<default>` values in a `config.xml`) without overwriting values that were already changed in the environment:
+
+```yaml
+path/to/config:
+  if: not-set
+  default:
+    0: 1
+```
+
+If a value for the path/scope combination already exists in the `core_config_data` table, the import reports `SKIPPED (already set)` and leaves the existing value untouched. Only actual database values count as "set" — defaults from `config.xml` or values in `app/etc/config.php` do not.
+
+The modifier applies to all scopes declared for the config path. If a later environment file re-declares the same path without the modifier, the value is imported unconditionally.
+
 ### Lock Config
 
 By default, imported values are written to the database (`core_config_data`) and remain editable in the Admin panel. If you want to additionally lock the values so they become **read-only in Admin**, use the `--lock` option:

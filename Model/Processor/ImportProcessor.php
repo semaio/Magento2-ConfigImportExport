@@ -10,6 +10,7 @@ use Magento\Config\App\Config\Type\System;
 use Magento\Framework\App\Config\ConfigPathResolver;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\App\DeploymentConfig\Writer as DeploymentConfigWriter;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Stdlib\ArrayManager;
 use Semaio\ConfigImportExport\Exception\UnresolveableValueException;
@@ -25,6 +26,8 @@ class ImportProcessor extends AbstractProcessor implements ImportProcessorInterf
 {
     private const DELETE_CONFIG_FLAG = '!!DELETE';
     private const KEEP_CONFIG_FLAG = '!!KEEP';
+    private const IF_MODIFIER = 'if';
+    private const IF_MODIFIER_NOT_SET = 'not-set';
 
     /**
      * @var WriterInterface
@@ -82,12 +85,25 @@ class ImportProcessor extends AbstractProcessor implements ImportProcessorInterf
     private $arrayManager;
 
     /**
+     * @var ResourceConnection
+     */
+    private $resourceConnection;
+
+    /**
+     * Config paths flagged with "if: not-set" that must only be imported when no value exists yet.
+     *
+     * @var array<string, bool>
+     */
+    private $ifNotSetPaths = [];
+
+    /**
      * @param WriterInterface         $configWriter
      * @param ScopeValidatorInterface $scopeValidator
      * @param ScopeConverterInterface $scopeConverter
      * @param DeploymentConfigWriter  $deploymentConfigWriter
      * @param ConfigPathResolver      $configPathResolver
      * @param ArrayManager            $arrayManager
+     * @param ResourceConnection      $resourceConnection
      * @param ResolverInterface[]     $resolvers
      */
     public function __construct(
@@ -97,6 +113,7 @@ class ImportProcessor extends AbstractProcessor implements ImportProcessorInterf
         DeploymentConfigWriter $deploymentConfigWriter,
         ConfigPathResolver $configPathResolver,
         ArrayManager $arrayManager,
+        ResourceConnection $resourceConnection,
         array $resolvers = []
     ) {
         $this->configWriter = $configWriter;
@@ -105,6 +122,7 @@ class ImportProcessor extends AbstractProcessor implements ImportProcessorInterf
         $this->deploymentConfigWriter = $deploymentConfigWriter;
         $this->configPathResolver = $configPathResolver;
         $this->arrayManager = $arrayManager;
+        $this->resourceConnection = $resourceConnection;
         $this->resolvers = $resolvers;
     }
 
@@ -155,6 +173,12 @@ class ImportProcessor extends AbstractProcessor implements ImportProcessorInterf
                         continue;
                     }
 
+                    if (!empty($this->ifNotSetPaths[$configPath]) && $this->isConfigValueSet($configPath, $scopeType, $scopeId)) {
+                        $this->getOutput()->writeln(sprintf('<comment>[%s] [%s] %s => %s</comment>', $scopeType, $scopeId, $configPath, 'SKIPPED (already set)'));
+
+                        continue;
+                    }
+
                     $this->configWriter->save($configPath, $value, $scopeType, $scopeId);
                     $this->getOutput()->writeln(sprintf('<comment>[%s] [%s] %s => %s</comment>', $scopeType, $scopeId, $configPath, $value));
 
@@ -173,6 +197,28 @@ class ImportProcessor extends AbstractProcessor implements ImportProcessorInterf
         if ($shouldLock && !empty($lockData)) {
             $this->writeToConfigPhp($lockData);
         }
+    }
+
+    /**
+     * Check whether a value for the given path/scope is already stored in core_config_data.
+     *
+     * Deliberately checks for an existing database row instead of using ScopeConfigInterface,
+     * so that config.xml defaults and app/etc/config.php values do not count as "set".
+     *
+     * @param string     $configPath
+     * @param string     $scopeType
+     * @param int|string $scopeId
+     */
+    private function isConfigValueSet(string $configPath, string $scopeType, $scopeId): bool
+    {
+        $connection = $this->resourceConnection->getConnection();
+        $select = $connection->select()
+            ->from($this->resourceConnection->getTableName('core_config_data'), 'config_id')
+            ->where('path = ?', $configPath)
+            ->where('scope = ?', $scopeType)
+            ->where('scope_id = ?', $scopeId);
+
+        return false !== $connection->fetchOne($select);
     }
 
     /**
@@ -214,6 +260,7 @@ class ImportProcessor extends AbstractProcessor implements ImportProcessorInterf
     private function collectConfigurationValues(array $files): array
     {
         $buffer = [];
+        $this->ifNotSetPaths = [];
 
         foreach ($files as $file) {
             $valuesSet = 0;
@@ -222,6 +269,26 @@ class ImportProcessor extends AbstractProcessor implements ImportProcessorInterf
             foreach ($configurations as $configPath => $configValues) {
                 if (!isset($buffer[$configPath])) {
                     $buffer[$configPath] = [];
+                }
+
+                // A file that re-declares the path without the modifier overrides it, like any other value.
+                $this->ifNotSetPaths[$configPath] = false;
+                if (is_array($configValues) && array_key_exists(self::IF_MODIFIER, $configValues)) {
+                    $condition = $configValues[self::IF_MODIFIER];
+                    unset($configValues[self::IF_MODIFIER]);
+
+                    if ($condition !== self::IF_MODIFIER_NOT_SET) {
+                        $this->getOutput()->writeln(sprintf(
+                            '<error>ERROR: Invalid "if" condition "%s" for path "%s". Only "%s" is supported.</error>',
+                            is_scalar($condition) ? $condition : gettype($condition),
+                            $configPath,
+                            self::IF_MODIFIER_NOT_SET
+                        ));
+
+                        continue;
+                    }
+
+                    $this->ifNotSetPaths[$configPath] = true;
                 }
 
                 $scopeConfigValues = $this->transformConfigToScopeConfig($configPath, $configValues);

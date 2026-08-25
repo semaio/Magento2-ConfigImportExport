@@ -9,8 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+* Add `if: not-set` modifier to import a config value only when no value exists in `core_config_data` yet (see [#80](https://github.com/semaio/Magento2-ConfigImportExport/issues/80) by [@threouv](https://github.com/threouv) 
 * Support encrypted environment variable values via nested placeholders, e.g. `%encrypt(%env(SECRET_KEY)%)%` (see [#82](https://github.com/semaio/Magento2-ConfigImportExport/pull/82)) by [@WouterSteen](https://github.com/WouterSteen)
-* Add `--lock` option to `config:data:import` to additionally write imported values to `app/etc/config.php`, making them read-only in the Admin panel (see [#82](https://github.com/semaio/Magento2-ConfigImportExport/pull/83)) by [@dm-vasylenko](https://github.com/dm-vasylenko) 
+* Add `--lock` option to `config:data:import` to additionally write imported values to `app/etc/config.php`, making them read-only in the Admin panel (see [#83](https://github.com/semaio/Magento2-ConfigImportExport/pull/83)) by [@dm-vasylenko](https://github.com/dm-vasylenko) 
 
 ### Changed
 
