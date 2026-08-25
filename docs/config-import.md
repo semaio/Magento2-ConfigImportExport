@@ -100,6 +100,14 @@ payment/provider/secret_key:
     0: '%encrypt(mySecretKey)%'
 ```
 
+You can also combine the placeholder with an environment variable, so the secret itself never has to be stored in your repository. The environment variable is resolved first and its value is then encrypted:
+
+```
+payment/provider/secret_key:
+  default:
+    0: '%encrypt(%env(VENDORX_SECRET_KEY)%)%'
+```
+
 :exclamation: It is generally not recommended to store sensitive data in your GIT repository but instead keep it securely in the environment's database. Please use this option with caution and at your own risk.
 
 ### Delete Config

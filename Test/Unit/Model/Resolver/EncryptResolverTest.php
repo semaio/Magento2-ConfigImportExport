@@ -90,6 +90,26 @@ class EncryptResolverTest extends TestCase
         ];
     }
 
+    /**
+     * @test
+     *
+     * @dataProvider supportsDataProvider
+     */
+    public function supports($value, $expectedResult): void
+    {
+        $this->assertEquals($expectedResult, $this->getEncryptResolver()->supports($value));
+    }
+
+    public function supportsDataProvider(): Generator
+    {
+        yield ['%encrypt(value)%', true];
+        yield ['%encrypt(%env(KEY)%)%', true];
+        yield ['plain_value', false];
+        yield ['%env(KEY)%', false];
+        yield ['prefix %encrypt(value)% suffix', false];
+        yield [null, false];
+    }
+
     public function testItWillRaiseErrorIfEncryptValueIsEmpty(): void
     {
         $this->expectException(UnresolveableValueException::class);
