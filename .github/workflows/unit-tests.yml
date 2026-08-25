@@ -21,6 +21,11 @@ jobs:
       fail-fast: false
     steps:
       - uses: actions/checkout@v4
+      - name: Configure composer for standalone module install
+        run: |
+          composer config repositories.mage-os composer https://repo.mage-os.org/
+          composer config --no-plugins "allow-plugins.magento/*" true
+          composer config --no-plugins "allow-plugins.mage-os/*" true
       - uses: mage-os/github-actions/unit-test@main
         with:
           php_version: ${{ matrix.php_version }}
