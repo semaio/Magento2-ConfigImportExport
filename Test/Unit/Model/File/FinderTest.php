@@ -7,6 +7,7 @@
 namespace Semaio\ConfigImportExport\Test\Unit\Model\File;
 
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Semaio\ConfigImportExport\Model\File\Finder;
 
@@ -30,6 +31,7 @@ class FinderTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function find(): void
     {
         $folder = __DIR__ . DIRECTORY_SEPARATOR . 'Finder' . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'store' . DIRECTORY_SEPARATOR;
@@ -51,6 +53,7 @@ class FinderTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function findWithoutBaseFiles(): void
     {
         $folder = __DIR__ . DIRECTORY_SEPARATOR . 'Finder' . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'store' . DIRECTORY_SEPARATOR;
@@ -71,6 +74,7 @@ class FinderTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function findWithoutEnvFiles(): void
     {
         $folder = __DIR__ . DIRECTORY_SEPARATOR . 'Finder' . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'store' . DIRECTORY_SEPARATOR;
@@ -91,6 +95,7 @@ class FinderTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function findFilesRecursively(): void
     {
         $folder = __DIR__ . DIRECTORY_SEPARATOR . 'Finder' . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'store' . DIRECTORY_SEPARATOR;
@@ -110,6 +115,7 @@ class FinderTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function setEnvironment(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -122,6 +128,7 @@ class FinderTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function setFolder(): void
     {
         $this->expectException(InvalidArgumentException::class);

@@ -14,6 +14,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Stdlib\ArrayManager;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Semaio\ConfigImportExport\Model\Converter\ScopeConverterInterface;
 use Semaio\ConfigImportExport\Model\File\Finder;
@@ -117,6 +118,7 @@ class ImportProcessorTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function processWithoutFiles(): void
     {
         $finderMock = $this->getMockBuilder(Finder::class)
@@ -140,6 +142,7 @@ class ImportProcessorTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function processWithInvalidScopeData(): void
     {
         $finderMock = $this->getMockBuilder(Finder::class)
@@ -175,6 +178,7 @@ class ImportProcessorTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function process(): void
     {
         $finderMock = $this->getMockBuilder(Finder::class)
@@ -195,11 +199,6 @@ class ImportProcessorTest extends TestCase
             ],
             'test/config/custom_field_to_be_keeped' => [
                 'default' => [
-                    0 => 'VALUE_THAT_SHOULD_NOT_BE_PROCESSED',
-                ],
-            ],
-            'test/config/custom_field_to_be_keeped' => [
-                'default' => [
                     0 => '!!KEEP',
                 ],
             ],
@@ -211,8 +210,11 @@ class ImportProcessorTest extends TestCase
         $readerMock->expects($this->once())->method('parse')->willReturn($parseResult);
 
         $this->scopeValidatorMock->expects($this->exactly(3))->method('validate')->willReturn(true);
-        $this->configWriterMock->expects($this->once())->method('save');
-        $this->configWriterMock->expects($this->once())->method('delete');
+        $this->scopeConverterMock->expects($this->exactly(3))->method('convert')->with(0, 'default')->willReturn(0);
+        $this->configWriterMock->expects($this->once())->method('save')
+            ->with('test/config/custom_field_one', 'ABC', 'default', 0);
+        $this->configWriterMock->expects($this->once())->method('delete')
+            ->with('test/config/custom_field_to_be_deleted', 'default', 0);
 
         $processor = $this->createProcessor();
         $processor->setInput($this->getMockBuilder(InputInterface::class)->getMock());
@@ -225,6 +227,7 @@ class ImportProcessorTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function processWithIfNotSetModifierAndNoExistingValue(): void
     {
         $parseResult = [
@@ -247,6 +250,7 @@ class ImportProcessorTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function processWithIfNotSetModifierAndExistingValue(): void
     {
         $parseResult = [
@@ -269,6 +273,7 @@ class ImportProcessorTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function processWithIfNotSetModifierOnlyGuardsFlaggedPaths(): void
     {
         $parseResult = [
@@ -296,6 +301,7 @@ class ImportProcessorTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function processWithInvalidIfModifierSkipsPath(): void
     {
         $parseResult = [

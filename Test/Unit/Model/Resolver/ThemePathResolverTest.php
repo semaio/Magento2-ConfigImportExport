@@ -17,7 +17,7 @@ class ThemePathResolverTest extends TestCase
     public function testSuccessfulReplacement(): void
     {
         $theme = $this->createMock(ThemeInterface::class);
-        $theme->expects($this->any())->method('getId')->willReturn(13);
+        $theme->method('getId')->willReturn(13);
 
         $themeProvider = $this->createMock(ThemeProviderInterface::class);
         $themeProvider->expects($this->once())
@@ -44,7 +44,7 @@ class ThemePathResolverTest extends TestCase
         $this->expectException(UnresolveableValueException::class);
 
         $theme = $this->createMock(ThemeInterface::class);
-        $theme->expects($this->any())->method('getId')->willReturn(null);
+        $theme->method('getId')->willReturn(null);
 
         $themeProvider = $this->createMock(ThemeProviderInterface::class);
         $themeProvider->expects($this->once())

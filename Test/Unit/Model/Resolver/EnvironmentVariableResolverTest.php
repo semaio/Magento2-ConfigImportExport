@@ -6,6 +6,8 @@
 
 namespace Semaio\ConfigImportExport\Test\Unit\Model\Validator;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Semaio\ConfigImportExport\Exception\UnresolveableValueException;
 use Semaio\ConfigImportExport\Model\Resolver\EnvironmentVariableResolver;
@@ -53,6 +55,8 @@ class EnvironmentVariableResolverTest extends TestCase
      *
      * @dataProvider resolveDataProvider
      */
+    #[Test]
+    #[DataProvider('resolveDataProvider')]
     public function validate($value, $expectedResult): void
     {
         $this->assertEquals(
@@ -61,7 +65,7 @@ class EnvironmentVariableResolverTest extends TestCase
         );
     }
 
-    public function resolveDataProvider(): \Generator
+    public static function resolveDataProvider(): \Generator
     {
         yield [
             'test_without_env_var',
@@ -139,12 +143,14 @@ class EnvironmentVariableResolverTest extends TestCase
      *
      * @dataProvider supportsDataProvider
      */
+    #[Test]
+    #[DataProvider('supportsDataProvider')]
     public function supports($value, $expectedResult): void
     {
         $this->assertEquals($expectedResult, $this->getEnvironmentVariableResolver()->supports($value));
     }
 
-    public function supportsDataProvider(): \Generator
+    public static function supportsDataProvider(): \Generator
     {
         yield ['%env(HOSTNAME)%', true];
         yield ['%encrypt(%env(HOSTNAME)%)%', true];

@@ -56,7 +56,7 @@ class ThemePathResolver extends AbstractResolver
             return (string) $theme->getId();
         }
 
-        throw new UnresolveableValueException(sprintf('Could not find theme with given value.', $themeCode));
+        throw new UnresolveableValueException('Could not find theme with given value.');
     }
 
     /**
