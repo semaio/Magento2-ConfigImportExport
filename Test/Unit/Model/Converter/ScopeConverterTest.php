@@ -9,6 +9,8 @@ namespace Semaio\ConfigImportExport\Test\Unit\Model\Converter;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Semaio\ConfigImportExport\Model\Converter\ScopeConverter;
 
@@ -38,6 +40,8 @@ class ScopeConverterTest extends TestCase
      *
      * @dataProvider itShouldNotConvertNumericScopeIdsProvider
      */
+    #[Test]
+    #[DataProvider('itShouldNotConvertNumericScopeIdsProvider')]
     public function itShouldNotConvertNumericScopeIds($scopeId, $scope): void
     {
         $this->storeManagerMock
@@ -54,6 +58,7 @@ class ScopeConverterTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function itShouldNotConvertStoreCodeValues(): void
     {
         $storeCode = 'mystore';
@@ -62,7 +67,6 @@ class ScopeConverterTest extends TestCase
 
         $storeStub = $this->getMockBuilder(StoreInterface::class)->getMock();
         $storeStub
-            ->expects($this->any())
             ->method('getId')
             ->willReturn($storeId);
 
@@ -82,6 +86,7 @@ class ScopeConverterTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function itShouldNotConvertWebsiteCodeValues(): void
     {
         $websiteCode = 'mywebsite';
@@ -90,7 +95,6 @@ class ScopeConverterTest extends TestCase
 
         $storeStub = $this->getMockBuilder(WebsiteInterface::class)->getMock();
         $storeStub
-            ->expects($this->any())
             ->method('getId')
             ->willReturn($websiteId);
 
@@ -107,7 +111,7 @@ class ScopeConverterTest extends TestCase
         $this->assertEquals($websiteId, $this->converter->convert($websiteCode, $scope));
     }
 
-    public function itShouldNotConvertNumericScopeIdsProvider(): array
+    public static function itShouldNotConvertNumericScopeIdsProvider(): array
     {
         return [
             [1, 'default'],

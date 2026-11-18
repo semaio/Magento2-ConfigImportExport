@@ -6,6 +6,8 @@
 
 namespace Semaio\ConfigImportExport\Test\Unit\Model\File\Reader;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Semaio\ConfigImportExport\Model\File\Reader\YamlReader;
 
@@ -31,6 +33,8 @@ class YamlReaderTest extends TestCase
      *
      * @dataProvider provideFiles
      */
+    #[Test]
+    #[DataProvider('provideFiles')]
     public function parse($file): void
     {
         $baseDir = __DIR__ . DIRECTORY_SEPARATOR . 'YamlReaderTest' . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR;
@@ -42,7 +46,7 @@ class YamlReaderTest extends TestCase
     /**
      * @return array
      */
-    public function provideFiles(): array
+    public static function provideFiles(): array
     {
         return [
             ['file' => 'fx-test.yaml'],

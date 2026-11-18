@@ -6,6 +6,8 @@
 
 namespace Semaio\ConfigImportExport\Test\Unit\Model\File\Reader;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use Semaio\ConfigImportExport\Model\File\Reader\JsonReader;
@@ -32,6 +34,8 @@ class JsonReaderTest extends TestCase
      *
      * @dataProvider provideFiles
      */
+    #[Test]
+    #[DataProvider('provideFiles')]
     public function parse($file): void
     {
         $baseDir = __DIR__ . DIRECTORY_SEPARATOR . 'JsonReaderTest' . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR;
@@ -43,6 +47,7 @@ class JsonReaderTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function parseInvalidFile(): void
     {
         $baseDir = __DIR__ . DIRECTORY_SEPARATOR . 'JsonReaderTest' . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR;
@@ -55,7 +60,7 @@ class JsonReaderTest extends TestCase
     /**
      * @return array
      */
-    public function provideFiles(): array
+    public static function provideFiles(): array
     {
         return [
             ['file' => 'fx-test.json'],

@@ -9,6 +9,8 @@ namespace Semaio\ConfigImportExport\Test\Unit\Model\Validator;
 use Generator;
 use Magento\Framework\Encryption\EncryptorInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Semaio\ConfigImportExport\Exception\UnresolveableValueException;
 use Semaio\ConfigImportExport\Model\Resolver\EncryptResolver;
@@ -56,9 +58,11 @@ class EncryptResolverTest extends TestCase
      *
      * @dataProvider resolveDataProvider
      */
+    #[Test]
+    #[DataProvider('resolveDataProvider')]
     public function validate($value, $expectedResult): void
     {
-        $this->encryptor->expects($this->any())
+        $this->encryptor
             ->method('encrypt')
             ->with($expectedResult)
             ->willReturn($expectedResult);
@@ -66,7 +70,7 @@ class EncryptResolverTest extends TestCase
         $this->assertEquals($this->getEncryptResolver()->resolve($value), $expectedResult);
     }
 
-    public function resolveDataProvider(): Generator
+    public static function resolveDataProvider(): Generator
     {
         yield [
             'test_without_data_to_encrypt',
@@ -95,12 +99,14 @@ class EncryptResolverTest extends TestCase
      *
      * @dataProvider supportsDataProvider
      */
+    #[Test]
+    #[DataProvider('supportsDataProvider')]
     public function supports($value, $expectedResult): void
     {
         $this->assertEquals($expectedResult, $this->getEncryptResolver()->supports($value));
     }
 
-    public function supportsDataProvider(): Generator
+    public static function supportsDataProvider(): Generator
     {
         yield ['%encrypt(value)%', true];
         yield ['%encrypt(%env(KEY)%)%', true];

@@ -9,6 +9,7 @@ namespace Semaio\ConfigImportExport\Test\Unit\Model\Validator;
 use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Semaio\ConfigImportExport\Model\Validator\ScopeValidator;
 
@@ -33,12 +34,11 @@ class ScopeValidatorTest extends TestCase
 
         $this->mockWebsiteOne = $this->getMockBuilder(WebsiteInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getCode'])
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)->getMock();
-        $storeManagerMock->expects($this->any())->method('getWebsites')->willReturn([1 => $this->mockWebsiteOne]);
-        $storeManagerMock->expects($this->any())->method('getStores')->willReturn([2 => 'ABC']);
+        $storeManagerMock->method('getWebsites')->willReturn([1 => $this->mockWebsiteOne]);
+        $storeManagerMock->method('getStores')->willReturn([2 => 'ABC']);
 
         $this->validator = new ScopeValidator($storeManagerMock);
     }
@@ -46,6 +46,7 @@ class ScopeValidatorTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function validate(): void
     {
         $this->assertTrue($this->validator->validate('default', 0));
@@ -61,12 +62,13 @@ class ScopeValidatorTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function validateNonNumericWebsite(): void
     {
         $existingWebsiteCode = 'my-cool-website';
 
-        $this->mockWebsiteOne->expects($this->any())->method('getCode')
-            ->will($this->returnValue($existingWebsiteCode));
+        $this->mockWebsiteOne->method('getCode')
+            ->willReturn($existingWebsiteCode);
 
         $this->assertTrue($this->validator->validate('websites', $existingWebsiteCode));
         $this->assertFalse($this->validator->validate('websites', 'am i real?'));
