@@ -210,8 +210,11 @@ class ImportProcessorTest extends TestCase
         $readerMock->expects($this->once())->method('parse')->willReturn($parseResult);
 
         $this->scopeValidatorMock->expects($this->exactly(3))->method('validate')->willReturn(true);
-        $this->configWriterMock->expects($this->once())->method('save');
-        $this->configWriterMock->expects($this->once())->method('delete');
+        $this->scopeConverterMock->expects($this->exactly(3))->method('convert')->with(0, 'default')->willReturn(0);
+        $this->configWriterMock->expects($this->once())->method('save')
+            ->with('test/config/custom_field_one', 'ABC', 'default', 0);
+        $this->configWriterMock->expects($this->once())->method('delete')
+            ->with('test/config/custom_field_to_be_deleted', 'default', 0);
 
         $processor = $this->createProcessor();
         $processor->setInput($this->getMockBuilder(InputInterface::class)->getMock());
